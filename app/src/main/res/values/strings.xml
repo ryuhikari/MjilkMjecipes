@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Mjilk Mjecipes</string>
+
+    <string name="btn_main_my_recipes">My recipes</string>
+    <string name="btn_main_favorites">Favorites</string>
+    <string name="btn_main_search">Search</string>
+    <string name="btn_main_profile">Profile</string>
+    <string name="btn_main_logout">Log out</string>
+
+    <string name="text_signup_name">Name</string>
+    <string name="text_signup_last_name">Last name</string>
+    <string name="text_signup_username">Username</string>
+    <string name="text_signup_email">Email</string>
+    <string name="text_signup_password">Password</string>
+    <string name="text_signup_confirm_password">Confirm Password</string>
+    <string name="btn_signup_signup">Sign up</string>
 </resources>
