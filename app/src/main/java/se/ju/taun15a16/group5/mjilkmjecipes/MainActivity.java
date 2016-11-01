@@ -20,10 +20,22 @@ public class MainActivity extends AppCompatActivity {
                 launchProfileActivity(null);
             }
         });
+
+        Button btn_my_recipes =(Button) findViewById(R.id.button_my_recipes);
+        btn_my_recipes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                launchShowListActivity(null);
+            }
+        });
     }
 
     public void launchProfileActivity(View view){
-        Intent intent = new Intent(this, SignUpActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void launchShowListActivity(View view){
+        Intent intent = new Intent(this, ShowListActivity.class);
         startActivity(intent);
     }
 }
