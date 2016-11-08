@@ -10,4 +10,5 @@ public class ShowListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list);
     }
+
 }
