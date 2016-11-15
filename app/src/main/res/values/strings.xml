@@ -1,12 +1,19 @@
 <resources>
+    <!-- App -->
     <string name="app_name">Mjilk Mjecipes</string>
 
+    <!-- Menu -->
+    <string name="text_menu_new_recipe">New recipe</string>
+    <string name="text_menu_search">Search</string>
+    <string name="text_menu_settings">Settings</string>
+    <string name="text_menu_new_comment">New comment</string>
+    <string name="text_menu_logout">Log out</string>
+    <!-- Main -->
     <string name="btn_main_my_recipes">My recipes</string>
     <string name="btn_main_favorites">Favorites</string>
-    <string name="btn_main_search">Search</string>
     <string name="btn_main_profile">Profile</string>
-    <string name="btn_main_logout">Log out</string>
 
+    <!-- Sign Up -->
     <string name="text_signup_name">Name</string>
     <string name="text_signup_last_name">Last name</string>
     <string name="text_signup_username">Username</string>
@@ -15,9 +22,11 @@
     <string name="text_signup_confirm_password">Confirm Password</string>
     <string name="btn_signup_signup">Sign up</string>
 
+    <!-- Profile -->
     <string name="text_profile_new_password">New password</string>
     <string name="btn_profile_save_changes">Save changes</string>
 
+    <!-- Show List -->
     <string name="text_show_list_recipe_name">Recipe name</string>
 
 </resources>

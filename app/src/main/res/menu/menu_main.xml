@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item android:title="@string/text_menu_new_recipe"
+        android:id="@+id/item_new_recipe"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="ifRoom" />
+    <item android:title="@string/text_menu_search"
+        android:id="@+id/item_search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="ifRoom" />
+    <item android:title="@string/text_menu_settings"
+        android:id="@+id/item_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        app:showAsAction="never" />
+    <item android:title="@string/text_menu_logout"
+        android:id="@+id/item_log_out"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:showAsAction="never" />
+</menu>
