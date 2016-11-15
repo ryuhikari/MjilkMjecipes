@@ -17,11 +17,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ShowListActivity" />
-        <activity android:name=".LogInActivity"></activity>
+        <activity
+            android:name=".LogInActivity"
+            android:label="@string/activity_name_login" />
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/activity_name_signup"
+            android:parentActivityName=".LogInActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LogInActivity" />
+        </activity>
+        <activity
+            android:name=".MainActivity" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/activity_name_profile"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".ShowListActivity"
+            android:parentActivityName=".MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>

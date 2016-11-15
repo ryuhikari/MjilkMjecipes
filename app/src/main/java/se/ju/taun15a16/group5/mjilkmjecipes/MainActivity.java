@@ -1,7 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,14 +12,14 @@ public class MainActivity extends MainMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn_profile =(Button) findViewById(R.id.button_profile);
+        Button btn_profile =(Button) findViewById(R.id.button_main_profile);
         btn_profile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 launchProfileActivity(null);
             }
         });
 
-        Button btn_my_recipes =(Button) findViewById(R.id.button_my_recipes);
+        Button btn_my_recipes =(Button) findViewById(R.id.button_main_my_recipes);
         btn_my_recipes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 launchShowListActivity(null);

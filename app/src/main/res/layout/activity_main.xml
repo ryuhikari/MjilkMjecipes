@@ -15,19 +15,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
-        android:id="@+id/button_my_recipes" />
+        android:id="@+id/button_main_my_recipes" />
 
     <Button
         android:text="@string/btn_main_favorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_favorites" />
+        android:id="@+id/button_main_favorites" />
 
     <Button
         android:text="@string/btn_main_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_profile" />
+        android:id="@+id/button_main_profile" />
 
 
 </LinearLayout>

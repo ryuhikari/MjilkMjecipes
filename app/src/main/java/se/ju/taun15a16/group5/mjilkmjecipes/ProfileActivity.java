@@ -9,5 +9,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // Up navigation arrow on the action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }
