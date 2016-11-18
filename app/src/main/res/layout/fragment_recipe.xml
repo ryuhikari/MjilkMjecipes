@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recipeNestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:fillViewport="true">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                app:srcCompat="@drawable/no_image_available"
+                android:id="@+id/recipeImage"
+                android:layout_height="300dp" />
+
+            <TextView
+                android:text="@string/text_show_list_recipe_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recipeNameLbl"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ratingBar"
+                    android:stepSize="1"
+                    android:numStars="5"
+                    android:isIndicator="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/recipe_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:id="@+id/byLbl" />
+
+                <TextView
+                    android:text="@string/text_signup_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/commentUsernameLbl"
+
+                    android:textAlignment="textStart"
+                    android:gravity="start"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+        <TextView
+            android:text="@string/recipe_steps_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recipeStepsTitleLbl"
+            android:paddingTop="10dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:text="@string/recipe_steps_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recipeStepsLbl" />
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
