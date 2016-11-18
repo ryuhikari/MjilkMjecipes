@@ -42,7 +42,7 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- Recipe -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="comments_load_more">Load more Comments</string>
     <string name="recipe_by">By:</string>

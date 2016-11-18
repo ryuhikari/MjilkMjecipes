@@ -12,20 +12,20 @@ public class MainActivity extends MainMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnMyRecipes = (Button) findViewById(R.id.button_my_recipes);
+        Button btnMyRecipes = (Button) findViewById(R.id.button_main_my_recipes);
         btnMyRecipes.setOnClickListener(view -> launchMyRecipesActivity(null));
 
-        Button btnFavorites = (Button) findViewById(R.id.button_favorites);
+        Button btnFavorites = (Button) findViewById(R.id.button_main_favorites);
         btnFavorites.setOnClickListener(view -> launchFavoritesActivity(null));
 
-        Button btnSearchRecipes = (Button) findViewById(R.id.button_search);
-        btnSearchRecipes.setOnClickListener(view -> launchSearchActivity(null));
+        /*Button btnSearchRecipes = (Button) findViewById(R.id.button_search);
+        btnSearchRecipes.setOnClickListener(view -> launchSearchActivity(null));*/
 
-        Button btnProfile =(Button) findViewById(R.id.button_profile);
+        Button btnProfile =(Button) findViewById(R.id.button_main_profile);
         btnProfile.setOnClickListener(view -> launchProfileActivity(null));
 
-        Button btnLogout = (Button) findViewById(R.id.button_logout);
-        btnLogout.setOnClickListener(view -> launchLoginActivity(null));
+        /*Button btnLogout = (Button) findViewById(R.id.button_logout);
+        btnLogout.setOnClickListener(view -> launchLoginActivity(null));*/
 
     }
 
