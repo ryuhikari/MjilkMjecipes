@@ -38,5 +38,17 @@
 
     <!-- Show List -->
     <string name="text_show_list_recipe_name">Recipe name</string>
+    <string name="title_activity_recipe">RecipeActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="comments_load_more">Load more Comments</string>
+    <string name="recipe_by">By:</string>
+    <string name="recipe_steps_title">Steps:</string>
+    <string name="recipe_steps_content">Lorem ipsum</string>
+    <string name="comment_username">Username</string>
+    <string name="comment_content">I am a testcomment</string>
 
 </resources>

@@ -12,19 +12,35 @@ public class MainActivity extends MainMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn_profile =(Button) findViewById(R.id.button_main_profile);
-        btn_profile.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                launchProfileActivity(null);
-            }
-        });
+        Button btnMyRecipes = (Button) findViewById(R.id.button_my_recipes);
+        btnMyRecipes.setOnClickListener(view -> launchMyRecipesActivity(null));
 
-        Button btn_my_recipes =(Button) findViewById(R.id.button_main_my_recipes);
-        btn_my_recipes.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                launchShowListActivity(null);
-            }
-        });
+        Button btnFavorites = (Button) findViewById(R.id.button_favorites);
+        btnFavorites.setOnClickListener(view -> launchFavoritesActivity(null));
+
+        Button btnSearchRecipes = (Button) findViewById(R.id.button_search);
+        btnSearchRecipes.setOnClickListener(view -> launchSearchActivity(null));
+
+        Button btnProfile =(Button) findViewById(R.id.button_profile);
+        btnProfile.setOnClickListener(view -> launchProfileActivity(null));
+
+        Button btnLogout = (Button) findViewById(R.id.button_logout);
+        btnLogout.setOnClickListener(view -> launchLoginActivity(null));
+
+    }
+
+    public void launchMyRecipesActivity(View view){
+        Intent intent = new Intent(this, RecipeActivity.class);
+        startActivity(intent);
+    }
+
+    public void launchFavoritesActivity(View view){
+
+    }
+
+    public void launchSearchActivity(View view){
+        Intent intent = new Intent(this, ShowListActivity.class);
+        startActivity(intent);
     }
 
     public void launchProfileActivity(View view){
@@ -32,8 +48,9 @@ public class MainActivity extends MainMenu {
         startActivity(intent);
     }
 
-    public void launchShowListActivity(View view){
-        Intent intent = new Intent(this, ShowListActivity.class);
-        startActivity(intent);
+    public void launchLoginActivity(View view){
+
     }
+
+
 }
