@@ -3,7 +3,9 @@ package se.ju.taun15a16.group5.mjilkmjecipes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class MainActivity extends MainMenu {
 
@@ -27,7 +29,16 @@ public class MainActivity extends MainMenu {
         /*Button btnLogout = (Button) findViewById(R.id.button_logout);
         btnLogout.setOnClickListener(view -> launchLoginActivity(null));*/
 
+
+        Button btnDebug = new Button(this);
+        btnDebug.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        btnDebug.setText("Debug Menu");
+        btnDebug.setOnClickListener(view -> launchDebugActivity(null));
+        LinearLayout layout = (LinearLayout) findViewById(R.id.activity_main);
+        layout.addView(btnDebug);
     }
+
+
 
     public void launchMyRecipesActivity(View view){
         Intent intent = new Intent(this, RecipeActivity.class);
@@ -50,6 +61,13 @@ public class MainActivity extends MainMenu {
 
     public void launchLoginActivity(View view){
 
+    }
+
+    private void launchDebugActivity(View view){
+        if(true){
+            Intent intent = new Intent(this, DebugActivity.class);
+            startActivity(intent);
+        }
     }
 
 
