@@ -1,4 +1,8 @@
 <resources>
+
+    <!-- App Plugins -->
+    <string name="facebook_app_id">1461394383878190</string>
+
     <!-- App -->
     <string name="app_name">Mjilk Recipes</string>
     <string name="activity_name_login">Log in</string>

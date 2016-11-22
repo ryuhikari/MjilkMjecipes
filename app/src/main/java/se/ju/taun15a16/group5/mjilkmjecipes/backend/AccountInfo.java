@@ -52,6 +52,16 @@ public class AccountInfo {
     }
 
     @Override
+    public String toString() {
+        return "AccountInfo{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
