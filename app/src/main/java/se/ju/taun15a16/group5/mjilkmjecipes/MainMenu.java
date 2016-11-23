@@ -1,8 +1,12 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.facebook.login.LoginManager;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -29,7 +33,13 @@ public class MainMenu extends AppCompatActivity {
 
             case R.id.item_settings:
                 return true;
-
+            case R.id.item_log_out:
+                // TODO: Either logout normally or with Facebook
+                LoginManager.getInstance().logOut();
+                Toast.makeText(getApplicationContext(), R.string.facebook_logout_successful_notify, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, LogInActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

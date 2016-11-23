@@ -51,4 +51,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_login_signup" />
+
+    <TextView
+        android:text="Or"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewBy"
+        android:textAlignment="center"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/fb_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        />
 </LinearLayout>

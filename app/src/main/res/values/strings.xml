@@ -1,7 +1,7 @@
 <resources>
 
     <!-- App Plugins -->
-    <string name="facebook_app_id">1461394383878190</string>
+    <string name="facebook_app_id" translatable="false">1461394383878190</string>
 
     <!-- App -->
     <string name="app_name">Mjilk Recipes</string>
@@ -22,6 +22,10 @@
     <string name="text_login_email">Email</string>
     <string name="text_login_password">Password</string>
 
+    <!-- Facebook -->
+    <string name="facebook_logout_successful_notify">Successfully Logged out in via Facebook</string>
+    <string name="facebook_login_successful_notify">Successfully Logged in via Facebook</string>
+
     <!-- Main -->
     <string name="btn_main_my_recipes">My recipes</string>
     <string name="btn_main_favorites">Favorites</string>
@@ -33,7 +37,7 @@
     <string name="text_signup_username">Username</string>
     <string name="text_signup_email">Email</string>
     <string name="text_signup_password">Password</string>
-    <string name="text_signup_confirm_password">Confirm Password</string>
+    <string name="text_signup_confirm_password">Confirm New Password</string>
     <string name="btn_signup_signup">Sign up</string>
 
     <!-- Profile -->
@@ -42,17 +46,17 @@
 
     <!-- Show List -->
     <string name="text_show_list_recipe_name">Recipe name</string>
-    <string name="title_activity_recipe">RecipeActivity</string>
+    <string name="title_activity_recipe" translatable="false">RecipeActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
 
     <!-- Recipe -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="comments_load_more">Load more Comments</string>
     <string name="recipe_by">By:</string>
     <string name="recipe_steps_title">Steps:</string>
-    <string name="recipe_steps_content">Lorem ipsum</string>
+    <string name="recipe_steps_content" translatable="false">Lorem ipsum</string>
     <string name="comment_username">Username</string>
-    <string name="comment_content">I am a testcomment</string>
+    <string name="comment_content" translatable="false">I am a testcomment</string>
 
 </resources>
