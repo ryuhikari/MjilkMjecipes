@@ -19,11 +19,12 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 public class DebugActivity extends AppCompatActivity {
 
 
-    private RESTManager debugRestManager = new RESTManager();
+    private RESTManager debugRestManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        debugRestManager = RESTManager.getInstance();
         setContentView(R.layout.activity_debug);
 
         Spinner dropdown = (Spinner)findViewById(R.id.spinnerDebug);

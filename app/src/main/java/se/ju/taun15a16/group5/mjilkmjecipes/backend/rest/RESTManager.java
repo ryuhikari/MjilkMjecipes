@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
@@ -43,7 +42,17 @@ public class RESTManager
 
 	private static int TIMEOUT = 1000;
 
-	public RESTManager(){
+
+	// Singleton Variable
+	private static RESTManager managerInstance = new RESTManager();
+
+	// Private constructor
+	private RESTManager(){
+	}
+
+	// Get RESTManager instance
+	public static RESTManager getInstance() {
+		return managerInstance;
 	}
 	
 	public AccountInfo createAccount(String username, String password, double longitude, double latitude) {
@@ -174,11 +183,13 @@ public class RESTManager
 	
 	public String createLoginToken(String username, String password) {
 		// TODO implement me
+		Log.d("REST","Creating Login-Token...");
 		return null;
 	}
 
 	public String createLoginTokenFacebook(String fbToken) {
 		// TODO implement me
+		Log.d("REST","Creating Facebook Login-Token...");
 		return null;
 	}
 	
