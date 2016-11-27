@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,9 @@ public class SplashActivity extends AppCompatActivity {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(getApplication());
+
+        AccountManager am = AccountManager.get(this);
+
 
         Intent intent = new Intent(this, LogInActivity.class);
         startActivity(intent);

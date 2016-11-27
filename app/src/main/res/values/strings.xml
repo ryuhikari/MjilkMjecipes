@@ -19,7 +19,7 @@
     <!-- Log In -->
     <string name="btn_login_login">Log In</string>
     <string name="btn_login_signup">Sign Up</string>
-    <string name="text_login_email">Email</string>
+    <string name="text_login_username">Username</string>
     <string name="text_login_password">Password</string>
 
     <!-- Facebook -->
@@ -58,5 +58,7 @@
     <string name="recipe_steps_content" translatable="false">Lorem ipsum</string>
     <string name="comment_username">Username</string>
     <string name="comment_content" translatable="false">I am a testcomment</string>
+    <string name="text_login_email">Email</string>
+    <string name="text_logging_in">Logging In</string>
 
 </resources>

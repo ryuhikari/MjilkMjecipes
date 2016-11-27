@@ -11,19 +11,44 @@
     tools:context="se.ju.taun15a16.group5.mjilkmjecipes.LogInActivity"
     android:orientation="vertical">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layoutLoginBar"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="100dp"
+            android:id="@+id/loginProgressBar"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:text="@string/text_logging_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginProgressBar"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/textViewLoggingIn"
+            android:textSize="24sp" />
+    </RelativeLayout>
+
     <TextView
-        android:text="@string/text_login_email"
+        android:text="@string/text_login_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView_login_email" />
+        android:id="@+id/textView_login_username" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/editText_login__email"
-        android:hint="@string/text_login_email" />
+        android:id="@+id/editText_login_username"
+        android:hint="@string/text_login_username"
+        android:inputType="text" />
 
     <TextView
         android:text="@string/text_login_password"
@@ -67,4 +92,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         />
+
 </LinearLayout>
