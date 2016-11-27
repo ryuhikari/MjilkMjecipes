@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mjilk Recipes</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="activity_name_login">Login</string>
+    <string name="activity_name_profile">Profil</string>
+    <string name="activity_name_signup">Registrieren</string>
+    <string name="btn_login_login">Login</string>
+    <string name="btn_login_signup">Registrieren</string>
+    <string name="btn_main_favorites">Favoriten</string>
+    <string name="btn_main_my_recipes">Meine Rezepte</string>
+    <string name="btn_main_profile">Profil</string>
+    <string name="btn_profile_save_changes">Änderungen Speichern</string>
+    <string name="btn_signup_signup">Registrieren</string>
+    <string name="comment_username">Username</string>
+    <string name="comments_load_more">Mehr Kommentare laden</string>
+    <string name="facebook_login_successful_notify">Erfolgreich via Facebook eingeloggt</string>
+    <string name="facebook_logout_successful_notify">Erfolgreich via Facebook ausgeloggt</string>
+    <string name="recipe_by">Von:</string>
+    <string name="recipe_steps_title">Schritte:</string>
+    <string name="text_login_password">Passwort</string>
+    <string name="text_login_email">Email</string>
+    <string name="text_menu_logout">Ausloggen</string>
+    <string name="text_menu_new_comment">Neuer Kommentar</string>
+    <string name="text_menu_new_recipe">Neues Rezept</string>
+    <string name="text_menu_search">Suche</string>
+    <string name="text_menu_settings">Einstellungen</string>
+    <string name="text_profile_new_password">Neues Passwort</string>
+    <string name="text_show_list_recipe_name">Rezeptname</string>
+    <string name="text_signup_confirm_password">Neues Passwort Bestätigen</string>
+    <string name="text_signup_email">Email</string>
+    <string name="text_signup_last_name">Nachname</string>
+    <string name="text_signup_name">Vorname</string>
+    <string name="text_signup_password">Passwort</string>
+    <string name="text_signup_username">Username</string>
+    <string name="text_login_username">Username</string>
+    <string name="text_logging_in">Logge ein</string>
+</resources>
