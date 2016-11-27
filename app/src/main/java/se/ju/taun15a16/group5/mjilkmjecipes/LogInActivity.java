@@ -1,19 +1,29 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.util.Base64;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
@@ -26,21 +36,76 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
+
+        //TODO: For Debug Only
+        ((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
+        ((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
+
+
+        RelativeLayout loginBarLayout = (RelativeLayout) findViewById(R.id.layoutLoginBar);
+
         Button btn_login =(Button) findViewById(R.id.button_login_login);
         btn_login.setOnClickListener(view -> {
+
             //TODO: Replace with actual login
-            EditText emailField = (EditText) findViewById(R.id.editText_login__email);
+            EditText usernameField = (EditText) findViewById(R.id.editText_login_username);
             EditText pwField = (EditText) findViewById(R.id.editText_login_password);
-            String email = emailField.getText().toString();
+            String username = usernameField.getText().toString();
             String password = pwField.getText().toString();
 
+            new AsyncTask<String, Void, JSONObject>(){
 
-            //Meanwhile it logs in directly
-            RESTManager restManager = RESTManager.getInstance();
-            //TODO: Change to JSONObject and then do something with the result
-            Object result = restManager.createLoginToken(email, password);
 
-            launchMainMenuActivity(null);
+                @Override
+                protected void onPreExecute() {
+                    loginBarLayout.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected JSONObject doInBackground(String... params) {
+
+                    // If the params are invalid, return immediately.
+                    if(params.length != 2){
+                        this.cancel(true);
+                        return null;
+                    }
+                    RESTManager restManager = RESTManager.getInstance();
+                    return restManager.createLoginToken(params[0], params[1]);
+                }
+
+                @Override
+                protected void onPostExecute(JSONObject jsonObject) {
+
+
+                    try {
+                        String token = jsonObject.getString("access_token");
+                        Log.d("Login","RAW JSON Login-Token: " + jsonObject.toString());
+                        String[] tokenPieces = token.split("\\.");
+                        Log.d("Login","Encoded Token Header: " + tokenPieces[0]);
+                        Log.d("Login","Encoded Token Payload: " + tokenPieces[1]);
+                        Log.d("Login","Encoded Token Signature: " + tokenPieces[2]);
+                        byte[] decodedTokenHeaderRAW = Base64.decode(tokenPieces[0], Base64.DEFAULT);
+                        byte[] decodedTokenClaimsRAW = Base64.decode(tokenPieces[1], Base64.DEFAULT);
+
+                        String decodedTokenHeader = new String(decodedTokenHeaderRAW, Charset.forName("UTF-8"));
+                        String decodedTokenClaims = new String(decodedTokenClaimsRAW, Charset.forName("UTF-8"));
+                        Log.d("Login","Decoded Token Header: " + decodedTokenHeader);
+                        Log.d("Login","Decoded Token Payload: " + decodedTokenClaims);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    loginBarLayout.setVisibility(View.GONE);
+                    launchMainMenuActivity(null);
+                }
+
+                @Override
+                protected void onCancelled(JSONObject jsonObject) {
+                    loginBarLayout.setVisibility(View.GONE);
+                }
+            }.execute(username, password);
         });
 
         Button btn_signup =(Button) findViewById(R.id.button_login_signup);
@@ -53,13 +118,58 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                RESTManager restManager = RESTManager.getInstance();
-                //TODO: Change to JSONObject and then do something with the result
-                Object result = restManager.createLoginTokenFacebook(loginResult.getAccessToken().getToken());
+                Log.d("Login-FB","Facebook-Token: " + loginResult.getAccessToken().getToken());
 
-                Log.d("Login", "Successfully Login in via Facebook: " + loginResult.getAccessToken().getToken());
-                Toast.makeText(getApplicationContext(), R.string.facebook_login_successful_notify, Toast.LENGTH_SHORT).show();
-                launchMainMenuActivity(null);
+
+                new AsyncTask<String, Void, JSONObject>() {
+
+                    @Override
+                    protected void onPreExecute() {
+                        loginBarLayout.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    protected JSONObject doInBackground(String... params) {
+                        RESTManager restManager = RESTManager.getInstance();
+                        return restManager.createLoginTokenFacebook(loginResult.getAccessToken().getToken());
+                    }
+
+                    @Override
+                    protected void onPostExecute(JSONObject jsonObject) {
+
+                        //TODO: Make working!
+                        /*try {
+                            String token = jsonObject.getString("access_token");
+                            Log.d("Login-FB", jsonObject.toString());
+                            String[] tokenPieces = token.split("\\.");
+                            Log.d("Login-FB","Encoded Token Header: " + tokenPieces[0]);
+                            Log.d("Login-FB","Encoded Token Payload: " + tokenPieces[1]);
+                            Log.d("Login-FB","Encoded Token Signature: " + tokenPieces[2]);
+                            byte[] decodedTokenHeaderRAW = Base64.decode(tokenPieces[0], Base64.DEFAULT);
+                            byte[] decodedTokenClaimsRAW = Base64.decode(tokenPieces[1], Base64.DEFAULT);
+
+                            String decodedTokenHeader = new String(decodedTokenHeaderRAW, Charset.forName("UTF-8"));
+                            String decodedTokenClaims = new String(decodedTokenClaimsRAW, Charset.forName("UTF-8"));
+                            Log.d("Login-FB","Decoded Token Header: " + decodedTokenHeader);
+                            Log.d("Login-FB","Decoded Token Payload: " + decodedTokenClaims);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }*/
+
+                        Log.d("Login", "Successfully Login in via Facebook: " + loginResult.getAccessToken().getToken());
+                        loginBarLayout.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), R.string.facebook_login_successful_notify, Toast.LENGTH_SHORT).show();
+                        launchMainMenuActivity(null);
+                    }
+
+                    @Override
+                    protected void onCancelled(JSONObject jsonObject) {
+                        loginBarLayout.setVisibility(View.GONE);
+                    }
+
+                }.execute(loginResult.getAccessToken().getToken());
             }
 
             @Override

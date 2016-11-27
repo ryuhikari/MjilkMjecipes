@@ -33,5 +33,6 @@
     <string name="text_signup_name">Vorname</string>
     <string name="text_signup_password">Passwort</string>
     <string name="text_signup_username">Username</string>
-    <string name="title_activity_recipe"></string>
+    <string name="text_login_username">Username</string>
+    <string name="text_logging_in">Logge ein</string>
 </resources>

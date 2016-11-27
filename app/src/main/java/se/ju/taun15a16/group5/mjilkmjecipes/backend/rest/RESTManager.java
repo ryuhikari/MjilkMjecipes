@@ -181,16 +181,157 @@ public class RESTManager
 		// TODO implement me
 	}
 	
-	public String createLoginToken(String username, String password) {
+	public JSONObject createLoginToken(String username, String password) {
 		// TODO implement me
 		Log.d("REST","Creating Login-Token...");
-		return null;
+
+		HttpURLConnection con = null;
+		JSONObject returnData = null;
+		try {
+			URL url = new URL(BASE_PATH + BASE_PATH_TOKEN);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			con.setRequestProperty("Accept","application/json");
+			con.setUseCaches(false);
+			con.setDoOutput(true);
+			// Currently unknown, still TODO
+			con.setAllowUserInteraction(false); //TODO: Check
+			con.setConnectTimeout(TIMEOUT);
+			con.setReadTimeout(TIMEOUT);
+
+
+			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+			osw.write("grant_type=password&username=" + username + "&password=" +  password);
+			osw.flush();
+			osw.close();
+
+
+			con.connect();
+			int status = con.getResponseCode();
+			Log.d("REST",status + " " + con.getResponseMessage());
+
+			BufferedReader br;
+			StringBuilder sb;
+			String line;
+			String jsonData;
+
+			switch(status){
+				case 200:
+				case 201:
+
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					sb = new StringBuilder();
+					while((line = br.readLine()) != null){
+						sb.append(line + "\n");
+					}
+					br.close();
+					jsonData = sb.toString();
+					returnData = new JSONObject(jsonData);
+					break;
+
+				case 400:
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+					sb = new StringBuilder();
+					while((line = br.readLine()) != null){
+						sb.append(line + "\n");
+					}
+					br.close();
+					jsonData = sb.toString();
+					String errorCode = new JSONObject(jsonData).getString("error");
+					Log.e("REST",errorCode);
+					break;
+
+				case -1:
+					break;
+
+			}
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+		} catch (JSONException e) {
+			Log.e("REST-JSON", Log.getStackTraceString(e));
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
+		return returnData;
 	}
 
-	public String createLoginTokenFacebook(String fbToken) {
+	public JSONObject createLoginTokenFacebook(String fbToken) {
 		// TODO implement me
 		Log.d("REST","Creating Facebook Login-Token...");
-		return null;
+		HttpURLConnection con = null;
+		JSONObject returnData = null;
+		try {
+			URL url = new URL(BASE_PATH + BASE_PATH_TOKEN);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			con.setRequestProperty("Accept","application/json");
+			con.setUseCaches(false);
+			con.setDoOutput(true);
+			// Currently unknown, still TODO
+			con.setAllowUserInteraction(false); //TODO: Check
+			con.setConnectTimeout(TIMEOUT);
+			con.setReadTimeout(TIMEOUT);
+
+
+			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+			osw.write("grant_type=" + "52.211.99.140/" + "grants/facebook&token=" + fbToken);
+			osw.flush();
+			osw.close();
+
+
+			con.connect();
+			int status = con.getResponseCode();
+			Log.d("REST",status + " " + con.getResponseMessage());
+
+			BufferedReader br;
+			StringBuilder sb;
+			String line;
+			String jsonData;
+
+			switch(status){
+				case 200:
+				case 201:
+
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					sb = new StringBuilder();
+					while((line = br.readLine()) != null){
+						sb.append(line + "\n");
+					}
+					br.close();
+					jsonData = sb.toString();
+					returnData = new JSONObject(jsonData);
+					break;
+
+				case 400:
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+					sb = new StringBuilder();
+					while((line = br.readLine()) != null){
+						sb.append(line + "\n");
+					}
+					br.close();
+					jsonData = sb.toString();
+					String errorCode = new JSONObject(jsonData).getString("error");
+					Log.e("REST",errorCode);
+					break;
+
+				case -1:
+					break;
+
+			}
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+		} catch (JSONException e) {
+			Log.e("REST-JSON", Log.getStackTraceString(e));
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
+		return returnData;
 	}
 	
 	public boolean createRecipe(Object[] recipeData) {
