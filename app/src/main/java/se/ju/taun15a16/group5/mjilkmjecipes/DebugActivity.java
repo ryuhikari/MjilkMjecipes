@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class DebugActivity extends AppCompatActivity {
@@ -61,6 +62,10 @@ public class DebugActivity extends AppCompatActivity {
                         case "createLoginTokenFacebook":
                             break;
                         case "createRecipe":
+                            Recipe recipe = new Recipe();
+                            recipe.setName("Test recipe");
+                            recipe.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
+                            recipe.setDescription("sdfdsfdsf");
                             break;
                         case "deleteAccount":
                             break;
