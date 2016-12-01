@@ -55,12 +55,15 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".ShowListActivity"
+            android:name=".recipelist.ShowListActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".recipelist.RecipeDetailActivity"
+            android:label="@string/btn_main_my_recipes" />
         <activity android:name=".DebugActivity"></activity>
     </application>
 

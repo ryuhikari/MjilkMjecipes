@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowListActivity;
+
 public class MainActivity extends MainMenu {
 
     @Override
@@ -41,7 +43,7 @@ public class MainActivity extends MainMenu {
 
 
     public void launchMyRecipesActivity(View view){
-        Intent intent = new Intent(this, RecipeActivity.class);
+        Intent intent = new Intent(this, ShowListActivity.class);
         startActivity(intent);
     }
 
