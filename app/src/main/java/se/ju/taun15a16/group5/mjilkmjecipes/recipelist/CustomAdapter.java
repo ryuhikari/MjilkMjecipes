@@ -103,6 +103,7 @@ class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
             holder.recipeName.setText( tempValues.getRecipeName() );
             holder.recipeAuthor.setText( tempValues.getRecipeAuthor() );
+            holder.recipeRating.setRating(tempValues.getRecipeRating()/2);
 
             int resID = resources.getIdentifier( tempValues.getRecipeImage(), "drawable", "se.ju.taun15a16.group5.mjilkmjecipes");
             holder.recipeImage.setImageResource(resID);
@@ -120,7 +121,7 @@ class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     }
 
     /********* Called when Item click in ListView ************/
-    private class OnItemClickListener  implements View.OnClickListener {
+    private class OnItemClickListener implements View.OnClickListener {
         private int mPosition;
 
         OnItemClickListener(int position){
@@ -135,7 +136,7 @@ class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
             /****  Call  onItemClick Method inside ShowListActivity Class ( See Below )****/
 
-            //sct.onItemClick( mPosition );
+            sct.itemClicked( mPosition );
         }
     }
 }

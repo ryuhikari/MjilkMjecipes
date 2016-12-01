@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
@@ -15,13 +17,13 @@ import se.ju.taun15a16.group5.mjilkmjecipes.R;
  */
 public class RecipeDetailFragment extends Fragment {
 
-    private long workoutId;
+    private long recipeId;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            workoutId = savedInstanceState.getLong("workoutId");
+            recipeId = savedInstanceState.getLong("recipeId");
         }
     }
 
@@ -36,20 +38,25 @@ public class RecipeDetailFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
-            TextView title = (TextView) view.findViewById(R.id.textTitle);
-            Workout workout = Workout.workouts[(int) workoutId]; title.setText(workout.getName());
-            TextView description = (TextView) view.findViewById(R.id.textDescription);
-            description.setText(workout.getDescription());
+            ImageView image = (ImageView) view.findViewById(R.id.imageView_recipe_detail_recipe_picture);
+            TextView name = (TextView) view.findViewById(R.id.textView_recipe_detail_recipe_name);
+            TextView author = (TextView) view.findViewById(R.id.textView_recipe_detail_recipe_author);
+            RatingBar rating = (RatingBar) view.findViewById(R.id.ratingBar_recipe_detail_recipe_rating);
+
+            image.setImageResource(R.drawable.tacos);
+            name.setText("Recipe "+recipeId);
+            author.setText("Author "+recipeId);
+            rating.setRating(recipeId/2);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putLong("workoutId", workoutId);
+        savedInstanceState.putLong("recipeId", recipeId);
     }
 
-    public void setWorkout(long id) {
-        this.workoutId = id;
+    public void setRecipe(long id) {
+        this.recipeId = id;
     }
 
 }
