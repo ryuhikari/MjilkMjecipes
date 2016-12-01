@@ -43,12 +43,17 @@ public class MainActivity extends MainMenu {
 
 
     public void launchMyRecipesActivity(View view){
+        String recipeType = "My Recipes";
         Intent intent = new Intent(this, ShowListActivity.class);
+        intent.putExtra(ShowListActivity.EXTRA_TYPE, recipeType);
         startActivity(intent);
     }
 
     public void launchFavoritesActivity(View view){
-
+        String recipeType = "Favorites";
+        Intent intent = new Intent(this, ShowListActivity.class);
+        intent.putExtra(ShowListActivity.EXTRA_TYPE, recipeType);
+        startActivity(intent);
     }
 
     public void launchSearchActivity(View view){
