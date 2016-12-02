@@ -40,7 +40,7 @@ public class RESTManager
 
 	private static final String PATH_RECIPES_SEARCH = "search?term=";
 
-	private static int TIMEOUT = 1000;
+	private static int TIMEOUT = 10000;
 
 
 	// Singleton Variable
@@ -264,7 +264,7 @@ public class RESTManager
 		HttpURLConnection con = null;
 		JSONObject returnData = null;
 		try {
-			URL url = new URL(BASE_PATH + BASE_PATH_TOKEN);
+			URL url = new URL(BASE_PATH + "tokens/facebook");
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("POST");
 			con.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
@@ -278,7 +278,7 @@ public class RESTManager
 
 
 			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
-			osw.write("grant_type=" + "52.211.99.140/" + "grants/facebook&token=" + fbToken);
+			osw.write("grant_type=mjecipes.com/grants/facebook&token=" + fbToken);
 			osw.flush();
 			osw.close();
 

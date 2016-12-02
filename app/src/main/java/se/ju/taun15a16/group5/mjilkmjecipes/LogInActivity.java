@@ -138,7 +138,7 @@ public class LogInActivity extends AppCompatActivity {
                     protected void onPostExecute(JSONObject jsonObject) {
 
                         //TODO: Make working!
-                        /*try {
+                        try {
                             String token = jsonObject.getString("access_token");
                             Log.d("Login-FB", jsonObject.toString());
                             String[] tokenPieces = token.split("\\.");
@@ -156,7 +156,7 @@ public class LogInActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }*/
+                        }
 
                         Log.d("Login", "Successfully Login in via Facebook: " + loginResult.getAccessToken().getToken());
                         loginBarLayout.setVisibility(View.GONE);
