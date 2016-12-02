@@ -4,6 +4,8 @@ package se.ju.taun15a16.group5.mjilkmjecipes.backend.rest;
 import android.media.Image;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
 
 public class RESTManager
 {
@@ -165,11 +168,117 @@ public class RESTManager
 	}
 	
 	public void getAllCreatedRecipesByAccount(String userID) {
-		// TODO implement me
+		// TODO check
+
+        JSONArray data = null;
+		// The HTTP connection
+		HttpURLConnection con = null;
+		try {
+			// Create the URL from the static strings
+			URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + userID + "/" + PATH_RECIPES);
+			// Open the connection
+			con = (HttpURLConnection) url.openConnection();
+			// Set the HTTP request type(GET,POST,PUT,DELETE)
+			con.setRequestMethod("GET");
+			// The type of the content you are receiving
+			con.setRequestProperty("Accept","application/json");
+			// Use a cached request(Instead of sending actual request, use a cached result. I advise against it currently!)
+			con.setUseCaches(false);
+			// Whether to send data to the server or not
+			con.setDoInput(true);
+			// Currently unknown, still TODO
+			con.setAllowUserInteraction(false); //TODO: Check
+			// Request timeout time
+			con.setConnectTimeout(TIMEOUT);
+			// Request timeout time
+			con.setReadTimeout(TIMEOUT);
+
+
+			// Not connect to the server and get the response
+			con.connect();
+			// What Code did we receive
+			int status = con.getResponseCode();
+			Log.d("REST", status + " " + con.getResponseMessage());
+
+
+			// Depending on the response code, take the correct measure
+			switch(status){
+                case 200:
+                case 201:
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while((line = br.readLine()) != null){
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                    String jsonData = sb.toString();
+                    data = new JSONArray(jsonData);
+                    break;
+                case 404:
+                    Log.e("REST-getAllRecipes", "Error 404 Not Found");
+                    break;
+			}
+			// If errors, then take approppiate measures.
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+        } catch (JSONException e) {
+            Log.e("REST-JSON", Log.getStackTraceString(e));
+			// Dont forget to close the connection in any case!
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
 	}
 	
 	public void getAllCommentsMadeByAccount(String userID) {
-		// TODO implement me
+		// TODO check
+
+        JSONArray data = null;
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + userID + "/" + PATH_COMMENTS);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept","application/json");
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 200:
+                case 201:
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while((line = br.readLine()) != null){
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                    String jsonData = sb.toString();
+                    data = new JSONArray(jsonData);
+                    break;
+                case 404:
+                    Log.e("REST-getAllRecipes", "Error 404 Not Found");
+                    break;
+            }
+        } catch (IOException e) {
+            Log.e("REST", Log.getStackTraceString(e));
+        } catch (JSONException e) {
+            Log.e("REST-JSON", Log.getStackTraceString(e));
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+
 	}
 	
 	public boolean updateAllFavoriteRecipesByAccount(String userID, String[] recipeIDs) {
@@ -334,9 +443,79 @@ public class RESTManager
 		return returnData;
 	}
 	
-	public boolean createRecipe(Object[] recipeData) {
-		// TODO implement me
-		return false;
+	public boolean createRecipe(Recipe recipeData) {
+		// Our return object
+		Recipe recipe = null;
+
+		// The HTTP connection
+		HttpURLConnection con = null;
+		try {
+			// Create the URL from the static strings
+			URL url = new URL(BASE_PATH + PATH_RECIPES);
+			// Open the connection
+			con = (HttpURLConnection) url.openConnection();
+			// Set the HTTP request type(GET,POST,PUT,DELETE)
+			con.setRequestMethod("POST");
+            // The Type of the content you are sending or receiving
+            con.setRequestProperty("Content-Type","application/json");
+			// The type of the content you are receiving
+			con.setRequestProperty("Accept","application/json");
+			// Use a cached request(Instead of sending actual request, use a cached result. I advise against it currently!)
+			con.setUseCaches(false);
+			// Whether to send data to the server or not
+			con.setDoOutput(true);
+			// Currently unknown, still TODO
+			con.setAllowUserInteraction(false); //TODO: Check
+			// Request timeout time
+			con.setConnectTimeout(TIMEOUT);
+			// Request timeout time
+			con.setReadTimeout(TIMEOUT);
+
+			// Authorization TODO: Check
+			String header = "Bearer 2YotnFZ.FEjr1zC.sicMWpAA";
+			con.addRequestProperty("Authorization", header);
+
+
+			// The JSON object to send
+			Gson gson = new Gson();
+            String jsonString = gson.toJson(recipeData);
+			JSONObject data = new JSONObject(jsonString);
+			// Use an OutputStreamWriter to send data to the server
+			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+			osw.write(data.toString());
+			// Do not forget this, otherwise you get an HTTP 500 Error
+			osw.flush();
+			// Do not forget this, otherwise you get an HTTP 500 Error
+			osw.close();
+
+
+			// Not connect to the server and get the response
+			con.connect();
+			// What Code did we receive
+			int status = con.getResponseCode();
+			Log.d("REST",status + " " + con.getResponseMessage());
+
+
+			// Depending on the response code, take the correct measure
+			switch(status){
+				case 200:
+				case 201:
+                    Log.e("REST-recipe", "Created recipe");
+					break;
+			}
+			// If errors, then take approppiate measures.
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+		} catch (JSONException e) {
+			Log.e("REST-JSON", Log.getStackTraceString(e));
+
+			// Dont forget to close the connection in any case!
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
+		return true;
 	}
 	
 	public JSONArray getMostRecentRecipes(int page) {
