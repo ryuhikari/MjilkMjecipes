@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class LogInActivity extends AppCompatActivity {
@@ -41,6 +42,9 @@ public class LogInActivity extends AppCompatActivity {
         ((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
         ((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
 
+        //((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
+        //((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
+
 
         RelativeLayout loginBarLayout = (RelativeLayout) findViewById(R.id.layoutLoginBar);
 
@@ -53,7 +57,11 @@ public class LogInActivity extends AppCompatActivity {
             String username = usernameField.getText().toString();
             String password = pwField.getText().toString();
 
-            new AsyncTask<String, Void, JSONObject>(){
+            AccountManager accManager = AccountManager.getInstance();
+            accManager.setUserName(getApplicationContext(), username);
+            accManager.setUserPassword(getApplicationContext(), password);
+
+            new AsyncTask<Void, Void, Void>(){
 
 
                 @Override
@@ -62,50 +70,23 @@ public class LogInActivity extends AppCompatActivity {
                 }
 
                 @Override
-                protected JSONObject doInBackground(String... params) {
-
-                    // If the params are invalid, return immediately.
-                    if(params.length != 2){
-                        this.cancel(true);
-                        return null;
-                    }
-                    RESTManager restManager = RESTManager.getInstance();
-                    return restManager.createLoginToken(params[0], params[1]);
+                protected Void doInBackground(Void... params) {
+                    accManager.login(getApplicationContext());
+                    return null;
                 }
 
                 @Override
-                protected void onPostExecute(JSONObject jsonObject) {
-
-
-                    try {
-                        String token = jsonObject.getString("access_token");
-                        Log.d("Login","RAW JSON Login-Token: " + jsonObject.toString());
-                        String[] tokenPieces = token.split("\\.");
-                        Log.d("Login","Encoded Token Header: " + tokenPieces[0]);
-                        Log.d("Login","Encoded Token Payload: " + tokenPieces[1]);
-                        Log.d("Login","Encoded Token Signature: " + tokenPieces[2]);
-                        byte[] decodedTokenHeaderRAW = Base64.decode(tokenPieces[0], Base64.DEFAULT);
-                        byte[] decodedTokenClaimsRAW = Base64.decode(tokenPieces[1], Base64.DEFAULT);
-
-                        String decodedTokenHeader = new String(decodedTokenHeaderRAW, Charset.forName("UTF-8"));
-                        String decodedTokenClaims = new String(decodedTokenClaimsRAW, Charset.forName("UTF-8"));
-                        Log.d("Login","Decoded Token Header: " + decodedTokenHeader);
-                        Log.d("Login","Decoded Token Payload: " + decodedTokenClaims);
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                protected void onPostExecute(Void aVoid) {
                     loginBarLayout.setVisibility(View.GONE);
                     launchMainMenuActivity(null);
                 }
 
                 @Override
-                protected void onCancelled(JSONObject jsonObject) {
+                protected void onCancelled() {
                     loginBarLayout.setVisibility(View.GONE);
                 }
-            }.execute(username, password);
+
+            }.execute();
         });
 
         Button btn_signup =(Button) findViewById(R.id.button_login_signup);
