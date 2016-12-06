@@ -57,8 +57,14 @@ public class DebugActivity extends AppCompatActivity {
                         case "addImageToRecipe":
                             break;
                         case "createAccount":
-                            AccountInfo info = debugRestManager.createAccount("AdminMjilkRecipes","Admin!1",0.0,0.0);
-                            callToast(info.toString());
+                            AccountInfo info = null;
+                            try {
+                                info = debugRestManager.createAccount("AdminMjilkRecipes","Admin!1",0.0,0.0);
+                                callToast(info.toString());
+                            } catch (HTTP400Exception e) {
+                                e.printStackTrace();
+                            }
+
                             break;
                         case "createAccountFacebook":
                             break;
@@ -132,12 +138,7 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void callToast(String message){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-            }
-        });
+        runOnUiThread(() -> Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show());
 
     }
 }
