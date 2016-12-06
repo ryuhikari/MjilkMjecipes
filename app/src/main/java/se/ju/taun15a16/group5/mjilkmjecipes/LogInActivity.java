@@ -37,10 +37,16 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
+        AccountManager accManager = AccountManager.getInstance();
+
+        String usernameSaved = accManager.getUserName(getApplicationContext());
+        String passwordSaved = accManager.getUserPassword(getApplicationContext());
+
+
 
         //TODO: For Debug Only
-        ((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
-        ((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
+        ((EditText)findViewById(R.id.editText_login_username)).setText(usernameSaved);
+        ((EditText)findViewById(R.id.editText_login_password)).setText(passwordSaved);
 
         //((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
         //((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
@@ -57,7 +63,7 @@ public class LogInActivity extends AppCompatActivity {
             String username = usernameField.getText().toString();
             String password = pwField.getText().toString();
 
-            AccountManager accManager = AccountManager.getInstance();
+
             accManager.setUserName(getApplicationContext(), username);
             accManager.setUserPassword(getApplicationContext(), password);
 
