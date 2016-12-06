@@ -43,13 +43,17 @@ public class LogInActivity extends AppCompatActivity {
         String passwordSaved = accManager.getUserPassword(getApplicationContext());
 
 
+        if(BuildConfig.DEBUG && (usernameSaved == null || passwordSaved == null)){
+            ((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
+            ((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
 
-        //TODO: For Debug Only
-        ((EditText)findViewById(R.id.editText_login_username)).setText(usernameSaved);
-        ((EditText)findViewById(R.id.editText_login_password)).setText(passwordSaved);
+        }else{
+            ((EditText)findViewById(R.id.editText_login_username)).setText(usernameSaved);
+            ((EditText)findViewById(R.id.editText_login_password)).setText(passwordSaved);
+        }
 
-        //((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
-        //((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
+
+
 
 
         RelativeLayout loginBarLayout = (RelativeLayout) findViewById(R.id.layoutLoginBar);
