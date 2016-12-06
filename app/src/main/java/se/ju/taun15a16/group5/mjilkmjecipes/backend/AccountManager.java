@@ -12,6 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
@@ -143,12 +146,16 @@ public class AccountManager {
                 return false;
             }
             JSONObject data = restManager.createLoginToken(username, pw);
+            if(data == null){
+                return false;
+            }
             try {
                 String token = data.getString("access_token");
                 String timestamp = data.getString("timestamp");
                 long expirationTime = data.getLong("expires_in");
                 setLoginToken(context, token);
                 setLoginTokenTimestampAndExpirationDate(context, timestamp, expirationTime);
+                setIsFacebookLogin(context, false);
 
                 Log.d("Login","RAW JSON Login-Token: " + data.toString());
                 String[] tokenPieces = token.split("\\.");
@@ -162,6 +169,11 @@ public class AccountManager {
                 String decodedTokenClaims = new String(decodedTokenClaimsRAW, Charset.forName("UTF-8"));
                 Log.d("Login","Decoded Token Header: " + decodedTokenHeader);
                 Log.d("Login","Decoded Token Payload: " + decodedTokenClaims);
+                JSONObject decodedData = new JSONObject(decodedTokenClaims);
+                Log.d("Login", "JSON Token Payload: " + decodedData.toString());
+                String userID = decodedData.getString("userId");
+                Log.d("Login", "User-ID: " + userID);
+                setUserID(context, userID);
             } catch (JSONException e) {
                 e.printStackTrace();
                 return false;
@@ -170,8 +182,26 @@ public class AccountManager {
         return true;
     }
 
-    public boolean refreshLogin(Context context, String prefFile){
-        SharedPreferences preferences = context.getSharedPreferences(prefFile, Context.MODE_PRIVATE);
-        return false;
+    public boolean refreshLogin(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        Date currentDate = new Date();
+        String timestamp = preferences.getString(PREF_TOKEN_TIMESTAMP, null);
+        if(timestamp != null){
+            try {
+                Date timestampDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(timestamp);
+                long differenceMS = currentDate.getTime() - timestampDate.getTime();
+                long differenceSS = differenceMS / 1000L;
+                long expirationTime = preferences.getLong(PREF_TOKEN_EXPIRATION_TIME, -1L);
+                if(differenceSS >= expirationTime){
+                    return login(context);
+                }else{
+                    return true;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return login(context);
     }
 }
