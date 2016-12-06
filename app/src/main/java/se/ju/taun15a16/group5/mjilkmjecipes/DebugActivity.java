@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.graphics.Path;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class DebugActivity extends AppCompatActivity {
@@ -53,7 +58,7 @@ public class DebugActivity extends AppCompatActivity {
                             break;
                         case "createAccount":
                             AccountInfo info = debugRestManager.createAccount("AdminMjilkRecipes","Admin!1",0.0,0.0);
-                            //Toast.makeText(getApplicationContext(), info.toString(), Toast.LENGTH_SHORT).show();
+                            callToast(info.toString());
                             break;
                         case "createAccountFacebook":
                             break;
@@ -65,7 +70,26 @@ public class DebugActivity extends AppCompatActivity {
                             Recipe recipe = new Recipe();
                             recipe.setName("Test recipe");
                             recipe.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
-                            recipe.setDescription("sdfdsfdsf");
+                            recipe.setDescription("sdfdsfdsasdff");
+                            ArrayList<Direction> directions = new ArrayList<Direction>();
+                            directions.add(new Direction(1,1,""));
+                            recipe.setDirections(directions);
+                            try {
+                                RESTManager.getInstance().createRecipe(recipe, getApplicationContext());
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                                callToast(e.getMessage());
+                            } catch (HTTP400Exception e) {
+                                e.printStackTrace();
+                                Log.e("REST-recipe", e.errorCodesToString());
+                                for(RESTErrorCodes code : e.getErrorCodes()){
+                                    callToast(code.getDescription());
+                                    switch (code){
+                                        case DIRECTION_DESCRIPTION_MISSING:
+                                            break;
+                                    }
+                                }
+                            }
                             break;
                         case "deleteAccount":
                             break;
@@ -85,6 +109,7 @@ public class DebugActivity extends AppCompatActivity {
                             break;
                         case "getMostRecentRecipes":
                             JSONArray recipes = debugRestManager.getMostRecentRecipes(1);
+                            callToast(recipes.toString());
                             //Toast.makeText(getApplicationContext(), recipes.toString(), Toast.LENGTH_LONG).show();
                             break;
                         case "getRecipe":
@@ -104,5 +129,15 @@ public class DebugActivity extends AppCompatActivity {
             }.start();
 
         });
+    }
+
+    private void callToast(String message){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }

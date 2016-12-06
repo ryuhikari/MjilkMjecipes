@@ -1,10 +1,13 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.backend.rest;
 
 
+import android.content.Context;
 import android.media.Image;
 import android.util.Log;
 
 //import com.google.gson.Gson;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.Format;
@@ -21,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
 
 public class RESTManager
@@ -535,7 +540,7 @@ public class RESTManager
 		return returnData;
 	}
 	
-	public boolean createRecipe(Recipe recipeData) {
+	public boolean createRecipe(Recipe recipeData, Context context) throws HTTP401Exception, HTTP400Exception {
 		// Our return object
 		Recipe recipe = null;
 
@@ -552,6 +557,11 @@ public class RESTManager
             con.setRequestProperty("Content-Type","application/json");
 			// The type of the content you are receiving
 			con.setRequestProperty("Accept","application/json");
+
+			// Authorization TODO: Check
+			String header = "Bearer " + AccountManager.getInstance().getLoginToken(context);
+			con.addRequestProperty("Authorization", header);
+
 			// Use a cached request(Instead of sending actual request, use a cached result. I advise against it currently!)
 			con.setUseCaches(false);
 			// Whether to send data to the server or not
@@ -563,15 +573,11 @@ public class RESTManager
 			// Request timeout time
 			con.setReadTimeout(TIMEOUT);
 
-			// Authorization TODO: Check
-			String header = "Bearer 2YotnFZ.FEjr1zC.sicMWpAA";
-			con.addRequestProperty("Authorization", header);
-
-
 			// The JSON object to send
-			//Gson gson = new Gson();
-            String jsonString = null; //gson.toJson(recipeData);
+			Gson gson = new Gson();
+            String jsonString = gson.toJson(recipeData);
 			JSONObject data = new JSONObject(jsonString);
+
 			// Use an OutputStreamWriter to send data to the server
 			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
 			osw.write(data.toString());
@@ -580,13 +586,16 @@ public class RESTManager
 			// Do not forget this, otherwise you get an HTTP 500 Error
 			osw.close();
 
-
 			// Not connect to the server and get the response
 			con.connect();
 			// What Code did we receive
 			int status = con.getResponseCode();
 			Log.d("REST",status + " " + con.getResponseMessage());
 
+			BufferedReader br;
+			StringBuilder sb;
+			String line;
+			String jsonData;
 
 			// Depending on the response code, take the correct measure
 			switch(status){
@@ -594,6 +603,27 @@ public class RESTManager
 				case 201:
                     Log.e("REST-recipe", "Created recipe");
 					break;
+				case 400:
+
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+					sb = new StringBuilder();
+					while((line = br.readLine()) != null){
+						sb.append(line + "\n");
+					}
+					br.close();
+					jsonData = sb.toString();
+
+					JSONObject obj = new JSONObject(jsonData);
+					JSONArray jsonArray = obj.getJSONArray("errors");
+
+					RESTErrorCodes[] errorCodes = new RESTErrorCodes[jsonArray.length()];
+					for(int i = 0; i < errorCodes.length; ++i){
+						errorCodes[i] = RESTErrorCodes.fromString(jsonArray.getString(i));
+					}
+
+					throw new HTTP400Exception("ERROR: 400", errorCodes);
+				case 401:
+					throw new HTTP401Exception("401 Unauthorized");
 			}
 			// If errors, then take approppiate measures.
 		} catch (IOException e) {

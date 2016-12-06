@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowListActivity;
+
 public class MainActivity extends MainMenu {
 
     @Override
@@ -41,12 +43,17 @@ public class MainActivity extends MainMenu {
 
 
     public void launchMyRecipesActivity(View view){
-        Intent intent = new Intent(this, RecipeActivity.class);
+        String recipeType = "My Recipes";
+        Intent intent = new Intent(this, ShowListActivity.class);
+        intent.putExtra(ShowListActivity.EXTRA_TYPE, recipeType);
         startActivity(intent);
     }
 
     public void launchFavoritesActivity(View view){
-
+        String recipeType = "Favorites";
+        Intent intent = new Intent(this, ShowListActivity.class);
+        intent.putExtra(ShowListActivity.EXTRA_TYPE, recipeType);
+        startActivity(intent);
     }
 
     public void launchSearchActivity(View view){
