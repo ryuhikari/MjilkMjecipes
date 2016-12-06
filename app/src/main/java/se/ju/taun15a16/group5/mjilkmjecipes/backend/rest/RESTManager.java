@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.Format;
@@ -539,7 +540,7 @@ public class RESTManager
 		return returnData;
 	}
 	
-	public boolean createRecipe(Recipe recipeData, Context context) {
+	public boolean createRecipe(Recipe recipeData, Context context) throws HTTP401Exception, HTTP400Exception {
 		// Our return object
 		Recipe recipe = null;
 
@@ -603,6 +604,7 @@ public class RESTManager
                     Log.e("REST-recipe", "Created recipe");
 					break;
 				case 400:
+
 					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 					sb = new StringBuilder();
 					while((line = br.readLine()) != null){
@@ -611,8 +613,17 @@ public class RESTManager
 					br.close();
 					jsonData = sb.toString();
 
-					Log.e("REST-recipe",jsonData);
-					break;
+					JSONObject obj = new JSONObject(jsonData);
+					JSONArray jsonArray = obj.getJSONArray("errors");
+
+					RESTErrorCodes[] errorCodes = new RESTErrorCodes[jsonArray.length()];
+					for(int i = 0; i < errorCodes.length; ++i){
+						errorCodes[i] = RESTErrorCodes.fromString(jsonArray.getString(i));
+					}
+
+					throw new HTTP400Exception("ERROR: 400", errorCodes);
+				case 401:
+					throw new HTTP401Exception("401 Unauthorized");
 			}
 			// If errors, then take approppiate measures.
 		} catch (IOException e) {

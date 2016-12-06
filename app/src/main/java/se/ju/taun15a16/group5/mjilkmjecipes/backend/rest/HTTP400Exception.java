@@ -56,4 +56,17 @@ public class HTTP400Exception extends Exception {
     public boolean isSingleErrorCode(){
         return errorCodes.length == 1 ? true : false;
     }
+
+    public String errorCodesToString(){
+        String code = "";
+        for(RESTErrorCodes c : errorCodes){
+            code += c.getDescription() + " ";
+        }
+        return code;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
