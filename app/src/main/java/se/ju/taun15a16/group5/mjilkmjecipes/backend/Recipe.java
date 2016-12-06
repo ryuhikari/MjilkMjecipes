@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +42,9 @@ public class Recipe {
     private String name;
     private String description;
     private String creatorId;
-    private List<Direction> directions;
+    private ArrayList<Direction> directions;
+    private String image;
+    private int created;
 
     public String getName() {
         return name;
@@ -67,21 +70,39 @@ public class Recipe {
         this.creatorId = creatorId;
     }
 
-    public List<Direction> getDirections() {
+    public ArrayList<Direction> getDirections() {
         return directions;
     }
 
-    public void setDirections(List<Direction> directions) {
+    public void setDirections(ArrayList<Direction> directions) {
         this.directions = directions;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getCreated() {
+        return created;
+    }
+
+    public void setCreated(int created) {
+        this.created = created;
     }
 
     @Override
     public String toString() {
         return "Recipe{" +
-                "name='" + name + '\'' +
+                "created=" + created +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", creatorId='" + creatorId + '\'' +
                 ", directions=" + directions +
+                ", image='" + image + '\'' +
                 '}';
     }
 }
