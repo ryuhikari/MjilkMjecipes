@@ -212,7 +212,7 @@ public class RESTManager
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Accept","application/json");
 			con.setUseCaches(false);
-			con.setDoInput(false);
+			con.setDoOutput(true);
 			con.setAllowUserInteraction(false); //TODO: Check
 			con.setConnectTimeout(TIMEOUT);
 			con.setReadTimeout(TIMEOUT);
@@ -921,7 +921,7 @@ public class RESTManager
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Accept","application/json");
 			con.setUseCaches(false);
-			con.setDoInput(false);
+			con.setDoInput(true);
 			con.setAllowUserInteraction(false); //TODO: Check
 			con.setConnectTimeout(TIMEOUT);
 			con.setReadTimeout(TIMEOUT);
