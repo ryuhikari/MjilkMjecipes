@@ -9,42 +9,33 @@ import java.util.List;
 
 public class Recipe {
 
-    class Direction {
-
-        private int order;
-        private String description;
-
-        public int getOrder() {
-            return order;
-        }
-
-        public void setOrder(int order) {
-            this.order = order;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        @Override
-        public String toString() {
-            return "Direction{" +
-                    "order=" + order +
-                    ", description='" + description + '\'' +
-                    '}';
-        }
-    }
-
+    private int id;
     private String name;
     private String description;
     private String creatorId;
     private ArrayList<Direction> directions;
     private String image;
     private int created;
+
+    public Recipe(){}
+
+    public Recipe(int id, String name, String description, String creatorId, ArrayList<Direction> directions, String image, int created) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.creatorId = creatorId;
+        this.directions = directions;
+        this.image = image;
+        this.created = created;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
