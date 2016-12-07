@@ -71,7 +71,7 @@ public class LogInActivity extends AppCompatActivity {
             accManager.setUserName(getApplicationContext(), username);
             accManager.setUserPassword(getApplicationContext(), password);
 
-            new AsyncTask<Void, Void, Void>(){
+            new AsyncTask<Void, Void, Boolean>(){
 
 
                 @Override
@@ -80,15 +80,18 @@ public class LogInActivity extends AppCompatActivity {
                 }
 
                 @Override
-                protected Void doInBackground(Void... params) {
-                    accManager.login(getApplicationContext());
-                    return null;
+                protected Boolean doInBackground(Void... params) {
+                    return accManager.login(getApplicationContext());
                 }
 
                 @Override
-                protected void onPostExecute(Void aVoid) {
+                protected void onPostExecute(Boolean result) {
                     loginBarLayout.setVisibility(View.GONE);
-                    launchMainMenuActivity(null);
+                    if(result != null && result){
+                        launchMainMenuActivity(null);
+                    }else{
+                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error logging in!", Toast.LENGTH_LONG).show());
+                    }
                 }
 
                 @Override

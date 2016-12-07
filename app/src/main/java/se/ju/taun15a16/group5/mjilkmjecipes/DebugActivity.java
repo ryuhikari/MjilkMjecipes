@@ -62,7 +62,7 @@ public class DebugActivity extends AppCompatActivity {
                         case "createAccount":
                             AccountInfo info = null;
                             try {
-                                info = debugRestManager.createAccount("AdminMjilkRecipes","Admin!1",0.0,0.0);
+                                info = debugRestManager.createAccount("AdminMjilkRecipes2","Admin!1",0.0,0.0);
                                 callToast(info.toString());
                             } catch (HTTP400Exception e) {
                                 Log.e("DEBUG-REST", Log.getStackTraceString(e));
@@ -100,6 +100,14 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "deleteAccount":
+                            try {
+                                boolean result = RESTManager.getInstance().deleteAccount(getApplicationContext(), AccountManager.getInstance().getUserID(getApplicationContext()));
+                                callToast("Deleting Account was: " + result);
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "deleteComment":
                             break;
@@ -127,6 +135,12 @@ public class DebugActivity extends AppCompatActivity {
                             callToast(recipes.toString());
                             break;
                         case "getRecipe":
+                            try {
+                                JSONObject data = RESTManager.getInstance().getRecipe("230");
+                                callToast(data.toString());
+                            } catch (HTTP404Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                            }
                             break;
                         case "searchRecipes":
                             //TODO: Replace search term
@@ -146,6 +160,14 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "updateAccountInfo":
+                            try {
+                                boolean result = RESTManager.getInstance().updateAccountInfo(getApplicationContext(),AccountManager.getInstance().getUserID(getApplicationContext()),1.0,1.0);
+                                callToast("Updating Account was: " + result);
+                            } catch (HTTP401Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                            } catch (HTTP404Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                            }
                             break;
                         case "updateAllFavoriteRecipesByAccount":
                             break;
