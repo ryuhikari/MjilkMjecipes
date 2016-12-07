@@ -79,12 +79,14 @@ public class DebugActivity extends AppCompatActivity {
                             Recipe recipe = new Recipe();
                             recipe.setName("Test recipe");
                             recipe.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
-                            recipe.setDescription("sdfdsfdsasdff");
+                            recipe.setDescription("Recipe Description");
                             ArrayList<Direction> directions = new ArrayList<Direction>();
-                            directions.add(new Direction(1,1,""));
+                            directions.add(new Direction(recipe.getId(),1,"Direction 1"));
                             recipe.setDirections(directions);
                             try {
-                                RESTManager.getInstance().createRecipe(recipe, getApplicationContext());
+                                if ( RESTManager.getInstance().createRecipe(recipe, getApplicationContext()) ){
+                                    callToast("Recipe created successfully!");
+                                }
                             } catch (HTTP401Exception e) {
                                 Log.e("DEBUG-REST", Log.getStackTraceString(e));
                                 callToast(e.getMessage());
@@ -112,6 +114,17 @@ public class DebugActivity extends AppCompatActivity {
                         case "deleteComment":
                             break;
                         case "deleteRecipe":
+                            try {
+                                if ( RESTManager.getInstance().deleteRecipe(getApplicationContext(), "230") ) {
+                                    callToast("Recipe deleted successfully!");
+                                }
+                            } catch (HTTP401Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                                callToast(e.getMessage());
+                            } catch (HTTP404Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                                callToast(e.getMessage());
+                            }
                             break;
                         case "getAccountInfo":
                             try {
