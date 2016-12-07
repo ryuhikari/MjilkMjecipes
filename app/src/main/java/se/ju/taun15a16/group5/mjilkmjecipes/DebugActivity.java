@@ -84,7 +84,9 @@ public class DebugActivity extends AppCompatActivity {
                             directions.add(new Direction(recipe.getId(),1,"Direction 1"));
                             recipe.setDirections(directions);
                             try {
-                                RESTManager.getInstance().createRecipe(recipe, getApplicationContext());
+                                if ( RESTManager.getInstance().createRecipe(recipe, getApplicationContext()) ){
+                                    callToast("Recipe created successfully!");
+                                }
                             } catch (HTTP401Exception e) {
                                 Log.e("DEBUG-REST", Log.getStackTraceString(e));
                                 callToast(e.getMessage());
@@ -104,6 +106,17 @@ public class DebugActivity extends AppCompatActivity {
                         case "deleteComment":
                             break;
                         case "deleteRecipe":
+                            try {
+                                if ( RESTManager.getInstance().deleteRecipe(getApplicationContext(), "230") ) {
+                                    callToast("Recipe deleted successfully!");
+                                }
+                            } catch (HTTP401Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                                callToast(e.getMessage());
+                            } catch (HTTP404Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                                callToast(e.getMessage());
+                            }
                             break;
                         case "getAccountInfo":
                             try {
