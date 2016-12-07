@@ -9,6 +9,8 @@ public class Direction {
     private int order;
     private String description;
 
+    public Direction(){}
+
     public Direction(int id, int order, String description) {
         this.id = id;
         this.order = order;
