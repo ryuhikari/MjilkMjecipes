@@ -66,9 +66,9 @@ public class RESTManager
 		return managerInstance;
 	}
 	
-	public AccountInfo createAccount(String username, String password, double longitude, double latitude) throws HTTP400Exception {
+	public JSONObject createAccount(String username, String password, double longitude, double latitude) throws HTTP400Exception {
 
-		AccountInfo info = null;
+		JSONObject returnData = null;
 		HttpURLConnection con = null;
 		try {
 			URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + PATH_PASSWORD);
@@ -108,9 +108,8 @@ public class RESTManager
 					}
 					br.close();
 					String jsonData = sb.toString();
-					JSONObject returnData = new JSONObject(jsonData);
-					info = new AccountInfo(returnData.getString("id"), returnData.getString("userName"), returnData.getDouble("longitude"), returnData.getDouble("latitude"));
-					Log.d("REST",info.toString());
+					returnData = new JSONObject(jsonData);
+					Log.d("REST",returnData.toString());
 					break;
 				case 400:
 					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
@@ -140,7 +139,7 @@ public class RESTManager
 				con.disconnect();
 			}
 		}
-		return info;
+		return returnData;
 	}
 
 	public AccountInfo createAccountFacebook(String username, String token, double longitude, double latitude) {

@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +28,17 @@ import java.nio.charset.Charset;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class LogInActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
+
+    private EditText usernameEditText = null;
+    private EditText passwordEditText = null;
+
+    private static final int REQUEST_CODE_SIGN_UP = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +56,17 @@ public class LogInActivity extends AppCompatActivity {
         String usernameSaved = accManager.getUserName(getApplicationContext());
         String passwordSaved = accManager.getUserPassword(getApplicationContext());
 
+        usernameEditText = (EditText)findViewById(R.id.editText_login_username);
+        passwordEditText = (EditText)findViewById(R.id.editText_login_password);
 
         if(BuildConfig.DEBUG && (usernameSaved == null || passwordSaved == null)){
-            ((EditText)findViewById(R.id.editText_login_username)).setText("AdminMjilkRecipes");
-            ((EditText)findViewById(R.id.editText_login_password)).setText("Admin!1");
+
+            usernameEditText.setText("AdminMjilkRecipes");
+            passwordEditText.setText("Admin!1");
 
         }else{
-            ((EditText)findViewById(R.id.editText_login_username)).setText(usernameSaved);
-            ((EditText)findViewById(R.id.editText_login_password)).setText(passwordSaved);
+            usernameEditText.setText(usernameSaved);
+            passwordEditText.setText(passwordSaved);
         }
 
 
@@ -67,18 +77,14 @@ public class LogInActivity extends AppCompatActivity {
 
         Button btn_login =(Button) findViewById(R.id.button_login_login);
         btn_login.setOnClickListener(view -> {
-
-            //TODO: Replace with actual login
-            EditText usernameField = (EditText) findViewById(R.id.editText_login_username);
-            EditText pwField = (EditText) findViewById(R.id.editText_login_password);
-            String username = usernameField.getText().toString();
-            String password = pwField.getText().toString();
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
 
 
             accManager.setUserName(getApplicationContext(), username);
             accManager.setUserPassword(getApplicationContext(), password);
 
-            new AsyncTask<Void, Void, Boolean>(){
+            new AsyncTask<Void, Void, RESTErrorCodes[]>(){
 
 
                 @Override
@@ -87,23 +93,32 @@ public class LogInActivity extends AppCompatActivity {
                 }
 
                 @Override
-                protected Boolean doInBackground(Void... params) {
-                    Boolean result = false;
+                protected RESTErrorCodes[] doInBackground(Void... params) {
+                    RESTErrorCodes[] result = {};
                     try {
-                       result = accManager.login(getApplicationContext());
+                       accManager.login(getApplicationContext());
                     } catch (HTTP400Exception e) {
                         Log.getStackTraceString(e);
+                        result = e.getErrorCodes();
                     }
                     return result;
                 }
 
                 @Override
-                protected void onPostExecute(Boolean result) {
-                    loginBarLayout.setVisibility(View.GONE);
-                    if(result != null && result){
+                protected void onPostExecute(RESTErrorCodes[] result) {
+                    if(result.length == 0){
                         launchMainMenuActivity(null);
+                        loginBarLayout.setVisibility(View.GONE);
                     }else{
-                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error logging in!", Toast.LENGTH_LONG).show());
+                        //Only one error code possible here! Otherwise use for loop with switch/case inside
+                        switch (result[0]){
+                            case INVALID_CLIENT:
+                                usernameEditText.setError("Username might be incorrect!");
+                                passwordEditText.setError("Password might be incorrect!");
+                                break;
+                        }
+                        loginBarLayout.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "Error logging in!", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -194,7 +209,18 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_SIGN_UP){
+            if(resultCode == Activity.RESULT_OK){
+                String username = data.getStringExtra("username");
+                String password = data.getStringExtra("password");
+                usernameEditText.setText(username);
+                passwordEditText.setText(password);
+            }
+        }else{
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 
     public void launchMainMenuActivity(View view){
@@ -205,6 +231,6 @@ public class LogInActivity extends AppCompatActivity {
 
     public void launchSignUpActivity(View view){
         Intent intent = new Intent(this, SignUpActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_SIGN_UP);
     }
 }

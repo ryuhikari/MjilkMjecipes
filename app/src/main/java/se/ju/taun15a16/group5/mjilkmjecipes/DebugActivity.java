@@ -60,9 +60,8 @@ public class DebugActivity extends AppCompatActivity {
                         case "addImageToRecipe":
                             break;
                         case "createAccount":
-                            AccountInfo info = null;
                             try {
-                                info = debugRestManager.createAccount("AdminMjilkRecipes2","Admin!1",0.0,0.0);
+                                JSONObject info = debugRestManager.createAccount("AdminMjilkRecipes2","Admin!1",0.0,0.0);
                                 callToast(info.toString());
                             } catch (HTTP400Exception e) {
                                 Log.e("DEBUG-REST", Log.getStackTraceString(e));
