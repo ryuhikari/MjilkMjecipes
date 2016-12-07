@@ -815,9 +815,63 @@ public class RESTManager
 		return true;
 	}
 	
-	public boolean updateRecipe(String recipeID, Object[] recipeData) {
-		// TODO implement me
-		return false;
+	public boolean updateRecipe(Context context, int recipeID, Recipe recipeData) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
+
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL(BASE_PATH + PATH_RECIPES + recipeID);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type","application/json");
+            con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Accept","application/json");
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            // Send new Recipe content
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(recipeData);
+            JSONObject data = new JSONObject(jsonString);
+
+            OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+            osw.write(data.toString());
+            osw.flush();
+            osw.close();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 200:
+                case 201:
+                case 204:
+                    break;
+                case 400:
+                    break;
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } catch (JSONException e) {
+            Log.e("REST-JSON", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 	
 	public boolean addImageToRecipe(String recipeID, Image image) {

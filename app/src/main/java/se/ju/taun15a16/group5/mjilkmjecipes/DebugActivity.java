@@ -187,6 +187,34 @@ public class DebugActivity extends AppCompatActivity {
                         case "updateComment":
                             break;
                         case "updateRecipe":
+                            Recipe recipe2 = new Recipe();
+                            recipe2.setId(231);
+                            recipe2.setName("Test recipe modified");
+                            recipe2.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
+                            recipe2.setDescription("Recipe Description modified");
+                            ArrayList<Direction> directions2 = new ArrayList<Direction>();
+                            directions2.add(new Direction(recipe2.getId(),1,"Direction 1 modified"));
+                            recipe2.setDirections(directions2);
+                            try {
+                                if ( RESTManager.getInstance().updateRecipe(getApplicationContext(), recipe2.getId(), recipe2) ){
+                                    callToast("Recipe modified successfully!");
+                                }
+                            } catch (HTTP401Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                                callToast(e.getMessage());
+                            } catch (HTTP404Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                                callToast(e.getMessage());
+                            } catch (HTTP400Exception e) {
+                                Log.e("DEBUG-REST", e.errorCodesToString());
+                                for(RESTErrorCodes code : e.getErrorCodes()){
+                                    callToast(code.getDescription());
+                                    switch (code){
+                                        case DIRECTION_DESCRIPTION_MISSING:
+                                            break;
+                                    }
+                                }
+                            }
                             break;
                     }
                 }
