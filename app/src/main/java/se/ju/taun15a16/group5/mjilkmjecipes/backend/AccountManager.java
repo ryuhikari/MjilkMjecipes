@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 /**
@@ -118,7 +120,7 @@ public class AccountManager {
         editor.apply();
     }
 
-    public boolean login(Context context){
+    public boolean login(Context context) throws HTTP400Exception {
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
         RESTManager restManager = RESTManager.getInstance();
         if(isFacebookLogin(context)){
@@ -182,7 +184,28 @@ public class AccountManager {
         return true;
     }
 
-    public boolean refreshLogin(Context context){
+    public void logout(Context context){
+        if(isFacebookLogin(context)){
+            LoginManager.getInstance().logOut();
+        }else{
+            invalidateToken(context);
+        }
+    }
+
+    public boolean refreshLogin(Context context) throws HTTP400Exception {
+        return login(context);
+    }
+
+    public void invalidateToken(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(PREF_TOKEN);
+        editor.remove(PREF_TOKEN_TIMESTAMP);
+        editor.remove(PREF_TOKEN_EXPIRATION_TIME);
+        editor.apply();
+    }
+
+    public boolean isTokenValid(Context context){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
         Date currentDate = new Date();
         String timestamp = preferences.getString(PREF_TOKEN_TIMESTAMP, null);
@@ -193,7 +216,7 @@ public class AccountManager {
                 long differenceSS = differenceMS / 1000L;
                 long expirationTime = preferences.getLong(PREF_TOKEN_EXPIRATION_TIME, -1L);
                 if(differenceSS >= expirationTime){
-                    return login(context);
+                    return false;
                 }else{
                     return true;
                 }
@@ -202,6 +225,6 @@ public class AccountManager {
                 return false;
             }
         }
-        return login(context);
+        return false;
     }
 }

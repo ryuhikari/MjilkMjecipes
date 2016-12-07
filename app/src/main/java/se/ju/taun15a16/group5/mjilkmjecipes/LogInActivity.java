@@ -26,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class LogInActivity extends AppCompatActivity {
@@ -35,6 +36,12 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(AccountManager.getInstance().isTokenValid(getApplicationContext())){
+            launchMainMenuActivity(null);
+            return;
+        }
+
         setContentView(R.layout.activity_log_in);
 
         AccountManager accManager = AccountManager.getInstance();
@@ -81,7 +88,13 @@ public class LogInActivity extends AppCompatActivity {
 
                 @Override
                 protected Boolean doInBackground(Void... params) {
-                    return accManager.login(getApplicationContext());
+                    Boolean result = false;
+                    try {
+                       result = accManager.login(getApplicationContext());
+                    } catch (HTTP400Exception e) {
+                        Log.getStackTraceString(e);
+                    }
+                    return result;
                 }
 
                 @Override
@@ -187,6 +200,7 @@ public class LogInActivity extends AppCompatActivity {
     public void launchMainMenuActivity(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void launchSignUpActivity(View view){

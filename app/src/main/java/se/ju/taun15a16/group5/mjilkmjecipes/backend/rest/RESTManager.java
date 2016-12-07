@@ -451,7 +451,7 @@ public class RESTManager
 		// TODO implement me
 	}
 	
-	public JSONObject createLoginToken(String username, String password) {
+	public JSONObject createLoginToken(String username, String password) throws HTTP400Exception {
 		// TODO implement me
 		Log.d("REST","Creating Login-Token...");
 
@@ -512,13 +512,11 @@ public class RESTManager
 					}
 					br.close();
 					jsonData = sb.toString();
-					String errorCode = new JSONObject(jsonData).getString("error");
-					Log.e("REST",errorCode);
-					break;
 
-				case -1:
-					break;
-
+					JSONObject obj = new JSONObject(jsonData);
+					String errorCode = obj.getString("error");
+					RESTErrorCodes code = RESTErrorCodes.fromString(errorCode);
+				throw new HTTP400Exception("ERROR: 400", code);
 			}
 		} catch (IOException e) {
 			Log.e("REST", Log.getStackTraceString(e));

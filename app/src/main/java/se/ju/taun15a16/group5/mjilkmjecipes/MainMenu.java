@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
+
 public class MainMenu extends AppCompatActivity {
 
     @Override
@@ -34,11 +36,11 @@ public class MainMenu extends AppCompatActivity {
             case R.id.item_settings:
                 return true;
             case R.id.item_log_out:
-                // TODO: Either logout normally or with Facebook
-                LoginManager.getInstance().logOut();
+                AccountManager.getInstance().logout(getApplicationContext());
                 Toast.makeText(getApplicationContext(), R.string.facebook_logout_successful_notify, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, LogInActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
