@@ -41,10 +41,11 @@
     <string name="btn_signup_signup">Sign up</string>
     <string name="text_signing_up">Signing up</string>
 
-
     <!-- Profile -->
-    <string name="text_profile_new_password">New password</string>
-    <string name="btn_profile_save_changes">Save changes</string>
+    <string name="text_profile_username">Username</string>
+    <string name="text_profile_longitude">Longitude</string>
+    <string name="text_profile_latitude">Latitude</string>
+    <string name="btn_profile_update_profile">Update profile</string>
 
     <!-- Show List -->
     <string name="text_show_list_recipe_name">Recipe name</string>

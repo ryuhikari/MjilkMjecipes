@@ -17,39 +17,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="@string/text_signup_name"
+            android:text="@string/text_profile_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView_profile_email" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editText_profile_name"
-            android:hint="@string/text_signup_name" />
-
-        <TextView
-            android:text="@string/text_signup_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView_profile_last_name" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editText_profile_last_name"
-            android:hint="@string/text_signup_last_name" />
-
-        <TextView
-            android:text="@string/text_signup_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView_profile_username"
-            android:layout_marginTop="20dp" />
+            android:id="@+id/textView_profile_username" />
 
         <EditText
             android:layout_width="match_parent"
@@ -57,39 +28,40 @@
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/editText_profile_username"
-            android:hint="@string/text_signup_username" />
+            android:hint="@string/text_profile_username"
+            android:enabled="false" />
 
         <TextView
-            android:text="@string/text_profile_new_password"
+            android:text="@string/text_profile_longitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView_profile_new_password"
+            android:id="@+id/textView_profile_longitude"
             android:layout_marginTop="20dp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
+            android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/editText_profile_new_password"
-            android:hint="@string/text_profile_new_password" />
+            android:id="@+id/editText_profile_longitude"
+            android:hint="@string/text_profile_longitude" />
 
         <TextView
-            android:text="@string/text_signup_confirm_password"
+            android:text="@string/text_profile_latitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView_profile_confirm_password" />
+            android:id="@+id/textView_profile_latitude" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
+            android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/editText_profile_confirm_password"
-            android:hint="@string/text_signup_confirm_password" />
+            android:id="@+id/editText_profile_latitude"
+            android:hint="@string/text_profile_latitude" />
 
         <Button
-            android:text="@string/btn_profile_save_changes"
+            android:text="@string/btn_profile_update_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_profile_save_changes"
