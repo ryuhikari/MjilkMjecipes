@@ -8,6 +8,7 @@ import android.util.Log;
 //import com.google.gson.Gson;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +23,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
@@ -344,7 +347,7 @@ public class RESTManager
 		return true;
 	}
 	
-	public void getAllCreatedRecipesByAccount(String userID) {
+	public JSONArray getAllCreatedRecipesByAccount(String userID) throws HTTP404Exception {
 		// TODO check
 
         JSONArray data = null;
@@ -376,11 +379,12 @@ public class RESTManager
                     br.close();
                     String jsonData = sb.toString();
                     data = new JSONArray(jsonData);
+
                     break;
                 case 404:
                     Log.e("REST-getAllRecipes", "Error 404 Not Found");
-                    break;
-			}
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+            }
 		} catch (IOException e) {
 			Log.e("REST", Log.getStackTraceString(e));
         } catch (JSONException e) {
@@ -390,6 +394,8 @@ public class RESTManager
 				con.disconnect();
 			}
 		}
+
+        return data;
 	}
 	
 	public void getAllCommentsMadeByAccount(String userID) {

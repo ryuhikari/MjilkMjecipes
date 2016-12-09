@@ -139,6 +139,13 @@ public class DebugActivity extends AppCompatActivity {
                         case "getAllCommentsMadeByAccount":
                             break;
                         case "getAllCreatedRecipesByAccount":
+                            try {
+                                JSONArray recipes2 = debugRestManager.getAllCreatedRecipesByAccount(AccountManager.getInstance().getUserID(getApplicationContext()));
+                                callToast(recipes2.toString());
+                            } catch (HTTP404Exception e) {
+                                Log.e("REST-recipe", Log.getStackTraceString(e));
+                                callToast(e.toString());
+                            }
                             break;
                         case "getAllFavoriteRecipesByAccount":
                             break;
