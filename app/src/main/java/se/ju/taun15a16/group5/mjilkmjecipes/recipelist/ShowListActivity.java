@@ -1,16 +1,34 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class ShowListActivity extends AppCompatActivity {
 
@@ -20,7 +38,7 @@ public class ShowListActivity extends AppCompatActivity {
     ListView list;
     CustomAdapter adapter;
     public ShowListActivity CustomListView = null;
-    public ArrayList<ListModel> CustomListViewValuesArray = new ArrayList<ListModel>();
+    public ArrayList<Recipe> CustomListViewValuesArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +62,7 @@ public class ShowListActivity extends AppCompatActivity {
         list = ( ListView )findViewById( R.id.list );  // List defined in XML ( See Below )
 
         /**************** Create Custom Adapter *********/
-        adapter=new CustomAdapter( CustomListView, CustomListViewValuesArray,resources );
+        adapter = new CustomAdapter( CustomListView, CustomListViewValuesArray, resources );
         list.setAdapter( adapter );
 
     }
@@ -52,21 +70,70 @@ public class ShowListActivity extends AppCompatActivity {
     /****** Function to set data in ArrayList *************/
     public void setListData()
     {
-
+        /*
         for (int i = 0; i < 11; i++) {
 
             final ListModel sched = new ListModel();
 
-            /******* Firstly take data in model object ******/
+            // Firstly take data in model object
             sched.setRecipeImage( "tacos" );
             sched.setRecipeName( "Name "+i );
             sched.setRecipeAuthor( "Author"+i );
             sched.setRecipeRating( i );
 
-            /******** Take Model Object in ArrayList **********/
+            // Take Model Object in ArrayList
             CustomListViewValuesArray.add( sched );
         }
+        */
 
+        // TODO check if the recipes are taken from the server properly
+        new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+
+            @Override
+            protected RESTErrorCodes[] doInBackground(Void... params) {
+
+                RESTErrorCodes[] result = {};
+                try {
+                    RESTManager restManager = RESTManager.getInstance();
+                    AccountManager accManager = AccountManager.getInstance();
+
+                    JSONArray sched = restManager.getAllCreatedRecipesByAccount(accManager.getUserID(getApplicationContext()));
+
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Recipe>>(){}.getType();
+                    CustomListViewValuesArray = gson.fromJson(sched.toString(), type);
+
+                } catch (HTTP404Exception e) {
+                    Log.getStackTraceString(e);
+
+                    Context context = getApplicationContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(RESTErrorCodes[] result) {
+
+                if (result.length == 0) {
+                    Toast.makeText(getApplicationContext(), "All your recipes!", Toast.LENGTH_SHORT).show();
+                } else {
+                    for(int i = 0; i < result.length; ++i){
+                        switch (result[i]){
+                            case INVALID_USERNAME:
+                                //TODO: Use textedit.setError("") for marking a textedit as incorrect!
+                                break;
+                            //TODO: Add all possible error codes here except for longitude and latitude
+                        }
+                    }
+                    Toast.makeText(getApplicationContext(), "Error creating account!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }.execute();
     }
 
     /*===================================================================*/
