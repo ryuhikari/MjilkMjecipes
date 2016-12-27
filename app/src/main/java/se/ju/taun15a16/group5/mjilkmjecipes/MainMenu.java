@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowListActivity;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -28,6 +30,7 @@ public class MainMenu extends AppCompatActivity {
 
         switch (id) {
             case R.id.item_new_recipe:
+                launchNewRecipeActivity(null);
                 return true;
 
             case R.id.item_search:
@@ -38,12 +41,21 @@ public class MainMenu extends AppCompatActivity {
             case R.id.item_log_out:
                 AccountManager.getInstance().logout(getApplicationContext());
                 Toast.makeText(getApplicationContext(), R.string.facebook_logout_successful_notify, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, LogInActivity.class);
-                startActivity(intent);
+                launchLogInActivity(null);
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void launchNewRecipeActivity(View view){
+        Intent intent = new Intent(this, NewRecipeActivity.class);
+        startActivity(intent);
+    }
+
+    public void launchLogInActivity(View view){
+        Intent intent = new Intent(this, LogInActivity.class);
+        startActivity(intent);
     }
 }

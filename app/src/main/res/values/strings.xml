@@ -8,6 +8,7 @@
     <string name="activity_name_login">Log in</string>
     <string name="activity_name_signup">Sign up</string>
     <string name="activity_name_profile">Profile</string>
+    <string name="activity_name_new_recipe">New Recipe</string>
 
     <!-- Menu -->
     <string name="text_menu_new_recipe">New recipe</string>
@@ -63,5 +64,17 @@
     <string name="comment_content" translatable="false">I am a testcomment</string>
     <string name="text_login_email">Email</string>
     <string name="text_logging_in">Logging In</string>
+
+    <!-- New Recipe -->
+    <string name="text_new_recipe_image_description">Recipe image</string>
+    <string name="text_new_recipe_permissions_message">Permissions are necessary to use the app</string>
+    <string name="text_new_recipe_option_take_picture">Take picture</string>
+    <string name="text_new_recipe_option_choose_from_galery">Choose from galery</string>
+    <string name="text_new_recipe_option_cancel">Cancel</string>
+    <string name="text_new_recipe_option_choose">Choose an option</string>
+    <string name="text_new_recipe_choose_image_app">Choose image app</string>
+    <string name="text_new_recipe_permissions_granted">Permissions granted</string>
+    <string name="text_new_recipe_permissions_denied">Permissions denied</string>
+    <string name="text_new_recipe_agree">Agree</string>
 
 </resources>
