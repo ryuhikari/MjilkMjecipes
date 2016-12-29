@@ -1,6 +1,5 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +19,10 @@ import org.json.JSONArray;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
-import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
@@ -56,6 +53,7 @@ public class ShowListActivity extends AppCompatActivity {
         CustomListView = this;
 
         /******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
+        // TODO: CustomListViewValuesArray get all the recipes from server but they cannot be passed to the adapter bellow
         setListData();
 
         Resources resources = getResources();
@@ -63,13 +61,12 @@ public class ShowListActivity extends AppCompatActivity {
 
         /**************** Create Custom Adapter *********/
         adapter = new CustomAdapter( CustomListView, CustomListViewValuesArray, resources );
+        Log.v("Important", Integer.toString(CustomListViewValuesArray.size()));
         list.setAdapter( adapter );
-
     }
 
     /****** Function to set data in ArrayList *************/
-    public void setListData()
-    {
+    public void setListData() {
         /*
         for (int i = 0; i < 11; i++) {
 
@@ -86,7 +83,6 @@ public class ShowListActivity extends AppCompatActivity {
         }
         */
 
-        // TODO check if the recipes are taken from the server properly
         new AsyncTask<Void, Void, RESTErrorCodes[]>() {
 
             @Override
@@ -130,12 +126,11 @@ public class ShowListActivity extends AppCompatActivity {
                             //TODO: Add all possible error codes here except for longitude and latitude
                         }
                     }
-                    Toast.makeText(getApplicationContext(), "Error creating account!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Error getting recipes!", Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
     }
-
     /*===================================================================*/
 
     /*@Override*/

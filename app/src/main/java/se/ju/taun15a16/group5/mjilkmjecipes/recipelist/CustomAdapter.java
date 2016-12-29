@@ -22,7 +22,7 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-class CustomAdapter extends BaseAdapter implements View.OnClickListener {
+public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
     /*********** Declare Used Variables *********/
     private Activity activity;
