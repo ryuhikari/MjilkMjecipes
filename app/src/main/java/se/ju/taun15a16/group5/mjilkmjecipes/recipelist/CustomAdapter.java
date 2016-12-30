@@ -111,7 +111,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
             holder.recipeName.setText( tempValues.getName() );
             //holder.recipeAuthor.setText();
-            holder.recipeCreated.setText(tempValues.getCreated());
+            holder.recipeCreated.setText(Integer.toString(tempValues.getCreated()));
 
             /* TODO create get recipe image method
             int resID = resources.getIdentifier( tempValues.getRecipeImage(), "drawable", "se.ju.taun15a16.group5.mjilkmjecipes");

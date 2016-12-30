@@ -51,18 +51,22 @@ public class ShowListActivity extends AppCompatActivity {
 
 
         CustomListView = this;
+        list = ( ListView )findViewById( R.id.list );  // List defined in XML ( See Below )
 
         /******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
         // TODO: CustomListViewValuesArray get all the recipes from server but they cannot be passed to the adapter bellow
         setListData();
 
+        /*
         Resources resources = getResources();
         list = ( ListView )findViewById( R.id.list );  // List defined in XML ( See Below )
 
         /**************** Create Custom Adapter *********/
+        /*
         adapter = new CustomAdapter( CustomListView, CustomListViewValuesArray, resources );
-        Log.v("Important", Integer.toString(CustomListViewValuesArray.size()));
         list.setAdapter( adapter );
+        */
+
     }
 
     /****** Function to set data in ArrayList *************/
@@ -115,9 +119,19 @@ public class ShowListActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(RESTErrorCodes[] result) {
 
+                Log.v("important", CustomListViewValuesArray.toString());
+
                 if (result.length == 0) {
-                    Toast.makeText(getApplicationContext(), "All your recipes!", Toast.LENGTH_SHORT).show();
+                    Resources resources = getResources();
+                    //list = ( ListView )findViewById( R.id.list );  // List defined in XML ( See Below )
+
+                    /**************** Create Custom Adapter *********/
+                    adapter = new CustomAdapter( CustomListView, CustomListViewValuesArray, resources );
+                    list.setAdapter( adapter );
+
                 } else {
+
+                    // TODO: Finish coding all the error messages
                     for(int i = 0; i < result.length; ++i){
                         switch (result[i]){
                             case INVALID_USERNAME:
