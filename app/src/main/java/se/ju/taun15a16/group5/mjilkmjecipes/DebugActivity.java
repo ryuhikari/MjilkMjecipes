@@ -76,9 +76,9 @@ public class DebugActivity extends AppCompatActivity {
                             break;
                         case "createRecipe":
                             Recipe recipe = new Recipe();
-                            recipe.setName("Test recipe");
+                            recipe.setName("Test recipe 2");
                             recipe.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
-                            recipe.setDescription("Recipe Description");
+                            recipe.setDescription("Recipe Description 2");
                             ArrayList<Direction> directions = new ArrayList<Direction>();
                             directions.add(new Direction(recipe.getId(),1,"Direction 1"));
                             recipe.setDirections(directions);
