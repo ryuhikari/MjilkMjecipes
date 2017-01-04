@@ -35,4 +35,22 @@
     <string name="text_signup_username">Username</string>
     <string name="text_login_username">Username</string>
     <string name="text_logging_in">Logge ein</string>
+    <string name="activity_name_new_recipe">Neues Rezept</string>
+    <string name="btn_main_search_recipes">Rezepte Suchen</string>
+    <string name="btn_profile_update_profile">Profil Bearbeiten</string>
+    <string name="recipe_step_title">Schritt</string>
+    <string name="text_new_recipe_agree">Zustimmen</string>
+    <string name="text_new_recipe_choose_image_app">Foto-App auswählen</string>
+    <string name="text_new_recipe_image_description">Rezeptfoto</string>
+    <string name="text_new_recipe_option_cancel">Abbrechen</string>
+    <string name="text_new_recipe_option_choose">Wählen Sie eine Option</string>
+    <string name="text_new_recipe_option_choose_from_galery">Aus Galerie auswählen</string>
+    <string name="text_new_recipe_option_take_picture">Foto machen</string>
+    <string name="text_new_recipe_permissions_denied">Genehmigungen verweigert</string>
+    <string name="text_new_recipe_permissions_granted">Genehmigungen gestattet</string>
+    <string name="text_new_recipe_permissions_message">Die Genehmigungen sind notwending um diese App zu nutzen</string>
+    <string name="text_profile_latitude">Längengrad</string>
+    <string name="text_profile_longitude">Breitengrad</string>
+    <string name="text_profile_username">Username</string>
+    <string name="text_signing_up">Registrieren</string>
 </resources>

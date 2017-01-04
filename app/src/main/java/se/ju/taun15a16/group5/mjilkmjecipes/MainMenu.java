@@ -7,10 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
-
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowListActivity;
 
 public class MainMenu extends AppCompatActivity {
 

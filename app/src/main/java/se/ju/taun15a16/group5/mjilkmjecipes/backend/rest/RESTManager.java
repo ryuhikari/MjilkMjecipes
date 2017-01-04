@@ -818,7 +818,7 @@ public class RESTManager
 		return true;
 	}
 	
-	public boolean updateRecipe(Context context, int recipeID, Recipe recipeData) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
+	public boolean updateRecipe(Context context, long recipeID, Recipe recipeData) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
 
         HttpURLConnection con = null;
         try {
@@ -967,7 +967,7 @@ public class RESTManager
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Accept","application/json");
 			con.setUseCaches(false);
-			con.setDoInput(false);
+			con.setDoOutput(false);
 			con.setAllowUserInteraction(false); //TODO: Check
 			con.setConnectTimeout(TIMEOUT);
 			con.setReadTimeout(TIMEOUT);

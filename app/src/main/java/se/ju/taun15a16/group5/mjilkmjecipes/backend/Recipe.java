@@ -9,17 +9,17 @@ import java.util.List;
 
 public class Recipe {
 
-    private int id;
+    private long id;
     private String name;
     private String description;
     private String creatorId;
     private ArrayList<Direction> directions;
     private String image;
-    private int created;
+    private long created;
 
     public Recipe(){}
 
-    public Recipe(int id, String name, String description, String creatorId, ArrayList<Direction> directions, String image, int created) {
+    public Recipe(long id, String name, String description, String creatorId, ArrayList<Direction> directions, String image, long created) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -29,11 +29,11 @@ public class Recipe {
         this.created = created;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -77,23 +77,24 @@ public class Recipe {
         this.image = image;
     }
 
-    public int getCreated() {
+    public long getCreated() {
         return created;
     }
 
-    public void setCreated(int created) {
+    public void setCreated(long created) {
         this.created = created;
     }
 
     @Override
     public String toString() {
         return "Recipe{" +
-                "created=" + created +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", creatorId='" + creatorId + '\'' +
                 ", directions=" + directions +
                 ", image='" + image + '\'' +
+                ", created=" + created +
                 '}';
     }
 }

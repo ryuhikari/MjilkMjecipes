@@ -1,6 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -27,14 +27,14 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
-public class ShowListActivity extends AppCompatActivity {
+public class ShowRecipeListActivity extends AppCompatActivity {
 
     public static final String EXTRA_TYPE = "recipeType";
 
 
     ListView list;
     CustomAdapter adapter;
-    public ShowListActivity CustomListView = null;
+    public ShowRecipeListActivity CustomListView = null;
     public ArrayList<Recipe> CustomListViewValuesArray = new ArrayList<>();
 
     @Override
@@ -56,38 +56,18 @@ public class ShowListActivity extends AppCompatActivity {
         /******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
         // TODO: CustomListViewValuesArray get all the recipes from server but they cannot be passed to the adapter bellow
         setListData();
-
-        /*
-        Resources resources = getResources();
-        list = ( ListView )findViewById( R.id.list );  // List defined in XML ( See Below )
-
-        /**************** Create Custom Adapter *********/
-        /*
-        adapter = new CustomAdapter( CustomListView, CustomListViewValuesArray, resources );
-        list.setAdapter( adapter );
-        */
-
     }
 
     /****** Function to set data in ArrayList *************/
     public void setListData() {
-        /*
-        for (int i = 0; i < 11; i++) {
-
-            final ListModel sched = new ListModel();
-
-            // Firstly take data in model object
-            sched.setRecipeImage( "tacos" );
-            sched.setRecipeName( "Name "+i );
-            sched.setRecipeAuthor( "Author"+i );
-            sched.setRecipeRating( i );
-
-            // Take Model Object in ArrayList
-            CustomListViewValuesArray.add( sched );
-        }
-        */
 
         new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+
+            @Override
+            protected void onPreExecute() {
+                findViewById(R.id.activity_show_list).setVisibility(View.GONE);
+                findViewById(R.id.layoutShowBar).setVisibility(View.VISIBLE);
+            }
 
             @Override
             protected RESTErrorCodes[] doInBackground(Void... params) {
@@ -98,14 +78,16 @@ public class ShowListActivity extends AppCompatActivity {
                     AccountManager accManager = AccountManager.getInstance();
 
                     JSONArray sched = restManager.getAllCreatedRecipesByAccount(accManager.getUserID(getApplicationContext()));
-
+                    Log.d("REST", sched.toString());
                     Gson gson = new Gson();
                     Type type = new TypeToken<ArrayList<Recipe>>(){}.getType();
                     CustomListViewValuesArray = gson.fromJson(sched.toString(), type);
+                    for(Recipe r : CustomListViewValuesArray){
+                        r.setCreatorId(AccountManager.getInstance().getUserID(getApplicationContext()));
+                    }
 
                 } catch (HTTP404Exception e) {
-                    Log.getStackTraceString(e);
-
+                    Log.e("REST", Log.getStackTraceString(e));
                     Context context = getApplicationContext();
                     CharSequence text = e.toString();
                     int duration = Toast.LENGTH_LONG;
@@ -142,6 +124,8 @@ public class ShowListActivity extends AppCompatActivity {
                     }
                     Toast.makeText(getApplicationContext(), "Error getting recipes!", Toast.LENGTH_LONG).show();
                 }
+                findViewById(R.id.layoutShowBar).setVisibility(View.GONE);
+                findViewById(R.id.activity_show_list).setVisibility(View.VISIBLE);
             }
         }.execute();
     }
@@ -152,7 +136,7 @@ public class ShowListActivity extends AppCompatActivity {
         View fragmentContainer = findViewById(R.id.fragment_container);
         if (fragmentContainer != null) {
             RecipeDetailFragment details = new RecipeDetailFragment();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             details.setRecipe(id);
             ft.replace(R.id.fragment_container, details);
             ft.addToBackStack(null);
@@ -160,7 +144,7 @@ public class ShowListActivity extends AppCompatActivity {
             ft.commit();
         } else {
             Intent intent = new Intent(this, RecipeDetailActivity.class);
-            intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, (int)id);
+            intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, id);
             startActivity(intent);
         }
     }

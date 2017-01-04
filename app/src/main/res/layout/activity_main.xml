@@ -11,10 +11,16 @@
     android:orientation="vertical">
 
     <Button
-        android:text="@string/btn_main_my_recipes"
+        android:text="@string/btn_main_search_recipes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
+        android:id="@+id/button_main_search_recipes" />
+
+    <Button
+        android:text="@string/btn_main_my_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/button_main_my_recipes" />
 
     <Button

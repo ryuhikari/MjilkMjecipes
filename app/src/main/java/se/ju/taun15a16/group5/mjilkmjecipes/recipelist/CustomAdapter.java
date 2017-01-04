@@ -3,24 +3,27 @@ package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
-import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
@@ -30,7 +33,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
     private static LayoutInflater inflater = null;
     private Resources resources;
     private Recipe tempValues = null;
-    private int i = 0;
 
 
 
@@ -110,8 +112,41 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             /************  Set Model values in Holder elements ***********/
 
             holder.recipeName.setText( tempValues.getName() );
+
+                new AsyncTask<Void, Void, JSONObject>(){
+
+                    @Override
+                    protected JSONObject doInBackground(Void... voids) {
+                        JSONObject rawData = null;
+                        try {
+                            rawData = RESTManager.getInstance().getAccountInfo(tempValues.getCreatorId());
+                            Log.d("REST", rawData.toString());
+                        } catch (HTTP404Exception e) {
+                            Log.e("REST", Log.getStackTraceString(e));
+                        }
+                        return rawData;
+                    }
+
+                    @Override
+                    protected void onPostExecute(JSONObject jsonObject) {
+                        if(jsonObject == null){
+                            return;
+                        }
+                        String author = null;
+                        try {
+                            author = jsonObject.getString("userName");
+                            holder.recipeAuthor.setText(author);
+                        } catch (JSONException e) {
+                            Log.e("REST", Log.getStackTraceString(e));
+                        }
+                    }
+                };
+
+
             //holder.recipeAuthor.setText();
-            holder.recipeCreated.setText(Integer.toString(tempValues.getCreated()));
+            Date tempDate = new Date(tempValues.getCreated() * 1000L);
+            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(tempDate);
+            holder.recipeCreated.setText(date);
 
             /* TODO create get recipe image method
             int resID = resources.getIdentifier( tempValues.getRecipeImage(), "drawable", "se.ju.taun15a16.group5.mjilkmjecipes");
@@ -142,11 +177,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         public void onClick(View arg0) {
 
 
-            ShowListActivity sct = (ShowListActivity) activity;
+            ShowRecipeListActivity sct = (ShowRecipeListActivity) activity;
 
-            /****  Call  onItemClick Method inside ShowListActivity Class ( See Below )****/
+            /****  Call  onItemClick Method inside ShowRecipeListActivity Class ( See Below )****/
 
-            sct.itemClicked( mPosition );
+            sct.itemClicked( data.get(mPosition).getId() );
         }
     }
 }

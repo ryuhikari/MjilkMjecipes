@@ -28,7 +28,8 @@
     <string name="facebook_login_successful_notify">Successfully Logged in via Facebook</string>
 
     <!-- Main -->
-    <string name="btn_main_my_recipes">My recipes</string>
+    <string name="btn_main_search_recipes">Search Recipes</string>
+    <string name="btn_main_my_recipes">My Recipes</string>
     <string name="btn_main_favorites">Favorites</string>
     <string name="btn_main_profile">Profile</string>
 
@@ -59,7 +60,8 @@
     <string name="comments_load_more">Load more Comments</string>
     <string name="recipe_by">By:</string>
     <string name="recipe_steps_title">Steps:</string>
-    <string name="recipe_steps_content" translatable="false">Lorem ipsum</string>
+    <string name="recipe_step_title">Step</string>
+
     <string name="comment_username">Username</string>
     <string name="comment_content" translatable="false">I am a testcomment</string>
     <string name="text_login_email">Email</string>
@@ -69,12 +71,14 @@
     <string name="text_new_recipe_image_description">Recipe image</string>
     <string name="text_new_recipe_permissions_message">Permissions are necessary to use the app</string>
     <string name="text_new_recipe_option_take_picture">Take picture</string>
-    <string name="text_new_recipe_option_choose_from_galery">Choose from galery</string>
+    <string name="text_new_recipe_option_choose_from_galery">Choose from gallery</string>
     <string name="text_new_recipe_option_cancel">Cancel</string>
     <string name="text_new_recipe_option_choose">Choose an option</string>
     <string name="text_new_recipe_choose_image_app">Choose image app</string>
     <string name="text_new_recipe_permissions_granted">Permissions granted</string>
     <string name="text_new_recipe_permissions_denied">Permissions denied</string>
     <string name="text_new_recipe_agree">Agree</string>
+    <string name="text_profile_new_password">New Password</string>
+    <string name="btn_profile_save_changes">Save Changes</string>
 
 </resources>

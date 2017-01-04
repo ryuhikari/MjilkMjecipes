@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowListActivity;
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
 
 public class MainActivity extends MainMenu {
 
@@ -16,14 +16,14 @@ public class MainActivity extends MainMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button btnSearchRecipes = (Button) findViewById(R.id.button_main_search_recipes);
+        btnSearchRecipes.setOnClickListener(view -> launchSearchActivity(null));
+
         Button btnMyRecipes = (Button) findViewById(R.id.button_main_my_recipes);
         btnMyRecipes.setOnClickListener(view -> launchMyRecipesActivity(null));
 
         Button btnFavorites = (Button) findViewById(R.id.button_main_favorites);
         btnFavorites.setOnClickListener(view -> launchFavoritesActivity(null));
-
-        /*Button btnSearchRecipes = (Button) findViewById(R.id.button_search);
-        btnSearchRecipes.setOnClickListener(view -> launchSearchActivity(null));*/
 
         Button btnProfile =(Button) findViewById(R.id.button_main_profile);
         btnProfile.setOnClickListener(view -> launchProfileActivity(null));
@@ -40,24 +40,24 @@ public class MainActivity extends MainMenu {
         layout.addView(btnDebug);
     }
 
-
+    public void launchSearchActivity(View view){
+        String recipeType = "Search Recipes";
+        Intent intent = new Intent(this, ShowRecipeListActivity.class);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
+        startActivity(intent);
+    }
 
     public void launchMyRecipesActivity(View view){
         String recipeType = "My Recipes";
-        Intent intent = new Intent(this, ShowListActivity.class);
-        intent.putExtra(ShowListActivity.EXTRA_TYPE, recipeType);
+        Intent intent = new Intent(this, ShowRecipeListActivity.class);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
         startActivity(intent);
     }
 
     public void launchFavoritesActivity(View view){
         String recipeType = "Favorites";
-        Intent intent = new Intent(this, ShowListActivity.class);
-        intent.putExtra(ShowListActivity.EXTRA_TYPE, recipeType);
-        startActivity(intent);
-    }
-
-    public void launchSearchActivity(View view){
-        Intent intent = new Intent(this, ShowListActivity.class);
+        Intent intent = new Intent(this, ShowRecipeListActivity.class);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
         startActivity(intent);
     }
 

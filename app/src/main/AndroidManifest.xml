@@ -61,7 +61,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".recipelist.ShowListActivity"
+            android:name=".recipelist.ShowRecipeListActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
