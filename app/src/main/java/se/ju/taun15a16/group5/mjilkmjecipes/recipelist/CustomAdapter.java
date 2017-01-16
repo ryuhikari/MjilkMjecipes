@@ -13,7 +13,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
@@ -68,7 +71,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
         ImageView recipeImage;
         TextView recipeName;
-        TextView recipeAuthor;
         TextView recipeCreated;
 
     }
@@ -89,7 +91,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder = new ViewHolder();
             holder.recipeImage = (ImageView) view.findViewById( R.id.imageView_tabitem_recipe_picture );
             holder.recipeName = (TextView) view.findViewById( R.id.textView_tabitem_recipe_name );
-            holder.recipeAuthor = (TextView) view.findViewById( R.id.textView_tabitem_recipe_author );
             holder.recipeCreated = (TextView) view.findViewById( R.id.textView_tabitem_recipe_created );
 
             /************  Set holder with LayoutInflater ************/
@@ -110,8 +111,13 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             /************  Set Model values in Holder elements ***********/
 
             holder.recipeName.setText( tempValues.getName() );
-            //holder.recipeAuthor.setText();
-            holder.recipeCreated.setText(Integer.toString(tempValues.getCreated()));
+            //holder.recipeCreated.setText(Integer.toString(tempValues.getCreated()));
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis((long) tempValues.getCreated() * 1000L);
+            Date d = c.getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+            holder.recipeCreated.setText(sdf.format(d));
 
             /* TODO create get recipe image method
             int resID = resources.getIdentifier( tempValues.getRecipeImage(), "drawable", "se.ju.taun15a16.group5.mjilkmjecipes");
@@ -135,7 +141,9 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         private int mPosition;
 
         OnItemClickListener(int position){
-            mPosition = position;
+            Recipe recipeInPosition = new Recipe();
+            recipeInPosition = data.get( position );
+            mPosition = recipeInPosition.getId();
         }
 
         @Override

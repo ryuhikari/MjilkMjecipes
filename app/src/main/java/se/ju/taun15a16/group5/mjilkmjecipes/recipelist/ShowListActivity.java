@@ -54,39 +54,11 @@ public class ShowListActivity extends AppCompatActivity {
         list = ( ListView )findViewById( R.id.list );  // List defined in XML ( See Below )
 
         /******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
-        // TODO: CustomListViewValuesArray get all the recipes from server but they cannot be passed to the adapter bellow
         setListData();
-
-        /*
-        Resources resources = getResources();
-        list = ( ListView )findViewById( R.id.list );  // List defined in XML ( See Below )
-
-        /**************** Create Custom Adapter *********/
-        /*
-        adapter = new CustomAdapter( CustomListView, CustomListViewValuesArray, resources );
-        list.setAdapter( adapter );
-        */
-
     }
 
     /****** Function to set data in ArrayList *************/
     public void setListData() {
-        /*
-        for (int i = 0; i < 11; i++) {
-
-            final ListModel sched = new ListModel();
-
-            // Firstly take data in model object
-            sched.setRecipeImage( "tacos" );
-            sched.setRecipeName( "Name "+i );
-            sched.setRecipeAuthor( "Author"+i );
-            sched.setRecipeRating( i );
-
-            // Take Model Object in ArrayList
-            CustomListViewValuesArray.add( sched );
-        }
-        */
-
         new AsyncTask<Void, Void, RESTErrorCodes[]>() {
 
             @Override
@@ -118,8 +90,6 @@ public class ShowListActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(RESTErrorCodes[] result) {
-
-                Log.v("important", CustomListViewValuesArray.toString());
 
                 if (result.length == 0) {
                     Resources resources = getResources();
