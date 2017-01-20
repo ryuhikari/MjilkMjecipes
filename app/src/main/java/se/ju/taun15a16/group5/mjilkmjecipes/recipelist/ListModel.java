@@ -4,9 +4,14 @@ class ListModel {
 
     private  String recipeImage = "";
     private  String recipeName = "";
+    private  String recipeAuthor = "";
     private  int recipeRating = 0;
 
     /*********** Set Methods ******************/
+
+    void setRecipeAuthor(String recipeAuthor) {
+        this.recipeAuthor = recipeAuthor;
+    }
 
     void setRecipeImage(String recipeImage) {
         this.recipeImage = recipeImage;
@@ -21,6 +26,10 @@ class ListModel {
     }
 
     /*********** Get Methods ****************/
+
+    String getRecipeAuthor() {
+        return recipeAuthor;
+    }
 
     String getRecipeImage() {
         return recipeImage;
