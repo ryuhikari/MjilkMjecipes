@@ -148,6 +148,15 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "getAllFavoriteRecipesByAccount":
+                            try {
+                                JSONArray recipes3 = debugRestManager.getAllFavoriteRecipesByAccount(getApplicationContext(), AccountManager.getInstance().getUserID(getApplicationContext()));
+                                callToast(recipes3.toString());
+                            } catch (HTTP404Exception e) {
+                                Log.e("REST-recipe", Log.getStackTraceString(e));
+                                callToast(e.toString());
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "getMostRecentRecipes":
                             JSONArray recipes = debugRestManager.getMostRecentRecipes(1);
@@ -189,6 +198,15 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "updateAllFavoriteRecipesByAccount":
+                            try {
+                                String[] favoriteRecipes = {"444"};
+                                Boolean correct = RESTManager.getInstance().updateAllFavoriteRecipesByAccount( getApplicationContext(), AccountManager.getInstance().getUserID(getApplicationContext()), favoriteRecipes );
+                                if (correct) callToast("correct");
+                            } catch (HTTP401Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                            } catch (HTTP404Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                            }
                             break;
                         case "updateComment":
                             break;

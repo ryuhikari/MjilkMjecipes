@@ -4,6 +4,7 @@ package se.ju.taun15a16.group5.mjilkmjecipes.backend.rest;
 import android.content.Context;
 import android.media.Image;
 import android.util.Log;
+import android.widget.Toast;
 
 //import com.google.gson.Gson;
 
@@ -447,13 +448,118 @@ public class RESTManager
 
 	}
 	
-	public boolean updateAllFavoriteRecipesByAccount(String userID, String[] recipeIDs) {
-		// TODO implement me
-		return false;
+	public boolean updateAllFavoriteRecipesByAccount(Context context, String userID, String[] recipeIDs) throws HTTP401Exception, HTTP404Exception {
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + userID + "/" + PATH_FAVORITES);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("PUT");
+            con.setRequestProperty("Content-Type","application/json");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Accept","application/json");
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            // Send Favorite recipes to the server
+            JSONArray jsonArray = new JSONArray();
+            for (String recipeID : recipeIDs ) {
+                JSONObject recipe = new JSONObject();
+                try {
+                    recipe.put("id", Integer.parseInt(recipeID));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                jsonArray.put(recipe);
+            }
+
+            OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+            osw.write(jsonArray.toString());
+            osw.flush();
+            osw.close();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 200:
+                case 201:
+                case 204:
+                    break;
+                case 400:
+                    break;
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 	
-	public void getAllFavoriteRecipesByAccount(String userID) {
-		// TODO implement me
+	public JSONArray getAllFavoriteRecipesByAccount(Context context, String userID) throws HTTP404Exception, HTTP401Exception {
+		// TODO check
+
+		JSONArray data = null;
+		HttpURLConnection con = null;
+		try {
+			URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + userID + "/" + PATH_FAVORITES);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Accept","application/json");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setUseCaches(false);
+			con.setDoInput(true);
+			con.setAllowUserInteraction(false); //TODO: Check
+			con.setConnectTimeout(TIMEOUT);
+			con.setReadTimeout(TIMEOUT);
+
+			con.connect();
+			int status = con.getResponseCode();
+			Log.d("REST", status + " " + con.getResponseMessage());
+
+			switch(status){
+				case 200:
+				case 201:
+					BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					StringBuilder sb = new StringBuilder();
+					String line;
+					while((line = br.readLine()) != null){
+						sb.append(line).append("\n");
+					}
+					br.close();
+					String jsonData = sb.toString();
+					data = new JSONArray(jsonData);
+
+					break;
+				case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+				case 404:
+					Log.e("REST-getAllRecipes", "Error 404 Not Found");
+					throw new HTTP404Exception("ERROR: HTTP 404 Error");
+			}
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+		} catch (JSONException e) {
+			Log.e("REST-JSON", Log.getStackTraceString(e));
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
+
+		return data;
 	}
 	
 	public JSONObject createLoginToken(String username, String password) throws HTTP400Exception {

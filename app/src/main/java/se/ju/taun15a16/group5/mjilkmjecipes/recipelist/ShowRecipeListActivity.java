@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
@@ -31,7 +32,7 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
     public static final String EXTRA_TYPE = "recipeType";
 
-
+    String recipeType = null;
     ListView list;
     CustomAdapter adapter;
     public ShowRecipeListActivity CustomListView = null;
@@ -45,7 +46,7 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String recipeType = intent.getStringExtra(EXTRA_TYPE);
+        recipeType = intent.getStringExtra(EXTRA_TYPE);
 
         getSupportActionBar().setTitle(recipeType);
 
@@ -77,7 +78,20 @@ public class ShowRecipeListActivity extends AppCompatActivity {
                     RESTManager restManager = RESTManager.getInstance();
                     AccountManager accManager = AccountManager.getInstance();
 
-                    JSONArray sched = restManager.getAllCreatedRecipesByAccount(accManager.getUserID(getApplicationContext()));
+                    JSONArray sched = null;
+
+                    switch( recipeType ) {
+                        case "Search Recipes":
+                            break;
+                        case "My Recipes":
+                            sched = restManager.getAllCreatedRecipesByAccount(accManager.getUserID(getApplicationContext()));
+                            break;
+                        case "Favorites":
+                            sched = restManager.getAllFavoriteRecipesByAccount(getApplicationContext(), accManager.getUserID(getApplicationContext()));
+                            break;
+                        default:
+                            break;
+                    }
                     Log.d("REST", sched.toString());
                     Gson gson = new Gson();
                     Type type = new TypeToken<ArrayList<Recipe>>(){}.getType();
@@ -94,7 +108,16 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+                } catch (HTTP401Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    Context context = getApplicationContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
+
                 return result;
             }
 
