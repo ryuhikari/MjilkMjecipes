@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -170,7 +171,10 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         private int mPosition;
 
         OnItemClickListener(int position){
-            mPosition = position;
+            Recipe recipeInPosition = new Recipe();
+            recipeInPosition = data.get( position );
+            mPosition = (int) recipeInPosition.getId();
+            //mPosition = position;
         }
 
         @Override
@@ -181,7 +185,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
             /****  Call  onItemClick Method inside ShowRecipeListActivity Class ( See Below )****/
 
-            sct.itemClicked( data.get(mPosition).getId() );
+            sct.itemClicked( mPosition );
         }
     }
 }

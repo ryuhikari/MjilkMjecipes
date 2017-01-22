@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".recipelist.ShowRecipeListActivity">
 
-  <ListView
-      android:id="@+id/list"
-      android:layout_height="wrap_content"
-      android:layout_width="400dp" />
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/layoutShowBar"
+      android:visibility="gone">
 
-  <FrameLayout
-      android:id="@+id/fragment_container"
-      android:layout_width="0dp"
-      android:layout_weight="3"
-      android:layout_height="match_parent" />
-</LinearLayout>
+    <ProgressBar
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="100dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="100dp" />
+  </RelativeLayout>
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:baselineAligned="false"
+      android:id="@+id/activity_show_list">
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_height="match_parent"
+        android:layout_width="400dp" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="match_parent" />
+  </LinearLayout>
+</RelativeLayout>

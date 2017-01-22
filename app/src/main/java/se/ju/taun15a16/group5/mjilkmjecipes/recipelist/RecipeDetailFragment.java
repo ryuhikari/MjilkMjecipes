@@ -3,6 +3,7 @@ package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;

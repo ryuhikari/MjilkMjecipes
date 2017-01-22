@@ -68,7 +68,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             switch (position){
                 case 0:
                     f = new RecipeDetailFragment();
-
+                    f.setRecipe( recipeId );
                     return f;
                 case 1:
                     return CommentsFragment.newInstance();
