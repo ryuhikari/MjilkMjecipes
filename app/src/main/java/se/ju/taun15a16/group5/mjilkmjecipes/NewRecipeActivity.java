@@ -1,5 +1,7 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
@@ -18,20 +20,38 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
 public class NewRecipeActivity extends AppCompatActivity {
+
+    // Elements related to the image
 
     private static String APP_DIRECTORY = "Mjilk/";
     private static String MEDIA_DIRECTORY = APP_DIRECTORY + "RecipePictures";
@@ -46,6 +66,22 @@ public class NewRecipeActivity extends AppCompatActivity {
 
     private String mPath;
 
+
+    // Elements related to the recipe
+
+    private EditText recipeName;
+    private EditText recipeDescription;
+
+    // Parent view for all rows and the add button.
+    private LinearLayout mContainerView;
+    // The "Add new" button
+    private Button mAddButton;
+
+    // There always should be only one empty row, other empty rows will
+    // be removed.
+    private View mExclusiveEmptyView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +90,16 @@ public class NewRecipeActivity extends AppCompatActivity {
         mSetImage = (ImageView) findViewById(R.id.set_picture);
         mOptionButton = (Button) findViewById(R.id.show_options_button);
         mRlView = (RelativeLayout) findViewById(R.id.rl_view);
+
+        recipeName = (EditText) findViewById(R.id.new_recipe_editText_name);
+        recipeDescription = (EditText) findViewById(R.id.new_recipe_editText_description);
+
+        mContainerView = (LinearLayout) findViewById(R.id.new_recipe_directions_parent);
+        mAddButton = (Button) findViewById(R.id.btnAddNewItem);
+
+        // Add some examples
+        inflateEditRow("Fernando");
+        inflateEditRow("Paco");
 
         if(mayRequestStoragePermission())
             mOptionButton.setEnabled(true);
@@ -221,5 +267,156 @@ public class NewRecipeActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+
+    // Methods related to Directions
+    // ------------------------------------------------------------------------
+
+    // onClick handler for the "Add new" button;
+    public void onAddNewClicked(View v) {
+        // Inflate a new row and hide the button self.
+        inflateEditRow(null);
+        //v.setVisibility(View.GONE);
+    }
+
+    // onClick handler for the "X" button of each row
+    public void onDeleteClicked(View v) {
+        // remove the row by calling the getParent on button
+        mContainerView.removeView((View) v.getParent());
+    }
+
+    // Helper for inflating a row
+    private void inflateEditRow(String name) {
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View rowView = inflater.inflate(R.layout.new_direction_item, null);
+        final ImageButton deleteButton = (ImageButton) rowView
+                .findViewById(R.id.buttonDelete);
+        final EditText editText = (EditText) rowView
+                .findViewById(R.id.editText);
+
+        if (name != null && !name.isEmpty()) {
+            editText.setText(name);
+        } else {
+            mExclusiveEmptyView = rowView;
+            //deleteButton.setVisibility(View.INVISIBLE);
+        }
+
+        // A TextWatcher to control the visibility of the "Add new" button and
+        // handle the exclusive empty view.
+        editText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString().isEmpty()) {
+                    //mAddButton.setVisibility(View.GONE);
+                    //deleteButton.setVisibility(View.INVISIBLE);
+
+                    if (mExclusiveEmptyView != null
+                            && mExclusiveEmptyView != rowView) {
+                        mContainerView.removeView(mExclusiveEmptyView);
+                    }
+                    mExclusiveEmptyView = rowView;
+                } else {
+
+                    if (mExclusiveEmptyView == rowView) {
+                        mExclusiveEmptyView = null;
+                    }
+
+                    //mAddButton.setVisibility(View.VISIBLE);
+                    //deleteButton.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+            }
+        });
+
+        // Inflate at the end of all rows but before the "Add new" button
+        mContainerView.addView(rowView, mContainerView.getChildCount() - 1);
+    }
+
+    // Server
+    // -------------------------------------------
+
+    public void sendToServer(View v) {
+
+        Recipe newRecipe = new Recipe();
+        newRecipe.setName(recipeName.getText().toString());
+        newRecipe.setCreatorId(AccountManager.getInstance().getUserID(getApplicationContext()));
+        newRecipe.setDescription(recipeDescription.getText().toString());
+
+        ArrayList<Direction> directions = new ArrayList<Direction>();
+
+        int directionOrder = 1;
+
+        for ( int i = 0; i < mContainerView.getChildCount() - 1; i++) {
+            LinearLayout row = (LinearLayout) mContainerView.getChildAt(i);
+            EditText directionHolder = (EditText) row.getChildAt(0);
+
+            if ( directionHolder.getText().length() > 0 ) {
+                directions.add(new Direction(newRecipe.getId(),directionOrder,directionHolder.getText().toString()));
+                directionOrder++;
+            }
+        }
+        newRecipe.setDirections(directions);
+
+
+        new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+
+            @Override
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected RESTErrorCodes[] doInBackground(Void... params) {
+
+                RESTErrorCodes[] result = {};
+                try {
+                    Boolean create = RESTManager.getInstance().createRecipe(newRecipe, getApplicationContext());
+
+                } catch (HTTP401Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                } catch (HTTP400Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    result = e.getErrorCodes();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(RESTErrorCodes[] result) {
+
+                if (result.length == 0) {
+                    Toast.makeText(getApplicationContext(), "Recipe created!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+
+                    // TODO: Finish coding all the error messages
+                    for(int i = 0; i < result.length; ++i){
+                        switch (result[i]){
+                            case INVALID_USERNAME:
+                                //TODO: Use textedit.setError("") for marking a textedit as incorrect!
+                                break;
+                            //TODO: Add all possible error codes here except for longitude and latitude
+                        }
+                    }
+                    Toast.makeText(getApplicationContext(), "Error creating recipe!", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }.execute();
+
     }
 }

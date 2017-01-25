@@ -15,7 +15,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:id="@+id/rl_view"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
@@ -36,6 +36,78 @@
             android:scaleType="centerCrop"
             android:contentDescription="@string/text_new_recipe_image_description"
             android:layout_below="@+id/show_options_button"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/set_picture"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/new_recipe_editText_name"
+                android:layout_below="@+id/show_options_button"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:hint="Name" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/new_recipe_editText_description"
+                android:layout_below="@+id/new_recipe_editText_name"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:hint="Description" />
+
+            <TextView
+                android:text="@string/btn_new_recipe_directions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:layout_marginTop="20dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/new_recipe_directions_parent"
+                android:animateLayoutChanges="true">
+
+                <Button
+                    android:id="@+id/btnAddNewItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+
+                    android:gravity="center_vertical|left"
+                    android:onClick="onAddNewClicked"
+                    android:paddingLeft="5dp"
+
+                    android:textColor="@android:color/darker_gray"
+                    android:background="@android:drawable/screen_background_light_transparent"
+                    android:text="@string/btn_new_recipe_add_direction" />
+
+            </LinearLayout>
+
+            <Button
+                android:text="@string/btn_new_recipe_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button3"
+                android:onClick="sendToServer" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 </ScrollView>

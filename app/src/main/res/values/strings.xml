@@ -80,5 +80,9 @@
     <string name="text_new_recipe_agree">Agree</string>
     <string name="text_profile_new_password">New Password</string>
     <string name="btn_profile_save_changes">Save Changes</string>
+    <string name="btn_new_recipe_add_direction">Add direction</string>
+    <string name="btn_new_recipe_directions">Directions:</string>
+    <string name="btn_new_recipe_update">Update</string>
+
 
 </resources>
