@@ -17,6 +17,8 @@
     <string name="text_menu_new_comment">New comment</string>
     <string name="text_menu_logout">Log out</string>
 
+    <string name="text_menu_edit">Edit</string>
+
     <!-- Log In -->
     <string name="btn_login_login">Log In</string>
     <string name="btn_login_signup">Sign Up</string>

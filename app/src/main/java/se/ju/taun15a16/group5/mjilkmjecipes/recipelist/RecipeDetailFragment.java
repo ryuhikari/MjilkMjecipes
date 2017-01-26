@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.IntegerRes;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -68,9 +71,26 @@ public class RecipeDetailFragment extends Fragment {
         if(savedInstanceState == null){
             loadRecipeData();
         }
+
+        setHasOptionsMenu(true);
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_recipe, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.item_edit_recipe){
+            //Do whatever you want to do
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     protected void loadRecipeData(){
         new AsyncTask<Void, Void, JSONObject>(){
