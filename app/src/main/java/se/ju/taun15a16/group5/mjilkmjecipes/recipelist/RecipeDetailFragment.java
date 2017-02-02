@@ -59,6 +59,8 @@ public class RecipeDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
+
+        //TODO: Add Loading Bar
         recipeImage = (ImageView) v.findViewById(R.id.imageView_recipe_detail_recipe_picture);
         recipeNameTextView = (TextView) v.findViewById(R.id.textView_recipe_detail_recipe_name);
         recipeAuthorTextView = (TextView) v.findViewById(R.id.textView_recipe_detail_recipe_author);
@@ -99,8 +101,6 @@ public class RecipeDetailFragment extends Fragment {
             protected void onPreExecute() {
                 View view = getView();
                 if (view != null) {
-                    getActivity().findViewById(R.id.recipePager).setVisibility(View.GONE);
-                    getActivity().findViewById(R.id.layoutShowRecipeBar).setVisibility(View.VISIBLE);
                 }
             }
 
@@ -152,8 +152,6 @@ public class RecipeDetailFragment extends Fragment {
                 }
                 View view = getView();
                 if (view != null) {
-                    getActivity().findViewById(R.id.layoutShowRecipeBar).setVisibility(View.GONE);
-                    getActivity().findViewById(R.id.recipePager).setVisibility(View.VISIBLE);
                 }
             }
         }.execute();
