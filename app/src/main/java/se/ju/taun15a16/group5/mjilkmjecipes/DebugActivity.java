@@ -213,7 +213,7 @@ public class DebugActivity extends AppCompatActivity {
                         case "updateRecipe":
                             Recipe recipe2 = new Recipe();
                             recipe2.setId(231);
-                            recipe2.setName("Test recipe modified");
+                            recipe2.setName("Test recipe modified again");
                             recipe2.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
                             recipe2.setDescription("Recipe Description modified");
                             ArrayList<Direction> directions2 = new ArrayList<Direction>();

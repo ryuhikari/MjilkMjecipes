@@ -82,6 +82,7 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
                     switch( recipeType ) {
                         case "Search Recipes":
+                            finish();
                             break;
                         case "My Recipes":
                             sched = restManager.getAllCreatedRecipesByAccount(accManager.getUserID(getApplicationContext()));

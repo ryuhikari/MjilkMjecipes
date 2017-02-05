@@ -1,6 +1,7 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IntegerRes;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -24,10 +26,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
+
+import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class RecipeDetailFragment extends Fragment {
 
@@ -87,7 +92,23 @@ public class RecipeDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.item_edit_recipe){
-            //Do whatever you want to do
+            Intent intent = new Intent(getContext(), NewRecipeActivity.class);
+
+            ListView directionListView = (ListView) getActivity().findViewById(R.id.listView_RecipeSteps);
+            Adapter adapter = directionListView.getAdapter();
+
+            ArrayList<String> directions = new ArrayList<String>();
+
+            for (int i=0; i < adapter.getCount(); i++) {
+                Direction direction = (Direction) adapter.getItem(i);
+                directions.add(i, direction.getDescription());
+            }
+
+            intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
+            intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
+            intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeId);
+            intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directions);
+            startActivity(intent);
             return true;
         }
 

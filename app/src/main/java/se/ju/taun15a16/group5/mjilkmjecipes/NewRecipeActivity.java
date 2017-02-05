@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ShowableListMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -42,14 +44,25 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
 public class NewRecipeActivity extends AppCompatActivity {
+
+    // To edit a recipe
+
+    public Boolean editingRecipe = false;
+
+    public final static String EXTRA_ID = "recipeId";
+    public final static String EXTRA_NAME = "recipeName";
+    public final static String EXTRA_DESCRIPTION = "recipeDescription";
+    public final static String EXTRA_DIRECTIONS = "recipeDirections";
 
     // Elements related to the image
 
@@ -69,6 +82,7 @@ public class NewRecipeActivity extends AppCompatActivity {
 
     // Elements related to the recipe
 
+    private long recipeId;
     private EditText recipeName;
     private EditText recipeDescription;
 
@@ -97,9 +111,26 @@ public class NewRecipeActivity extends AppCompatActivity {
         mContainerView = (LinearLayout) findViewById(R.id.new_recipe_directions_parent);
         mAddButton = (Button) findViewById(R.id.btnAddNewItem);
 
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            editingRecipe =  true;
+
+            recipeId = intent.getLongExtra(EXTRA_ID, 0);
+            recipeName.setText(intent.getStringExtra(EXTRA_NAME));
+            recipeDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
+
+            ArrayList<String> directions = new ArrayList<String>();
+            directions = intent.getStringArrayListExtra(EXTRA_DIRECTIONS);
+
+            for (int i=0; i < directions.size(); i++) {
+                inflateEditRow(directions.get(i));
+            }
+        }
+
         // Add some examples
-        inflateEditRow("Fernando");
-        inflateEditRow("Paco");
+        // inflateEditRow("Fernando");
+        // inflateEditRow("Paco");
 
         if(mayRequestStoragePermission())
             mOptionButton.setEnabled(true);
@@ -112,6 +143,10 @@ public class NewRecipeActivity extends AppCompatActivity {
                 showOptions();
             }
         });
+
+    }
+
+    private void fillTheGaps(long recipeId) {
 
     }
 
@@ -370,53 +405,110 @@ public class NewRecipeActivity extends AppCompatActivity {
         }
         newRecipe.setDirections(directions);
 
+        if (editingRecipe) {
+            new AsyncTask<Void, Void, RESTErrorCodes[]>() {
 
-        new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+                @Override
+                protected void onPreExecute() {
 
-            @Override
-            protected void onPreExecute() {
-
-            }
-
-            @Override
-            protected RESTErrorCodes[] doInBackground(Void... params) {
-
-                RESTErrorCodes[] result = {};
-                try {
-                    Boolean create = RESTManager.getInstance().createRecipe(newRecipe, getApplicationContext());
-
-                } catch (HTTP401Exception e) {
-                    Log.e("REST", Log.getStackTraceString(e));
-                } catch (HTTP400Exception e) {
-                    Log.e("REST", Log.getStackTraceString(e));
-                    result = e.getErrorCodes();
                 }
 
-                return result;
-            }
+                @Override
+                protected RESTErrorCodes[] doInBackground(Void... params) {
 
-            @Override
-            protected void onPostExecute(RESTErrorCodes[] result) {
-
-                if (result.length == 0) {
-                    Toast.makeText(getApplicationContext(), "Recipe created!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-
-                    // TODO: Finish coding all the error messages
-                    for(int i = 0; i < result.length; ++i){
-                        switch (result[i]){
-                            case INVALID_USERNAME:
-                                //TODO: Use textedit.setError("") for marking a textedit as incorrect!
-                                break;
-                            //TODO: Add all possible error codes here except for longitude and latitude
-                        }
+                    RESTErrorCodes[] result = {};
+                    try {
+                        newRecipe.setId(recipeId);
+                        newRecipe.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
+                        Log.e("Recipe", newRecipe.toString());
+                        RESTManager.getInstance().updateRecipe(getApplicationContext(), recipeId, newRecipe);
+                    } catch (HTTP401Exception e) {
+                        Log.e("REST", Log.getStackTraceString(e));
+                    } catch (HTTP404Exception e) {
+                        Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                        Log.e("Important", e.getMessage());
+                    } catch (HTTP400Exception e) {
+                        Log.e("REST", Log.getStackTraceString(e));
+                        result = e.getErrorCodes();
                     }
-                    Toast.makeText(getApplicationContext(), "Error creating recipe!", Toast.LENGTH_LONG).show();
+
+                    return result;
                 }
 
-            }
-        }.execute();
+                @Override
+                protected void onPostExecute(RESTErrorCodes[] result) {
 
+                    if (result.length == 0) {
+                        Toast.makeText(getApplicationContext(), "Recipe updated!", Toast.LENGTH_SHORT).show();
+                        //finish();
+                        Intent intent = new Intent(getApplicationContext(), ShowRecipeListActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, "My Recipes");
+                        startActivity(intent);
+                        finish();
+                    } else {
+
+                        // TODO: Finish coding all the error messages
+                        for(int i = 0; i < result.length; ++i){
+                            switch (result[i]){
+                                case INVALID_USERNAME:
+                                    //TODO: Use textedit.setError("") for marking a textedit as incorrect!
+                                    break;
+                                //TODO: Add all possible error codes here except for longitude and latitude
+                            }
+                        }
+                        Toast.makeText(getApplicationContext(), "Error updating recipe!", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }.execute();
+        } else {
+            new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+
+                @Override
+                protected void onPreExecute() {
+
+                }
+
+                @Override
+                protected RESTErrorCodes[] doInBackground(Void... params) {
+
+                    RESTErrorCodes[] result = {};
+                    try {
+                        Boolean create = RESTManager.getInstance().createRecipe(newRecipe, getApplicationContext());
+
+                    } catch (HTTP401Exception e) {
+                        Log.e("REST", Log.getStackTraceString(e));
+                    } catch (HTTP400Exception e) {
+                        Log.e("REST", Log.getStackTraceString(e));
+                        result = e.getErrorCodes();
+                    }
+
+                    return result;
+                }
+
+                @Override
+                protected void onPostExecute(RESTErrorCodes[] result) {
+
+                    if (result.length == 0) {
+                        Toast.makeText(getApplicationContext(), "Recipe created!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+
+                        // TODO: Finish coding all the error messages
+                        for(int i = 0; i < result.length; ++i){
+                            switch (result[i]){
+                                case INVALID_USERNAME:
+                                    //TODO: Use textedit.setError("") for marking a textedit as incorrect!
+                                    break;
+                                //TODO: Add all possible error codes here except for longitude and latitude
+                            }
+                        }
+                        Toast.makeText(getApplicationContext(), "Error creating recipe!", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }.execute();
+        }
     }
 }
