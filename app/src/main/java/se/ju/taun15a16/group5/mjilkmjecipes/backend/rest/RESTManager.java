@@ -962,7 +962,24 @@ public class RESTManager
                 case 204:
                     break;
                 case 400:
-                    break;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = new String();
+                    while((line = br.readLine()) != null){
+                        sb.append(line).append("\n");
+                    }
+                    br.close();
+                    String jsonData = new String();
+                    jsonData = sb.toString();
+
+                    JSONObject obj = new JSONObject(jsonData);
+                    JSONArray jsonArray = obj.getJSONArray("errors");
+
+                    RESTErrorCodes[] errorCodes = new RESTErrorCodes[jsonArray.length()];
+                    for(int i = 0; i < errorCodes.length; ++i){
+                        errorCodes[i] = RESTErrorCodes.fromString(jsonArray.getString(i));
+                    }
+                    throw new HTTP400Exception("ERROR: 400", errorCodes);
                 case 401:
                     throw new HTTP401Exception("ERROR: HTTP 401 Error");
                 case 404:

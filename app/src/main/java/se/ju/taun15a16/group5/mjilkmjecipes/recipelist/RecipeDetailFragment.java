@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IntegerRes;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
@@ -35,6 +39,8 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class RecipeDetailFragment extends Fragment {
+
+    private Boolean showEditButton = false;
 
     private long recipeId;
     private String recipeName = "";
@@ -86,6 +92,11 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_recipe, menu);
+
+        if (showEditButton) {
+            MenuItem editButton = menu.findItem(R.id.item_edit_recipe);
+            editButton.setVisible(true);
+        }
     }
 
     @Override
@@ -156,6 +167,11 @@ public class RecipeDetailFragment extends Fragment {
                     recipeAuthorTextView.setText(recipeAuthor);
                     recipeRating = (float)recipeData.getDouble("averageRating");
                     recipeRatingTextView.setRating(recipeRating);
+
+                    if (recipeAuthor.equals(AccountManager.getInstance().getUserName(getContext()))) {
+                        showEditButton = true;
+                        ActivityCompat.invalidateOptionsMenu(getActivity());
+                    }
 
                     JSONArray directionArray = recipeData.getJSONArray("directions");
                     ArrayList<Direction> directions = new ArrayList<>();

@@ -7,5 +7,6 @@
         android:orderInCategory="100"
         android:title="@string/text_menu_edit"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_edit" />
+        android:icon="@android:drawable/ic_menu_edit"
+        android:visible="false" />
 </menu>

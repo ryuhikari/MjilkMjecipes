@@ -419,7 +419,12 @@ public class NewRecipeActivity extends AppCompatActivity {
                     RESTErrorCodes[] result = {};
                     try {
                         newRecipe.setId(recipeId);
-                        newRecipe.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
+                        String creatorId = new String();
+
+                        creatorId = AccountManager.getInstance().getUserID(getApplicationContext());
+
+                        newRecipe.setCreatorId(creatorId);
+
                         Log.e("Recipe", newRecipe.toString());
                         RESTManager.getInstance().updateRecipe(getApplicationContext(), recipeId, newRecipe);
                     } catch (HTTP401Exception e) {
@@ -444,6 +449,7 @@ public class NewRecipeActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), ShowRecipeListActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                         intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, "My Recipes");
+                        intent.putExtra(ShowRecipeListActivity.EXTRA_SHOW, newRecipe.getId());
                         startActivity(intent);
                         finish();
                     } else {

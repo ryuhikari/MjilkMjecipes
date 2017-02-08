@@ -31,6 +31,7 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 public class ShowRecipeListActivity extends AppCompatActivity {
 
     public static final String EXTRA_TYPE = "recipeType";
+    public static final String EXTRA_SHOW = "recipeId";
 
     String recipeType = null;
     ListView list;
@@ -47,6 +48,13 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         recipeType = intent.getStringExtra(EXTRA_TYPE);
+
+        long showRecipe;
+        showRecipe = intent.getLongExtra(EXTRA_SHOW, -1);
+
+        if ( showRecipe != -1 ) {
+            itemClicked(showRecipe);
+        }
 
         getSupportActionBar().setTitle(recipeType);
 
