@@ -9,4 +9,19 @@
         app:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_menu_edit"
         android:visible="false" />
+
+    <item
+        android:id="@+id/item_favorite_recipe"
+        android:orderInCategory="100"
+        android:title="@string/text_menu_star_on"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/item_not_favorite_recipe"
+        android:orderInCategory="100"
+        android:title="@string/text_menu_star_off"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/btn_star_big_off" />
 </menu>

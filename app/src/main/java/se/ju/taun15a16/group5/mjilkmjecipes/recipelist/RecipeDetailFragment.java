@@ -1,7 +1,10 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IntegerRes;
@@ -23,24 +26,36 @@ import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
+import static android.R.drawable.btn_star_big_off;
 import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class RecipeDetailFragment extends Fragment {
 
     private Boolean showEditButton = false;
+    private Boolean markedAsFavorite = false;
+
+    private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
 
     private long recipeId;
     private String recipeName = "";
@@ -83,6 +98,7 @@ public class RecipeDetailFragment extends Fragment {
 
         if(savedInstanceState == null){
             loadRecipeData();
+            checkFavorite();
         }
 
         setHasOptionsMenu(true);
@@ -97,30 +113,54 @@ public class RecipeDetailFragment extends Fragment {
             MenuItem editButton = menu.findItem(R.id.item_edit_recipe);
             editButton.setVisible(true);
         }
+
+        if (markedAsFavorite) {
+            MenuItem favoriteButton = menu.findItem(R.id.item_favorite_recipe);
+            favoriteButton.setVisible(true);
+
+            MenuItem notFavoriteButton = menu.findItem(R.id.item_not_favorite_recipe);
+            notFavoriteButton.setVisible(false);
+        } else {
+            MenuItem favoriteButton = menu.findItem(R.id.item_favorite_recipe);
+            favoriteButton.setVisible(false);
+
+            MenuItem notFavoriteButton = menu.findItem(R.id.item_not_favorite_recipe);
+            notFavoriteButton.setVisible(true);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.item_edit_recipe){
-            Intent intent = new Intent(getContext(), NewRecipeActivity.class);
 
-            ListView directionListView = (ListView) getActivity().findViewById(R.id.listView_RecipeSteps);
-            Adapter adapter = directionListView.getAdapter();
+        switch (id) {
+            case R.id.item_edit_recipe:
+                Intent intent = new Intent(getContext(), NewRecipeActivity.class);
 
-            ArrayList<String> directions = new ArrayList<String>();
+                ListView directionListView = (ListView) getActivity().findViewById(R.id.listView_RecipeSteps);
+                Adapter adapter = directionListView.getAdapter();
 
-            for (int i=0; i < adapter.getCount(); i++) {
-                Direction direction = (Direction) adapter.getItem(i);
-                directions.add(i, direction.getDescription());
-            }
+                ArrayList<String> directions = new ArrayList<String>();
 
-            intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
-            intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
-            intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeId);
-            intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directions);
-            startActivity(intent);
-            return true;
+                for (int i=0; i < adapter.getCount(); i++) {
+                    Direction direction = (Direction) adapter.getItem(i);
+                    directions.add(i, direction.getDescription());
+                }
+
+                intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
+                intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
+                intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeId);
+                intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directions);
+                startActivity(intent);
+                return true;
+
+            case R.id.item_favorite_recipe:
+                updateFavoriteRecipes(false);
+                break;
+
+            case R.id.item_not_favorite_recipe:
+                updateFavoriteRecipes(true);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -189,6 +229,152 @@ public class RecipeDetailFragment extends Fragment {
                 }
                 View view = getView();
                 if (view != null) {
+                }
+            }
+        }.execute();
+    }
+
+    private void checkFavorite() {
+        new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+
+            @Override
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected RESTErrorCodes[] doInBackground(Void... params) {
+
+                RESTErrorCodes[] result = {};
+                try {
+                    RESTManager restManager = RESTManager.getInstance();
+                    AccountManager accManager = AccountManager.getInstance();
+
+                    JSONArray sched = null;
+                    sched = restManager.getAllFavoriteRecipesByAccount(getContext(), accManager.getUserID(getContext()));
+
+                    Log.d("REST", sched.toString());
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Recipe>>(){}.getType();
+                    favoriteRecipes = gson.fromJson(sched.toString(), type);
+
+                    for(Recipe recipe : favoriteRecipes){
+                        if ( recipe.getId() == recipeId ) {
+                            markedAsFavorite = true;
+                            ActivityCompat.invalidateOptionsMenu(getActivity());
+                        }
+                    }
+
+                } catch (HTTP404Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    Context context = getContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                } catch (HTTP401Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    Context context = getContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(RESTErrorCodes[] result) {
+
+                if (result.length == 0) {
+
+                } else {
+
+                    // TODO: Finish coding all the error messages
+                    for(int i = 0; i < result.length; ++i){
+                        switch (result[i]){
+                            case INVALID_USERNAME:
+                                //TODO: Use textedit.setError("") for marking a textedit as incorrect!
+                                break;
+                            //TODO: Add all possible error codes here except for longitude and latitude
+                        }
+                    }
+                    Toast.makeText(getContext(), "Error checking favorite recipes!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }.execute();
+    }
+
+    private void updateFavoriteRecipes(Boolean addToFavorites) {
+
+        List<String> newFavoriteRecipes = new ArrayList<>();
+
+        for(Recipe recipe : favoriteRecipes){
+            newFavoriteRecipes.add(Long.toString(recipe.getId()));
+        }
+
+        if (addToFavorites) {
+            newFavoriteRecipes.add(Long.toString(recipeId));
+        } else {
+            newFavoriteRecipes.remove(Long.toString(recipeId));
+        }
+
+        new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+
+            @Override
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected RESTErrorCodes[] doInBackground(Void... params) {
+
+                RESTErrorCodes[] result = {};
+                try {
+                    Boolean correct = RESTManager.getInstance().updateAllFavoriteRecipesByAccount( getContext(), AccountManager.getInstance().getUserID(getContext()), newFavoriteRecipes );
+
+                } catch (HTTP401Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    Context context = getContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                } catch (HTTP404Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    Context context = getContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(RESTErrorCodes[] result) {
+
+                if (result.length == 0) {
+                    markedAsFavorite = addToFavorites;
+                    ActivityCompat.invalidateOptionsMenu(getActivity());
+                } else {
+
+                    // TODO: Finish coding all the error messages
+                    for(int i = 0; i < result.length; ++i){
+                        switch (result[i]){
+                            case INVALID_USERNAME:
+                                //TODO: Use textedit.setError("") for marking a textedit as incorrect!
+                                break;
+                            //TODO: Add all possible error codes here except for longitude and latitude
+                        }
+                    }
+                    Toast.makeText(getContext(), "Error checking favorite recipes!", Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();

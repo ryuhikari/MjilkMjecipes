@@ -448,7 +448,7 @@ public class RESTManager
 
 	}
 	
-	public boolean updateAllFavoriteRecipesByAccount(Context context, String userID, String[] recipeIDs) throws HTTP401Exception, HTTP404Exception {
+	public boolean updateAllFavoriteRecipesByAccount(Context context, String userID, List<String> recipeIDs) throws HTTP401Exception, HTTP404Exception {
         HttpURLConnection con = null;
         try {
             URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + userID + "/" + PATH_FAVORITES);

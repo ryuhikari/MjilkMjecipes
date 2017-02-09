@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
@@ -199,7 +200,8 @@ public class DebugActivity extends AppCompatActivity {
                             break;
                         case "updateAllFavoriteRecipesByAccount":
                             try {
-                                String[] favoriteRecipes = {"444"};
+                                List<String> favoriteRecipes = new ArrayList<String>();
+                                favoriteRecipes.add("444");
                                 Boolean correct = RESTManager.getInstance().updateAllFavoriteRecipesByAccount( getApplicationContext(), AccountManager.getInstance().getUserID(getApplicationContext()), favoriteRecipes );
                                 if (correct) callToast("correct");
                             } catch (HTTP401Exception e) {

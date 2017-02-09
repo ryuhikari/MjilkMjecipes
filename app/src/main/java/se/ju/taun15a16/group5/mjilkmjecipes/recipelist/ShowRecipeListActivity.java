@@ -67,6 +67,12 @@ public class ShowRecipeListActivity extends AppCompatActivity {
         setListData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onRestart();
+        setListData();
+    }
+
     /****** Function to set data in ArrayList *************/
     public void setListData() {
 

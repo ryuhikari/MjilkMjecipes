@@ -18,6 +18,8 @@
     <string name="text_menu_logout">Log out</string>
 
     <string name="text_menu_edit">Edit</string>
+    <string name="text_menu_star_off">Mark as Favorite</string>
+    <string name="text_menu_star_on">Unmark as Favorite</string>
 
     <!-- Log In -->
     <string name="btn_login_login">Log In</string>
