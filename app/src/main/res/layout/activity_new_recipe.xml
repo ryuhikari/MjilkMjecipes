@@ -101,10 +101,10 @@
             </LinearLayout>
 
             <Button
-                android:text="@string/btn_new_recipe_update"
+                android:text="@string/btn_new_recipe_create"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/button3"
+                android:id="@+id/button_new_recipe_send"
                 android:onClick="sendToServer" />
 
         </LinearLayout>

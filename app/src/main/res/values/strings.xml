@@ -72,6 +72,8 @@
     <string name="text_logging_in">Logging In</string>
 
     <!-- New Recipe -->
+    <string name="text_new_recipe_update_recipe">Update recipe</string>
+
     <string name="text_new_recipe_image_description">Recipe image</string>
     <string name="text_new_recipe_permissions_message">Permissions are necessary to use the app</string>
     <string name="text_new_recipe_option_take_picture">Take picture</string>
@@ -86,6 +88,7 @@
     <string name="btn_profile_save_changes">Save Changes</string>
     <string name="btn_new_recipe_add_direction">Add direction</string>
     <string name="btn_new_recipe_directions">Directions:</string>
+    <string name="btn_new_recipe_create">Create new</string>
     <string name="btn_new_recipe_update">Update</string>
 
 

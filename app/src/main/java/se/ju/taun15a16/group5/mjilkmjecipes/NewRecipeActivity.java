@@ -95,6 +95,8 @@ public class NewRecipeActivity extends AppCompatActivity {
     // be removed.
     private View mExclusiveEmptyView;
 
+    private Button sendButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,10 +113,15 @@ public class NewRecipeActivity extends AppCompatActivity {
         mContainerView = (LinearLayout) findViewById(R.id.new_recipe_directions_parent);
         mAddButton = (Button) findViewById(R.id.btnAddNewItem);
 
+        sendButton = (Button) findViewById(R.id.button_new_recipe_send);
+
         Intent intent = getIntent();
 
-        if (intent != null) {
+        if (intent.getExtras() != null) {
             editingRecipe =  true;
+
+            getSupportActionBar().setTitle(R.string.text_new_recipe_update_recipe);
+            sendButton.setText(R.string.btn_new_recipe_update);
 
             recipeId = intent.getLongExtra(EXTRA_ID, 0);
             recipeName.setText(intent.getStringExtra(EXTRA_NAME));
