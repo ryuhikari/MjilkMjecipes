@@ -29,10 +29,45 @@
       android:baselineAligned="false"
       android:id="@+id/activity_show_list">
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_height="match_parent"
-        android:layout_width="400dp" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="400dp"
+        android:layout_height="match_parent">
+
+      <ListView
+          android:id="@+id/list"
+          android:layout_height="match_parent"
+          android:layout_width="match_parent"
+          android:layout_weight="1" />
+
+      <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="gone">
+
+        <Button
+            android:text="@string/text_show_list_previous_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_show_list_previous_page"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_show_list_page_number"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="@string/text_show_list_next_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_show_list_next_page"
+            android:layout_weight="1" />
+      </LinearLayout>
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragment_container"

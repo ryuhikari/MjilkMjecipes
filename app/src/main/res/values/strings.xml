@@ -58,6 +58,8 @@
     <string name="title_activity_recipe" translatable="false">RecipeActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format" translatable="false">Hello World from section: %1$d</string>
+    <string name="text_show_list_next_page">Next &gt;&gt;</string>
+    <string name="text_show_list_previous_page">&lt;&lt; Previous</string>
 
     <!-- Recipe -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
