@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -32,12 +34,24 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
     public static final String EXTRA_TYPE = "recipeType";
     public static final String EXTRA_SHOW = "recipeId";
+    public static final String EXTRA_PAGE = "recipePage";
+
+    public static final String EXTRA_SEARCH = "Search Recipes";
+    public static final String EXTRA_RECENT = "Recent Recipes";
+    public static final String EXTRA_MY = "My Recipes";
+    public static final String EXTRA_FAVORITES = "Favorite Recipes";
 
     String recipeType = null;
+    int recipePage = 1;
     ListView list;
     CustomAdapter adapter;
     public ShowRecipeListActivity CustomListView = null;
     public ArrayList<Recipe> CustomListViewValuesArray = new ArrayList<>();
+
+    private View pageButtons;
+    private Button nextPageButton;
+    private Button previousPageButton;
+    private TextView pageIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +70,28 @@ public class ShowRecipeListActivity extends AppCompatActivity {
             itemClicked(showRecipe);
         }
 
+        recipePage = intent.getIntExtra(EXTRA_PAGE, 0);
+
+        if ( recipePage != 0 ) {
+            pageButtons = findViewById(R.id.layout_page_buttons);
+            pageButtons.setVisibility(View.VISIBLE);
+
+            previousPageButton = (Button) findViewById(R.id.button_show_list_previous_page);
+            nextPageButton = (Button) findViewById(R.id.button_show_list_next_page);
+            pageIndicator = (TextView) findViewById(R.id.textView_show_list_page_number);
+
+            if ( recipePage == 1 ) {
+                previousPageButton.setEnabled(false);
+            } else {
+                previousPageButton.setEnabled(true);
+            }
+
+            pageIndicator.setText(Integer.toString(recipePage));
+            previousPageButton.setOnClickListener(view -> changeToNextPage(false));
+            nextPageButton.setOnClickListener(view -> changeToNextPage(true));
+        }
+
+
         getSupportActionBar().setTitle(recipeType);
 
 
@@ -65,6 +101,22 @@ public class ShowRecipeListActivity extends AppCompatActivity {
         /******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
         // TODO: CustomListViewValuesArray get all the recipes from server but they cannot be passed to the adapter bellow
         setListData();
+    }
+
+    private void changeToNextPage(Boolean nextPage) {
+        if ( nextPage ) {
+            Intent intent = new Intent(this, ShowRecipeListActivity.class);
+            intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_RECENT);
+            intent.putExtra(ShowRecipeListActivity.EXTRA_PAGE, recipePage+1);
+            startActivity(intent);
+        } else {
+            if ( recipePage > 1 ) {
+                Intent intent = new Intent(this, ShowRecipeListActivity.class);
+                intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_RECENT);
+                intent.putExtra(ShowRecipeListActivity.EXTRA_PAGE, recipePage-1);
+                startActivity(intent);
+            }
+        }
     }
 
     @Override
@@ -95,13 +147,16 @@ public class ShowRecipeListActivity extends AppCompatActivity {
                     JSONArray sched = null;
 
                     switch( recipeType ) {
-                        case "Search Recipes":
+                        case EXTRA_SEARCH:
                             finish();
                             break;
-                        case "My Recipes":
+                        case EXTRA_RECENT:
+                            sched = restManager.getMostRecentRecipes(recipePage);
+                            break;
+                        case EXTRA_MY:
                             sched = restManager.getAllCreatedRecipesByAccount(accManager.getUserID(getApplicationContext()));
                             break;
-                        case "Favorites":
+                        case EXTRA_FAVORITES:
                             sched = restManager.getAllFavoriteRecipesByAccount(getApplicationContext(), accManager.getUserID(getApplicationContext()));
                             break;
                         default:

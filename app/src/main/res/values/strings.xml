@@ -33,6 +33,7 @@
 
     <!-- Main -->
     <string name="btn_main_search_recipes">Search Recipes</string>
+    <string name="btn_main_recent_recipes">Recent Recipes</string>
     <string name="btn_main_my_recipes">My Recipes</string>
     <string name="btn_main_favorites">Favorites</string>
     <string name="btn_main_profile">Profile</string>

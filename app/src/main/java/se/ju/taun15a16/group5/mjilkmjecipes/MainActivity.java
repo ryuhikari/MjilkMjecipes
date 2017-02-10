@@ -19,6 +19,9 @@ public class MainActivity extends MainMenu {
         Button btnSearchRecipes = (Button) findViewById(R.id.button_main_search_recipes);
         btnSearchRecipes.setOnClickListener(view -> launchSearchActivity(null));
 
+        Button btnRecentRecipes = (Button) findViewById(R.id.button_main_recent_recipes);
+        btnRecentRecipes.setOnClickListener(view -> launchRecentActivity(null));
+
         Button btnMyRecipes = (Button) findViewById(R.id.button_main_my_recipes);
         btnMyRecipes.setOnClickListener(view -> launchMyRecipesActivity(null));
 
@@ -41,23 +44,27 @@ public class MainActivity extends MainMenu {
     }
 
     public void launchSearchActivity(View view){
-        String recipeType = "Search Recipes";
         Intent intent = new Intent(this, ShowRecipeListActivity.class);
-        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_SEARCH);
+        startActivity(intent);
+    }
+
+    public void launchRecentActivity(View view){
+        Intent intent = new Intent(this, ShowRecipeListActivity.class);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_RECENT);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_PAGE, 1);
         startActivity(intent);
     }
 
     public void launchMyRecipesActivity(View view){
-        String recipeType = "My Recipes";
         Intent intent = new Intent(this, ShowRecipeListActivity.class);
-        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_MY);
         startActivity(intent);
     }
 
     public void launchFavoritesActivity(View view){
-        String recipeType = "Favorites";
         Intent intent = new Intent(this, ShowRecipeListActivity.class);
-        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
+        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_FAVORITES);
         startActivity(intent);
     }
 
