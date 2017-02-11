@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
+import android.app.SearchManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
@@ -53,15 +55,22 @@ public class ShowRecipeListActivity extends AppCompatActivity {
     private Button previousPageButton;
     private TextView pageIndicator;
 
+    private String searchQuery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list);
 
-
+        // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         recipeType = intent.getStringExtra(EXTRA_TYPE);
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            searchQuery = intent.getStringExtra(SearchManager.QUERY);
+            recipeType = EXTRA_SEARCH;
+        }
 
         long showRecipe;
         showRecipe = intent.getLongExtra(EXTRA_SHOW, -1);
@@ -148,7 +157,7 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
                     switch( recipeType ) {
                         case EXTRA_SEARCH:
-                            finish();
+                            sched = restManager.searchRecipes(searchQuery);
                             break;
                         case EXTRA_RECENT:
                             sched = restManager.getMostRecentRecipes(recipePage);
@@ -160,6 +169,7 @@ public class ShowRecipeListActivity extends AppCompatActivity {
                             sched = restManager.getAllFavoriteRecipesByAccount(getApplicationContext(), accManager.getUserID(getApplicationContext()));
                             break;
                         default:
+                            finish();
                             break;
                     }
                     Log.d("REST", sched.toString());
@@ -186,6 +196,16 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+                } catch (HTTP400Exception e) {
+                    Log.e("REST", e.errorCodesToString());
+                    for(RESTErrorCodes code : e.getErrorCodes()){
+                        switch (code){
+                            case TERM_MISSING:
+                                Toast.makeText(getApplicationContext(), "Please, fill in the search.", Toast.LENGTH_SHORT).show();
+                                finish();
+                                break;
+                        }
+                    }
                 }
 
                 return result;

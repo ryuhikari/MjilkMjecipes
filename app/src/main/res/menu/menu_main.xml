@@ -9,8 +9,9 @@
         app:showAsAction="ifRoom" />
     <item android:title="@string/text_menu_search"
         android:id="@+id/item_search"
+        android:actionViewClass="android.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="collapseActionView|ifRoom" />
     <item android:title="@string/text_menu_settings"
         android:id="@+id/item_settings"
         android:icon="@android:drawable/ic_menu_preferences"

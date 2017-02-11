@@ -16,9 +16,6 @@ public class MainActivity extends MainMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnSearchRecipes = (Button) findViewById(R.id.button_main_search_recipes);
-        btnSearchRecipes.setOnClickListener(view -> launchSearchActivity(null));
-
         Button btnRecentRecipes = (Button) findViewById(R.id.button_main_recent_recipes);
         btnRecentRecipes.setOnClickListener(view -> launchRecentActivity(null));
 
@@ -31,22 +28,12 @@ public class MainActivity extends MainMenu {
         Button btnProfile =(Button) findViewById(R.id.button_main_profile);
         btnProfile.setOnClickListener(view -> launchProfileActivity(null));
 
-        /*Button btnLogout = (Button) findViewById(R.id.button_logout);
-        btnLogout.setOnClickListener(view -> launchLoginActivity(null));*/
-
-
         Button btnDebug = new Button(this);
         btnDebug.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         btnDebug.setText("Debug Menu");
         btnDebug.setOnClickListener(view -> launchDebugActivity(null));
         LinearLayout layout = (LinearLayout) findViewById(R.id.activity_main);
         layout.addView(btnDebug);
-    }
-
-    public void launchSearchActivity(View view){
-        Intent intent = new Intent(this, ShowRecipeListActivity.class);
-        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_SEARCH);
-        startActivity(intent);
     }
 
     public void launchRecentActivity(View view){
@@ -71,10 +58,6 @@ public class MainActivity extends MainMenu {
     public void launchProfileActivity(View view){
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
-    }
-
-    public void launchLoginActivity(View view){
-
     }
 
     private void launchDebugActivity(View view){

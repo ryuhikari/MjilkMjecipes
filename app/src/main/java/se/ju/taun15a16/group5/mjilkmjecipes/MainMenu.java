@@ -1,20 +1,33 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
 
 public class MainMenu extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Inflate the options menu from XML
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.item_search).getActionView();
+
+
         return true;
     }
 
@@ -31,6 +44,7 @@ public class MainMenu extends AppCompatActivity {
                 return true;
 
             case R.id.item_search:
+                onSearchRequested();
                 return true;
 
             case R.id.item_settings:
