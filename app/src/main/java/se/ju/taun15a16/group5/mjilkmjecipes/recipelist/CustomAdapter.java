@@ -3,6 +3,8 @@ package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -149,16 +153,42 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(tempDate);
             holder.recipeCreated.setText(date);
 
-            /* TODO create get recipe image method
-            int resID = resources.getIdentifier( tempValues.getRecipeImage(), "drawable", "se.ju.taun15a16.group5.mjilkmjecipes");
-            holder.recipeImage.setImageResource(resID);
-            */
+            final String imgURL  = tempValues.getImage();
+            new DownLoadImageTask(holder.recipeImage).execute(imgURL);
 
-            /******** Set Item Click Listner for LayoutInflater for each row *******/
+            /******** Set Item Click Listener for LayoutInflater for each row *******/
 
             view.setOnClickListener(new OnItemClickListener( position ));
         }
         return view;
+    }
+
+    private class DownLoadImageTask extends AsyncTask<String,Void,Bitmap>{
+        ImageView imageView;
+
+        public DownLoadImageTask(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        protected Bitmap doInBackground(String...urls){
+            String urlOfImage = urls[0];
+            Log.v("Image URL", urlOfImage+" "+tempValues.getName());
+            if (urlOfImage == null) {
+                return BitmapFactory.decodeResource(resources, R.drawable.no_image_available);
+            }
+            Bitmap logo = null;
+            try{
+                InputStream is = new URL(urlOfImage).openStream();
+                logo = BitmapFactory.decodeStream(is);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        protected void onPostExecute(Bitmap result){
+            imageView.setImageBitmap(result);
+        }
     }
 
     @Override
