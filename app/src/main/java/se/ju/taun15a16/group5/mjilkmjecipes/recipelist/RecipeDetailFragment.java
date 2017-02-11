@@ -51,7 +51,6 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
-import static android.R.drawable.btn_star_big_off;
 import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class RecipeDetailFragment extends Fragment {
@@ -65,7 +64,7 @@ public class RecipeDetailFragment extends Fragment {
     private String recipeName = "";
     private String recipeAuthor = "";
     private float recipeRating = 0.0f;
-    private String recipeImageURL = "";
+    private String recipeImageURL;
 
 
     private ImageView recipeImageImageView = null;
@@ -214,6 +213,7 @@ public class RecipeDetailFragment extends Fragment {
                     recipeRatingTextView.setRating(recipeRating);
 
                     recipeImageURL  = recipeData.getString("image");
+                    Log.v("Recipe Image URL JSON", recipeImageURL);
                     new DownLoadImageTask(recipeImageImageView).execute(recipeImageURL);
 
                     if (recipeAuthor.equals(AccountManager.getInstance().getUserName(getContext()))) {
@@ -414,7 +414,7 @@ public class RecipeDetailFragment extends Fragment {
             String urlOfImage = urls[0];
             Log.v("Image URL", urlOfImage+" "+recipeName);
             if (urlOfImage == null) {
-                return BitmapFactory.decodeResource(getResources(), R.drawable.no_image_available);
+                return null;
             }
             Bitmap logo = null;
             try{
@@ -427,7 +427,11 @@ public class RecipeDetailFragment extends Fragment {
         }
 
         protected void onPostExecute(Bitmap result){
+            if (result == null) {
+                return;
+            }
             imageView.setImageBitmap(result);
+            Log.v("ImageView", imageView.getDrawable().toString());
         }
     }
 
