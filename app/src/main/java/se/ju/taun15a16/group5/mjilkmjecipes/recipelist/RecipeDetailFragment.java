@@ -4,6 +4,8 @@ package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,7 +35,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,9 +65,10 @@ public class RecipeDetailFragment extends Fragment {
     private String recipeName = "";
     private String recipeAuthor = "";
     private float recipeRating = 0.0f;
+    private String recipeImageURL = "";
 
 
-    private ImageView recipeImage = null;
+    private ImageView recipeImageImageView = null;
     private TextView recipeNameTextView = null;
     private TextView recipeAuthorTextView = null;
     private RatingBar recipeRatingTextView = null;
@@ -87,7 +92,7 @@ public class RecipeDetailFragment extends Fragment {
 
 
         //TODO: Add Loading Bar
-        recipeImage = (ImageView) v.findViewById(R.id.imageView_recipe_detail_recipe_picture);
+        recipeImageImageView = (ImageView) v.findViewById(R.id.imageView_recipe_detail_recipe_picture);
         recipeNameTextView = (TextView) v.findViewById(R.id.textView_recipe_detail_recipe_name);
         recipeAuthorTextView = (TextView) v.findViewById(R.id.textView_recipe_detail_recipe_author);
         recipeRatingTextView = (RatingBar) v.findViewById(R.id.ratingBar_recipe_detail_recipe_rating);
@@ -207,6 +212,9 @@ public class RecipeDetailFragment extends Fragment {
                     recipeAuthorTextView.setText(recipeAuthor);
                     recipeRating = (float)recipeData.getDouble("averageRating");
                     recipeRatingTextView.setRating(recipeRating);
+
+                    recipeImageURL  = recipeData.getString("image");
+                    new DownLoadImageTask(recipeImageImageView).execute(recipeImageURL);
 
                     if (recipeAuthor.equals(AccountManager.getInstance().getUserName(getContext()))) {
                         showEditButton = true;
@@ -393,6 +401,34 @@ public class RecipeDetailFragment extends Fragment {
             }
         }
         return sum / (double)(commentData.length());
+    }
+
+    private class DownLoadImageTask extends AsyncTask<String,Void,Bitmap>{
+        ImageView imageView;
+
+        public DownLoadImageTask(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        protected Bitmap doInBackground(String...urls){
+            String urlOfImage = urls[0];
+            Log.v("Image URL", urlOfImage+" "+recipeName);
+            if (urlOfImage == null) {
+                return BitmapFactory.decodeResource(getResources(), R.drawable.no_image_available);
+            }
+            Bitmap logo = null;
+            try{
+                InputStream is = new URL(urlOfImage).openStream();
+                logo = BitmapFactory.decodeStream(is);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        protected void onPostExecute(Bitmap result){
+            imageView.setImageBitmap(result);
+        }
     }
 
     @Override
