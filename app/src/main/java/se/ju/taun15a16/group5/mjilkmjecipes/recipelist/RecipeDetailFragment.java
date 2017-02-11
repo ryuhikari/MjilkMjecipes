@@ -343,23 +343,16 @@ public class RecipeDetailFragment extends Fragment {
                 RESTErrorCodes[] result = {};
                 try {
                     Boolean correct = RESTManager.getInstance().updateAllFavoriteRecipesByAccount( getContext(), AccountManager.getInstance().getUserID(getContext()), newFavoriteRecipes );
-
                 } catch (HTTP401Exception e) {
                     Log.e("REST", Log.getStackTraceString(e));
                     Context context = getContext();
                     CharSequence text = e.toString();
                     int duration = Toast.LENGTH_LONG;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
                 } catch (HTTP404Exception e) {
                     Log.e("REST", Log.getStackTraceString(e));
                     Context context = getContext();
                     CharSequence text = e.toString();
                     int duration = Toast.LENGTH_LONG;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
                 }
 
                 return result;

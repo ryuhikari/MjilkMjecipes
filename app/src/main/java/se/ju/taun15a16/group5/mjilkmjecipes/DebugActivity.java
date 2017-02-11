@@ -59,7 +59,13 @@ public class DebugActivity extends AppCompatActivity {
                         case "addImageToComment":
                             break;
                         case "addImageToRecipe":
-                            break;
+                            try {
+                                Boolean imageUploaded = RESTManager.getInstance().addImageToRecipe(getApplicationContext(), getResources(), "444", "");
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
                         case "createAccount":
                             try {
                                 JSONObject info = debugRestManager.createAccount("AdminMjilkRecipes2","Admin!1",0.0,0.0);
