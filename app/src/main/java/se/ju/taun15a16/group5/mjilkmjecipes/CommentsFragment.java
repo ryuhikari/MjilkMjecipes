@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +24,10 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
@@ -87,13 +93,15 @@ public class CommentsFragment extends Fragment {
                 try {
                     for(int i = 0; i < rawCommentData.length(); ++i){
                         JSONObject comment = rawCommentData.getJSONObject(i);
+
+                        int commentId = comment.getInt("id");
                         String username = comment.getJSONObject("commenter").getString("userName");
                         float rating = (float)comment.getDouble("grade");
                         String commentText = comment.getString("text");
-                        long creationTimestamp = comment.getLong("created");
+                        int creationTimestamp = comment.getInt("created");
                         String commentImageURL = comment.getString("image");
 
-                        createCommentView(username, rating, commentText, commentImageURL, creationTimestamp);
+                        createCommentView(commentId, username, creationTimestamp, rating, commentText, commentImageURL, creationTimestamp);
                     }
 
                 } catch (JSONException e) {
@@ -111,12 +119,24 @@ public class CommentsFragment extends Fragment {
      * @param imageURL (Optional)Image URL to display.
      * @return The created comment view.
      */
-    public View createCommentView(String username, float rating, String comment, String imageURL, long createDate){
+    public View createCommentView(int commentId, String username, int commentCreated, float rating, String comment, String imageURL, long createDate){
         View commentView = inflater.inflate(R.layout.recipes_comment, container, false);
+
+        TextView commentIdTextView = (TextView) commentView.findViewById(R.id.textView_comment_id);
+        commentIdTextView.setText(Integer.toString(commentId));
+
         TextView userLbl = (TextView) commentView.findViewById(R.id.commentUsernameLbl);
         userLbl.setText(username);
+
+        Date tempDate = new Date(commentCreated * 1000L);
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(tempDate);
+
+        TextView commentCreatedTextView = (TextView) commentView.findViewById(R.id.textView_comment_created);
+        commentCreatedTextView.setText(date);
+
         RatingBar commentRating = (RatingBar) commentView.findViewById(R.id.commentRatingBar);
         commentRating.setRating(rating);
+
         TextView commentLbl = (TextView) commentView.findViewById(R.id.commentLbl);
         if(comment == null || comment.trim().isEmpty()){
             comment = "";
@@ -129,6 +149,25 @@ public class CommentsFragment extends Fragment {
         }
         // Add to the views penultimate index
         commentsLayout.addView(commentView, commentsLayout.getChildCount());
+
+        // Set onClickListener
+        ImageButton editButton = (ImageButton) commentView.findViewById(R.id.imageButton_comment_edit);
+        ImageButton deleteButton = (ImageButton) commentView.findViewById(R.id.imageButton_comment_delete);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commentAction(v);
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commentAction(v);
+            }
+        });
+
         return commentView;
     }
 
@@ -161,5 +200,41 @@ public class CommentsFragment extends Fragment {
             }
             imageView.setImageBitmap(result);
         }
+    }
+
+    private void commentAction(View v) {
+        int buttonClicked = v.getId();
+
+        View commentItem = (View) findParentRecursively(v, R.id.commentItem);
+        TextView commentAuthorTextView = (TextView) commentItem.findViewById(R.id.commentUsernameLbl);
+        String commentAuthor = commentAuthorTextView.getText().toString();
+
+        TextView commentIdTextView = (TextView) commentItem.findViewById(R.id.textView_comment_id);
+        String commentId = commentIdTextView.getText().toString();
+
+        String message = new String();
+        switch (buttonClicked) {
+            case R.id.imageButton_comment_edit:
+                message = commentId+" edit";
+                break;
+            case R.id.imageButton_comment_delete:
+                message = commentId+" delete";
+                break;
+            default:
+                break;
+        }
+
+        Toast.makeText(getContext(), message+" "+commentAuthor, Toast.LENGTH_SHORT).show();
+    }
+
+    public ViewParent findParentRecursively(View view, int targetId) {
+        if (view.getId() == targetId) {
+            return (ViewParent)view;
+        }
+        View parent = (View) view.getParent();
+        if (parent == null) {
+            return null;
+        }
+        return findParentRecursively(parent, targetId);
     }
 }

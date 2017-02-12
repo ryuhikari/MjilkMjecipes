@@ -6,20 +6,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:paddingRight="8dp"
+    android:id="@+id/commentItem">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_comment_id"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
-            android:text="@string/comment_username"
-            android:layout_width="match_parent"
-            android:id="@+id/commentUsernameLbl"
-            tools:text="Username"
-            android:textSize="24sp"
-            android:textStyle="normal|bold"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_height="wrap_content" />
+                android:text="@string/comment_username"
+                android:layout_width="wrap_content"
+                android:id="@+id/commentUsernameLbl"
+                tools:text="Username"
+                android:textSize="24sp"
+                android:textStyle="normal|bold"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-        <RatingBar
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton_comment_edit"
+            android:background="@android:drawable/ic_menu_edit"
+            android:layout_gravity="center_vertical" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton_comment_delete"
+            android:background="@android:drawable/ic_delete"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_comment_created" />
+
+    <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/commentRatingBar"
@@ -28,7 +65,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp" />
 
-        <TextView
+    <TextView
             android:text="@string/comment_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,4 +81,10 @@
             android:id="@+id/commentImage"
             android:layout_marginTop="4dp"
             android:layout_height="125dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginTop="10dp" />
 </LinearLayout>
