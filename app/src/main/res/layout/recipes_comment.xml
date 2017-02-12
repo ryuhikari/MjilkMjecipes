@@ -38,7 +38,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageButton_comment_edit"
             android:background="@android:drawable/ic_menu_edit"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:visibility="gone" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -46,7 +47,8 @@
             android:id="@+id/imageButton_comment_delete"
             android:background="@android:drawable/ic_delete"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -63,7 +65,8 @@
             android:numStars="5"
             android:isIndicator="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
             android:text="@string/comment_content"

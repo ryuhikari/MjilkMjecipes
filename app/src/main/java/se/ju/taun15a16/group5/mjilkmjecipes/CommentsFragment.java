@@ -1,7 +1,9 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,7 +31,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.DirectionAdapter;
@@ -113,20 +117,20 @@ public class CommentsFragment extends Fragment {
 
     /**
      * Adds a comment to the parent layout.
-     * @param username Username to display.
+     * @param commentUserName Username to display.
      * @param rating Rating to display.
      * @param comment (Optional)Comment-text to display.
      * @param imageURL (Optional)Image URL to display.
      * @return The created comment view.
      */
-    public View createCommentView(int commentId, String username, int commentCreated, float rating, String comment, String imageURL, long createDate){
+    public View createCommentView(int commentId, String commentUserName, int commentCreated, float rating, String comment, String imageURL, long createDate){
         View commentView = inflater.inflate(R.layout.recipes_comment, container, false);
 
         TextView commentIdTextView = (TextView) commentView.findViewById(R.id.textView_comment_id);
         commentIdTextView.setText(Integer.toString(commentId));
 
         TextView userLbl = (TextView) commentView.findViewById(R.id.commentUsernameLbl);
-        userLbl.setText(username);
+        userLbl.setText(commentUserName);
 
         Date tempDate = new Date(commentCreated * 1000L);
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(tempDate);
@@ -147,10 +151,11 @@ public class CommentsFragment extends Fragment {
         if(imageURL != null){
             new DownLoadImageTask(commentImage).execute(imageURL);
         }
+
         // Add to the views penultimate index
         commentsLayout.addView(commentView, commentsLayout.getChildCount());
 
-        // Set onClickListener
+        // Set onClickListener to edit and delete buttons
         ImageButton editButton = (ImageButton) commentView.findViewById(R.id.imageButton_comment_edit);
         ImageButton deleteButton = (ImageButton) commentView.findViewById(R.id.imageButton_comment_delete);
 
@@ -167,6 +172,13 @@ public class CommentsFragment extends Fragment {
                 commentAction(v);
             }
         });
+
+        // Show/Hide edit and delete buttons
+        String userName = AccountManager.getInstance().getUserName(getContext());
+        if ( userName.equals(commentUserName) ) {
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+        }
 
         return commentView;
     }
@@ -212,19 +224,22 @@ public class CommentsFragment extends Fragment {
         TextView commentIdTextView = (TextView) commentItem.findViewById(R.id.textView_comment_id);
         String commentId = commentIdTextView.getText().toString();
 
-        String message = new String();
         switch (buttonClicked) {
             case R.id.imageButton_comment_edit:
-                message = commentId+" edit";
+                Toast.makeText(getContext(), R.string.comment_edit_message, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageButton_comment_delete:
-                message = commentId+" delete";
+                String userName = AccountManager.getInstance().getUserName(getContext());
+                if ( userName.equals(commentAuthor) ) {
+                    new DeleteCommentTask(commentItem).execute(commentId);
+                } else {
+                    Toast.makeText(getContext(), R.string.comment_delete_error_message, Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;
         }
 
-        Toast.makeText(getContext(), message+" "+commentAuthor, Toast.LENGTH_SHORT).show();
     }
 
     public ViewParent findParentRecursively(View view, int targetId) {
@@ -236,5 +251,35 @@ public class CommentsFragment extends Fragment {
             return null;
         }
         return findParentRecursively(parent, targetId);
+    }
+
+    private class DeleteCommentTask extends AsyncTask<String,Void,Boolean>{
+        View commentView;
+
+        public DeleteCommentTask(View imageView){
+            this.commentView = imageView;
+        }
+
+        protected Boolean doInBackground(String...commentId){
+            Boolean deleteComment = false;
+            try {
+                deleteComment = RESTManager.getInstance().deleteComment(getContext(), commentId[0]);
+            } catch (HTTP404Exception e) {
+                e.printStackTrace();
+            } catch (HTTP401Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+
+        protected void onPostExecute(Boolean result){
+            if (result) {
+                commentView.setVisibility(View.GONE);
+                Toast.makeText(getContext(), R.string.comment_delete_successful_message, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), R.string.comment_delete_error_message, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

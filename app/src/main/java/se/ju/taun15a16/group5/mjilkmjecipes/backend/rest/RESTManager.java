@@ -1259,9 +1259,38 @@ public class RESTManager
 		return false;
 	}
 	
-	public boolean deleteComment(String commentID) {
-		// TODO implement me
-		return false;
+	public boolean deleteComment(Context context, String commentID) throws HTTP404Exception, HTTP401Exception {
+		HttpURLConnection con = null;
+		try {
+			URL url = new URL(BASE_PATH + PATH_COMMENTS + commentID);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("DELETE");
+			con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+			con.setUseCaches(false);
+			con.setDoOutput(false);
+			con.setAllowUserInteraction(false); //TODO: Check
+			con.setConnectTimeout(TIMEOUT);
+			con.setReadTimeout(TIMEOUT);
+
+			con.connect();
+			int status = con.getResponseCode();
+			Log.d("REST",status + " " + con.getResponseMessage());
+
+			switch(status){
+				case 204:
+				case 401:
+					throw  new HTTP401Exception("ERROR: HTTP 401 Error");
+				case 404:
+					throw new HTTP404Exception("ERROR: HTTP 404 Error");
+			}
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
+		return true;
 	}
 	
 	public boolean addImageToComment(String commentID, Image image) {

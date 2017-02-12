@@ -55,6 +55,15 @@ public class DebugActivity extends AppCompatActivity {
                     String selection = (String) dropdown.getSelectedItem();
                     switch(selection){
                         case "addCommentToRecipe":
+                            try {
+                                Boolean createComment = RESTManager.getInstance().addCommentToRecipe(getApplicationContext(), "444", "Cool comment", 5, AccountManager.getInstance().getUserID(getApplicationContext()));
+                            } catch (HTTP400Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "addImageToComment":
                             break;
@@ -118,6 +127,13 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "deleteComment":
+                            try {
+                                Boolean deleteComment = RESTManager.getInstance().deleteComment(getApplicationContext(), "344");
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "deleteRecipe":
                             try {

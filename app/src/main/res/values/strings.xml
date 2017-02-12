@@ -79,6 +79,13 @@
     <string name="text_login_email">Email</string>
     <string name="text_logging_in">Logging In</string>
 
+    <!-- Comments -->
+    <string name="comment_delete_successful_message">Comment deleted!</string>
+    <string name="comment_delete_error_message">Problem deleting comment!</string>
+    <string name="comment_edit_message">Edit comment!</string>
+    <string name="comment_edit_successful_message">Comment updated!</string>
+    <string name="comment_edit_error_message">Problem editing comment!</string>
+
     <!-- New Recipe -->
     <string name="text_new_recipe_update_recipe">Update recipe</string>
 
