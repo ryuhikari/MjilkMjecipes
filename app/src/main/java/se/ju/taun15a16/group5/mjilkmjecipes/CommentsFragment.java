@@ -1,6 +1,7 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
@@ -88,8 +91,9 @@ public class CommentsFragment extends Fragment {
                         float rating = (float)comment.getDouble("grade");
                         String commentText = comment.getString("text");
                         long creationTimestamp = comment.getLong("created");
+                        String commentImageURL = comment.getString("image");
 
-                        createCommentView(username, rating, commentText, null, creationTimestamp);
+                        createCommentView(username, rating, commentText, commentImageURL, creationTimestamp);
                     }
 
                 } catch (JSONException e) {
@@ -104,10 +108,10 @@ public class CommentsFragment extends Fragment {
      * @param username Username to display.
      * @param rating Rating to display.
      * @param comment (Optional)Comment-text to display.
-     * @param image (Optional)Image to display.
+     * @param imageURL (Optional)Image URL to display.
      * @return The created comment view.
      */
-    public View createCommentView(String username, float rating, String comment, Bitmap image, long createDate){
+    public View createCommentView(String username, float rating, String comment, String imageURL, long createDate){
         View commentView = inflater.inflate(R.layout.recipes_comment, container, false);
         TextView userLbl = (TextView) commentView.findViewById(R.id.commentUsernameLbl);
         userLbl.setText(username);
@@ -120,11 +124,42 @@ public class CommentsFragment extends Fragment {
         commentLbl.setText(comment);
         ImageView commentImage = (ImageView) commentView.findViewById(R.id.commentImage);
         // Set only if theres a custom image, otherwise display dummy
-        if(image != null){
-            commentImage.setImageBitmap(image);
+        if(imageURL != null){
+            new DownLoadImageTask(commentImage).execute(imageURL);
         }
         // Add to the views penultimate index
         commentsLayout.addView(commentView, commentsLayout.getChildCount());
         return commentView;
+    }
+
+    private class DownLoadImageTask extends AsyncTask<String,Void,Bitmap>{
+        ImageView imageView;
+
+        public DownLoadImageTask(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        protected Bitmap doInBackground(String...urls){
+            String urlOfImage = urls[0];
+            Log.v("Comment Image URL", urlOfImage);
+            if (urlOfImage == null) {
+                return null;
+            }
+            Bitmap logo = null;
+            try{
+                InputStream is = new URL(urlOfImage).openStream();
+                logo = BitmapFactory.decodeStream(is);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        protected void onPostExecute(Bitmap result){
+            if (result == null) {
+                return;
+            }
+            imageView.setImageBitmap(result);
+        }
     }
 }
