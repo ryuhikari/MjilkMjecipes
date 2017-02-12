@@ -12,7 +12,7 @@
         app:srcCompat="@drawable/no_image_available"
         android:id="@+id/imageView_tabitem_recipe_picture"
         android:layout_height="80dp"
-        android:layout_rowSpan="3"
+        android:layout_rowSpan="2"
         android:layout_gravity="center"
         android:layout_width="80dp"
         android:layout_marginRight="20dp"
@@ -22,6 +22,7 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_rowSpan="1"
         android:id="@+id/textView_tabitem_recipe_name"
         android:textSize="20sp" />
 
@@ -29,13 +30,7 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView_tabitem_recipe_author"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_rowSpan="1"
         android:id="@+id/textView_tabitem_recipe_created"
         android:layout_marginTop="10dp" />
 

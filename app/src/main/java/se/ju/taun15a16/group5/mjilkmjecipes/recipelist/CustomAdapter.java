@@ -75,7 +75,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
         ImageView recipeImage;
         TextView recipeName;
-        TextView recipeAuthor;
         TextView recipeCreated;
 
     }
@@ -96,7 +95,6 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder = new ViewHolder();
             holder.recipeImage = (ImageView) view.findViewById( R.id.imageView_tabitem_recipe_picture );
             holder.recipeName = (TextView) view.findViewById( R.id.textView_tabitem_recipe_name );
-            holder.recipeAuthor = (TextView) view.findViewById( R.id.textView_tabitem_recipe_author );
             holder.recipeCreated = (TextView) view.findViewById( R.id.textView_tabitem_recipe_created );
 
             /************  Set holder with LayoutInflater ************/
@@ -118,39 +116,8 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
             holder.recipeName.setText( tempValues.getName() );
 
-                new AsyncTask<Void, Void, JSONObject>(){
-
-                    @Override
-                    protected JSONObject doInBackground(Void... voids) {
-                        JSONObject rawData = null;
-                        try {
-                            rawData = RESTManager.getInstance().getAccountInfo(tempValues.getCreatorId());
-                            Log.d("REST", rawData.toString());
-                        } catch (HTTP404Exception e) {
-                            Log.e("REST", Log.getStackTraceString(e));
-                        }
-                        return rawData;
-                    }
-
-                    @Override
-                    protected void onPostExecute(JSONObject jsonObject) {
-                        if(jsonObject == null){
-                            return;
-                        }
-                        String author = null;
-                        try {
-                            author = jsonObject.getString("userName");
-                            holder.recipeAuthor.setText(author);
-                        } catch (JSONException e) {
-                            Log.e("REST", Log.getStackTraceString(e));
-                        }
-                    }
-                };
-
-
-            //holder.recipeAuthor.setText();
             Date tempDate = new Date(tempValues.getCreated() * 1000L);
-            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(tempDate);
+            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(tempDate);
             holder.recipeCreated.setText(date);
 
             final String imgURL  = tempValues.getImage();
