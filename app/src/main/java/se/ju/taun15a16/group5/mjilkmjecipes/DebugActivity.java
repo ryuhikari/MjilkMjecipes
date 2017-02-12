@@ -66,7 +66,13 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "addImageToComment":
-                            break;
+                            try {
+                                Boolean commentImageUploaded = RESTManager.getInstance().addImageToComment(getApplicationContext(), getResources(), "349", "");
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
                         case "addImageToRecipe":
                             try {
                                 Boolean imageUploaded = RESTManager.getInstance().addImageToRecipe(getApplicationContext(), getResources(), "444", "");

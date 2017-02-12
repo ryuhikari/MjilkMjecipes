@@ -1010,7 +1010,7 @@ public class RESTManager
         return true;
 	}
 	
-	public boolean addImageToRecipe(Context context, Resources resources, String recipeID, String imagePath) throws HTTP401Exception, HTTP404Exception {
+	public boolean addImageToRecipe(Context context,Resources resources , String recipeID, String imagePath) throws HTTP401Exception, HTTP404Exception {
 
         HttpURLConnection con = null;
         String boundary = Long.toHexString(System.currentTimeMillis());
@@ -1293,9 +1293,63 @@ public class RESTManager
 		return true;
 	}
 	
-	public boolean addImageToComment(String commentID, Image image) {
-		// TODO implement me
-		return false;
+	public boolean addImageToComment(Context context, Resources resources, String commentID, String imagePath) throws HTTP401Exception, HTTP404Exception {
+        HttpURLConnection con = null;
+        String boundary = Long.toHexString(System.currentTimeMillis());
+
+        try {
+            URL url = new URL(BASE_PATH + PATH_COMMENTS + commentID + "/" + PATH_IMAGE);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("PUT");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Content-Type","multipart/form-data;boundary="+boundary);
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            String charset = "UTF-8";
+            String CRLF = "\r\n";
+            File binaryFile = new File("/path/to/file.bin");
+            OutputStream output = con.getOutputStream();
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
+
+            // Send binary file.
+            writer.append("--" + boundary).append(CRLF);
+            writer.append("Content-Disposition: form-data;name=\"image\";filename=\"tacos.jpeg\"").append(CRLF);
+            writer.append("Content-Type: image/jpeg").append(CRLF);
+            writer.append(CRLF).flush();
+            Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.tacos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, output);
+            output.flush(); // Important before continuing with writer!
+            writer.append(CRLF).flush(); // CRLF is important! It indicates end of boundary.
+
+            // End of multipart/form-data.
+            writer.append("--" + boundary + "--").append(CRLF).flush();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 204:
+                    break;
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 
 }

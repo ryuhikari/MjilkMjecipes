@@ -227,6 +227,7 @@ public class CommentsFragment extends Fragment {
         switch (buttonClicked) {
             case R.id.imageButton_comment_edit:
                 Toast.makeText(getContext(), R.string.comment_edit_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), commentId, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageButton_comment_delete:
                 String userName = AccountManager.getInstance().getUserName(getContext());
