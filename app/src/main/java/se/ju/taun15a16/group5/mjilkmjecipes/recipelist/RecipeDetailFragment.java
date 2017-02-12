@@ -65,6 +65,7 @@ public class RecipeDetailFragment extends Fragment {
     private String recipeName = "";
     private String recipeAuthor = "";
     private float recipeRating = 0.0f;
+    private String recipeDescription= "";
     private String recipeImageURL;
 
     LinearLayout rootLayout = null;
@@ -75,6 +76,7 @@ public class RecipeDetailFragment extends Fragment {
     private TextView recipeNameTextView = null;
     private TextView recipeAuthorTextView = null;
     private RatingBar recipeRatingTextView = null;
+    private TextView recipeDescriptionTextView = null;
 
 
     @Override
@@ -85,6 +87,7 @@ public class RecipeDetailFragment extends Fragment {
             recipeName = savedInstanceState.getString("recipeName");
             recipeAuthor = savedInstanceState.getString("recipeAuthor");
             recipeRating = savedInstanceState.getFloat("recipeRating");
+            recipeDescription = savedInstanceState.getString("recipeDescription");
         }
     }
 
@@ -100,10 +103,12 @@ public class RecipeDetailFragment extends Fragment {
         recipeNameTextView = (TextView) v.findViewById(R.id.textView_recipe_detail_recipe_name);
         recipeAuthorTextView = (TextView) v.findViewById(R.id.textView_recipe_detail_recipe_author);
         recipeRatingTextView = (RatingBar) v.findViewById(R.id.ratingBar_recipe_detail_recipe_rating);
+        recipeDescriptionTextView = (TextView) v.findViewById(R.id.recipeDescriptionText);
 
         recipeNameTextView.setText(recipeName);
         recipeAuthorTextView.setText(recipeAuthor);
         recipeRatingTextView.setRating(recipeRating);
+        recipeDescriptionTextView.setText(recipeDescription);
 
         if(savedInstanceState == null){
             loadRecipeData();
@@ -154,7 +159,7 @@ public class RecipeDetailFragment extends Fragment {
 
                 intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
                 intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
-                intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeId);
+                intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeDescription);
                 intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directionDescriptions);
                 startActivity(intent);
                 return true;
@@ -212,6 +217,8 @@ public class RecipeDetailFragment extends Fragment {
                     recipeAuthorTextView.setText(recipeAuthor);
                     recipeRating = (float)recipeData.getDouble("averageRating");
                     recipeRatingTextView.setRating(recipeRating);
+                    recipeDescription = recipeData.getString("description");
+                    recipeDescriptionTextView.setText(recipeDescription);
 
                     recipeImageURL  = recipeData.getString("image");
                     Log.v("Recipe Image URL JSON", recipeImageURL);
@@ -438,6 +445,7 @@ public class RecipeDetailFragment extends Fragment {
         savedInstanceState.putString("recipeName", recipeName);
         savedInstanceState.putString("recipeAuthor", recipeAuthor);
         savedInstanceState.putFloat("recipeRating", recipeRating);
+        savedInstanceState.putString("recipeDescription", recipeDescription);
     }
 
     public void setRecipe(long id) {
