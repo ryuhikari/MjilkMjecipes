@@ -54,10 +54,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
      */
     public class RecipePagerAdapter extends FragmentPagerAdapter {
 
-        //TODO: Make static!
-        private final int TAB_COUNT = 2;
+        //TODO: Somehow pass commentData from RecipeDetailFragment to CommentsFragment to save data-volume!
+        private static final int TAB_COUNT = 2;
 
-        public RecipePagerAdapter(FragmentManager fm) {
+        RecipePagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -71,7 +71,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     f.setRecipe( recipeId );
                     return f;
                 case 1:
-                    return CommentsFragment.newInstance();
+                    return CommentsFragment.newInstance(recipeId);
                 default:
                     f = new RecipeDetailFragment();
                     return f;

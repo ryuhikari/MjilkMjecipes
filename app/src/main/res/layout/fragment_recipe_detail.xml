@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recipeNestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:fillViewport="true">
-
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+    android:paddingTop="@dimen/activity_vertical_margin">
         <ImageView
             android:layout_width="match_parent"
             app:srcCompat="@drawable/no_image_available"
@@ -61,7 +53,8 @@
                 android:gravity="end"
                 android:layout_weight="1"
                 android:id="@+id/byLbl"
-                android:paddingRight="1dp" />
+                android:paddingRight="1dp"
+                android:paddingEnd="1dp"/>
 
             <TextView
                 android:text="@string/text_signup_username"
@@ -72,7 +65,8 @@
                 android:textAlignment="textStart"
                 android:gravity="start"
                 android:layout_weight="1"
-                android:paddingLeft="1dp" />
+                android:paddingLeft="1dp"
+                android:paddingStart="1dp"/>
         </LinearLayout>
 
         <TextView
@@ -83,24 +77,11 @@
             android:paddingTop="10dp"
             android:textSize="20sp" />
 
-        <android.support.v4.widget.NestedScrollView
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/listView_RecipeSteps"
-                    tools:listitem="@layout/direction_item"
-                    android:paddingLeft="20dp" />
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView >
+            android:id="@+id/listView_RecipeSteps"
+            tools:listitem="@layout/direction_item"
+            android:paddingLeft="20dp"
+            android:paddingStart="20dp"/>
+</LinearLayout >

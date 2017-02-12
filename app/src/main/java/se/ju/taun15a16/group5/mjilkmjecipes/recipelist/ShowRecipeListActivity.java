@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.CommentsFragment;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
@@ -246,12 +247,14 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
     /*@Override*/
     public void itemClicked(long id) {
-        View fragmentContainer = findViewById(R.id.fragment_container);
+        View fragmentContainer = findViewById(R.id.fragment_container_detail);
         if (fragmentContainer != null) {
             RecipeDetailFragment details = new RecipeDetailFragment();
+            CommentsFragment comments = CommentsFragment.newInstance(id);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             details.setRecipe(id);
-            ft.replace(R.id.fragment_container, details);
+            ft.replace(R.id.fragment_container_detail, details);
+            ft.replace(R.id.fragment_container_comments, comments);
             ft.addToBackStack(null);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();

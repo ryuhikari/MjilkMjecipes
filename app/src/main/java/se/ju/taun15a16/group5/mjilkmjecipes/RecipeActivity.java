@@ -90,7 +90,7 @@ public class RecipeActivity extends AppCompatActivity {
                 case 0:
                     return RecipeFragment.newInstance();
                 case 1:
-                    return CommentsFragment.newInstance();
+                    return CommentsFragment.newInstance(0);
                 default:
                     return RecipeFragment.newInstance();
             }
