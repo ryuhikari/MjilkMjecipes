@@ -121,6 +121,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder.recipeCreated.setText(date);
 
             final String imgURL  = tempValues.getImage();
+            holder.recipeImage.setImageResource(R.drawable.no_image_available);
             new DownLoadImageTask(holder.recipeImage).execute(imgURL);
 
             /******** Set Item Click Listener for LayoutInflater for each row *******/
@@ -141,7 +142,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             String urlOfImage = urls[0];
             Log.v("Image URL", urlOfImage+" "+tempValues.getName());
             if (urlOfImage == null) {
-                return BitmapFactory.decodeResource(resources, R.drawable.no_image_available);
+                return null;
             }
             Bitmap logo = null;
             try{
@@ -154,7 +155,11 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         }
 
         protected void onPostExecute(Bitmap result){
-            imageView.setImageBitmap(result);
+            if (result == null) {
+                imageView.setImageResource(R.drawable.no_image_available);
+            } else {
+                imageView.setImageBitmap(result);
+            }
         }
     }
 
