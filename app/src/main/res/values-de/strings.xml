@@ -53,4 +53,16 @@
     <string name="text_profile_longitude">Breitengrad</string>
     <string name="text_profile_username">Username</string>
     <string name="text_signing_up">Registrieren</string>
+    <string name="btn_main_recent_recipes">Neueste Rezepte</string>
+    <string name="btn_new_recipe_add_direction">Schritt Hinzufügen</string>
+    <string name="btn_new_recipe_create">Neues Rezept</string>
+    <string name="btn_new_recipe_directions">Schritte:</string>
+    <string name="btn_new_recipe_update">Rezept Updaten</string>
+    <string name="recipe_description_title">Beschreibung:</string>
+    <string name="text_menu_star_off">Als Favorit Hinzufügen</string>
+    <string name="text_menu_star_on">Von Favoriten Entfernen</string>
+    <string name="search_hint">Durchsuche Rezepte</string>
+    <string name="text_new_recipe_update_recipe">Rezept Updaten</string>
+    <string name="text_show_list_next_page">Nächste &gt;&gt;</string>
+    <string name="text_show_list_previous_page">&lt;&lt; Vorherige</string>
 </resources>

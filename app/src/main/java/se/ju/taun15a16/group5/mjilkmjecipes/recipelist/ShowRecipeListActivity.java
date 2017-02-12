@@ -64,23 +64,29 @@ public class ShowRecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list);
 
-        // Get the intent, verify the action and get the query
-        Intent intent = getIntent();
-        recipeType = intent.getStringExtra(EXTRA_TYPE);
+        if(savedInstanceState == null){
+            // Get the intent, verify the action and get the query
+            Intent intent = getIntent();
+            recipeType = intent.getStringExtra(EXTRA_TYPE);
 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            searchQuery = intent.getStringExtra(SearchManager.QUERY);
-            recipeType = EXTRA_SEARCH;
+            if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+                searchQuery = intent.getStringExtra(SearchManager.QUERY);
+                recipeType = EXTRA_SEARCH;
+            }
+
+            long showRecipe;
+            showRecipe = intent.getLongExtra(EXTRA_SHOW, -1);
+
+            if ( showRecipe != -1 ) {
+                itemClicked(showRecipe);
+            }
+
+            recipePage = intent.getIntExtra(EXTRA_PAGE, 0);
+        }else{
+            recipeType = savedInstanceState.getString(EXTRA_TYPE);
+            recipePage = savedInstanceState.getInt(EXTRA_PAGE);
         }
 
-        long showRecipe;
-        showRecipe = intent.getLongExtra(EXTRA_SHOW, -1);
-
-        if ( showRecipe != -1 ) {
-            itemClicked(showRecipe);
-        }
-
-        recipePage = intent.getIntExtra(EXTRA_PAGE, 0);
 
         if ( recipePage != 0 ) {
             pageButtons = findViewById(R.id.layout_page_buttons);
@@ -133,6 +139,19 @@ public class ShowRecipeListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onRestart();
         setListData();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(EXTRA_TYPE, recipeType);
+        outState.putInt(EXTRA_PAGE, recipePage);
     }
 
     /****** Function to set data in ArrayList *************/

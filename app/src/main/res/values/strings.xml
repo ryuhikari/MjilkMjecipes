@@ -69,6 +69,8 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="comments_load_more">Load more Comments</string>
     <string name="recipe_by">By:</string>
+    <string name="recipe_description_title">Description:</string>
+    <string name="recipe_description_text" translatable="false">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</string>
     <string name="recipe_steps_title">Steps:</string>
     <string name="recipe_step_title">Step</string>
 
@@ -92,10 +94,10 @@
     <string name="text_new_recipe_agree">Agree</string>
     <string name="text_profile_new_password">New Password</string>
     <string name="btn_profile_save_changes">Save Changes</string>
-    <string name="btn_new_recipe_add_direction">Add direction</string>
+    <string name="btn_new_recipe_add_direction">Add Step</string>
     <string name="btn_new_recipe_directions">Directions:</string>
-    <string name="btn_new_recipe_create">Create new</string>
-    <string name="btn_new_recipe_update">Update</string>
+    <string name="btn_new_recipe_create">Create Recipe</string>
+    <string name="btn_new_recipe_update">Update Recipe</string>
 
 
 </resources>

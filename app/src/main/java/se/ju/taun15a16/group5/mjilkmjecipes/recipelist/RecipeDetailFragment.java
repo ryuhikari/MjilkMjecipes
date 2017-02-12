@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -66,6 +67,9 @@ public class RecipeDetailFragment extends Fragment {
     private float recipeRating = 0.0f;
     private String recipeImageURL;
 
+    LinearLayout rootLayout = null;
+
+    ArrayList<Direction> directions = new ArrayList<>();
 
     private ImageView recipeImageImageView = null;
     private TextView recipeNameTextView = null;
@@ -89,6 +93,7 @@ public class RecipeDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
+        rootLayout = (LinearLayout) v.findViewById(R.id.fragment_recipe_linearview);
 
         //TODO: Add Loading Bar
         recipeImageImageView = (ImageView) v.findViewById(R.id.imageView_recipe_detail_recipe_picture);
@@ -141,20 +146,16 @@ public class RecipeDetailFragment extends Fragment {
             case R.id.item_edit_recipe:
                 Intent intent = new Intent(getContext(), NewRecipeActivity.class);
 
-                ListView directionListView = (ListView) getActivity().findViewById(R.id.listView_RecipeSteps);
-                Adapter adapter = directionListView.getAdapter();
+                ArrayList<String> directionDescriptions = new ArrayList<String>();
 
-                ArrayList<String> directions = new ArrayList<String>();
-
-                for (int i=0; i < adapter.getCount(); i++) {
-                    Direction direction = (Direction) adapter.getItem(i);
-                    directions.add(i, direction.getDescription());
+                for (Direction d : directions) {
+                    directionDescriptions.add(d.getDescription());
                 }
 
                 intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
                 intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
                 intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeId);
-                intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directions);
+                intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directionDescriptions);
                 startActivity(intent);
                 return true;
 
@@ -222,21 +223,24 @@ public class RecipeDetailFragment extends Fragment {
                     }
 
                     JSONArray directionArray = recipeData.getJSONArray("directions");
-                    ArrayList<Direction> directions = new ArrayList<>();
                     for(int i = 0; i < directionArray.length(); ++i){
                         JSONObject directionRAW = directionArray.getJSONObject(i);
                         Direction d = new Direction(recipeId, directionRAW.getInt("order"), directionRAW.getString("description"));
+
+                        View child = getActivity().getLayoutInflater().inflate(R.layout.direction_item, null);
+                        TextView title = (TextView) child.findViewById(R.id.textViewDirectionTitle);
+                        title.setText(getActivity().getString(R.string.recipe_step_title) + " " + d.getOrder());
+                        TextView description = (TextView) child.findViewById(R.id.textViewDirectionDescription);
+                        description.setText(d.getDescription());
+                        final float scale = getResources().getDisplayMetrics().density;
+                        int padding = (int) (20 * scale + 0.5f);
+                        child.setPadding(padding,0,0,0);
+                        rootLayout.addView(child);
                         directions.add(d);
                     }
-                    DirectionAdapter adapter = new DirectionAdapter(getActivity(), R.layout.direction_item, directions);
-                    ListView directionListView = (ListView) getActivity().findViewById(R.id.listView_RecipeSteps);
-                    directionListView.setAdapter(adapter);
 
                 } catch (JSONException e) {
                     Log.e("REST", Log.getStackTraceString(e));
-                }
-                View view = getView();
-                if (view != null) {
                 }
             }
         }.execute();
