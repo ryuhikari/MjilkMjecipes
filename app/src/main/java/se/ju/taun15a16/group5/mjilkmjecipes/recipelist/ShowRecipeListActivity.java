@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
@@ -44,10 +45,10 @@ public class ShowRecipeListActivity extends AppCompatActivity {
     public static final String EXTRA_MY = "My Recipes";
     public static final String EXTRA_FAVORITES = "Favorite Recipes";
 
-    String recipeType = null;
-    int recipePage = 1;
-    ListView list;
-    CustomAdapter adapter;
+    private String recipeType = null;
+    private int recipePage = 1;
+    private ListView list;
+    private CustomAdapter adapter;
     public ShowRecipeListActivity CustomListView = null;
     public ArrayList<Recipe> CustomListViewValuesArray = new ArrayList<>();
 
@@ -57,6 +58,14 @@ public class ShowRecipeListActivity extends AppCompatActivity {
     private TextView pageIndicator;
 
     private String searchQuery;
+
+    public String getRecipeType() {
+        return this.recipeType;
+    }
+
+    public int getRecipePage() {
+        return this.recipePage;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -24,4 +24,12 @@
         android:title="@string/text_menu_star_off"
         app:showAsAction="ifRoom"
         android:icon="@android:drawable/btn_star_big_off" />
+
+    <item
+        android:id="@+id/item_delete_recipe"
+        android:orderInCategory="100"
+        android:title="@string/text_menu_delete"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:visible="false" />
 </menu>

@@ -1,7 +1,9 @@
 package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -126,6 +128,15 @@ public class RecipeDetailFragment extends Fragment {
         if (showEditButton) {
             MenuItem editButton = menu.findItem(R.id.item_edit_recipe);
             editButton.setVisible(true);
+
+            MenuItem deleteButton = menu.findItem(R.id.item_delete_recipe);
+            deleteButton.setVisible(true);
+        } else {
+            MenuItem editButton = menu.findItem(R.id.item_edit_recipe);
+            editButton.setVisible(false);
+
+            MenuItem deleteButton = menu.findItem(R.id.item_delete_recipe);
+            deleteButton.setVisible(false);
         }
 
         if (markedAsFavorite) {
@@ -163,6 +174,19 @@ public class RecipeDetailFragment extends Fragment {
                 intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directionDescriptions);
                 startActivity(intent);
                 return true;
+
+            case R.id.item_delete_recipe:
+                new AlertDialog.Builder(getContext())
+                    .setTitle(R.string.text_menu_delete)
+                    .setMessage(R.string.text_menu_delete_confirmation)
+                    .setIconAttribute(android.R.attr.alertDialogIcon)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteRecipe();
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+                break;
 
             case R.id.item_favorite_recipe:
                 updateFavoriteRecipes(false);
@@ -253,6 +277,83 @@ public class RecipeDetailFragment extends Fragment {
         }.execute();
     }
 
+    private void deleteRecipe() {
+        new AsyncTask<Void, Void, RESTErrorCodes[]>() {
+
+            @Override
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected RESTErrorCodes[] doInBackground(Void... params) {
+
+                RESTErrorCodes[] result = {};
+                try {
+                    RESTManager restManager = RESTManager.getInstance();
+                    AccountManager accManager = AccountManager.getInstance();
+
+                    Boolean deleteRecipe = restManager.deleteRecipe(getContext(), Long.toString(recipeId));
+                } catch (HTTP404Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    Context context = getContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                } catch (HTTP401Exception e) {
+                    Log.e("REST", Log.getStackTraceString(e));
+                    Context context = getContext();
+                    CharSequence text = e.toString();
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(RESTErrorCodes[] result) {
+
+                if (result.length == 0) {
+                    View fragmentContainer = getActivity().findViewById(R.id.fragment_container_detail);
+
+                    if (fragmentContainer != null) {
+                        String recipeType = ((ShowRecipeListActivity)getActivity()).getRecipeType();
+                        int recipePage = ((ShowRecipeListActivity)getActivity()).getRecipePage();
+
+                        Toast.makeText(getContext(), R.string.recipe_delete_successful_message, Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(getContext(), ShowRecipeListActivity.class);
+                        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
+                        intent.putExtra(ShowRecipeListActivity.EXTRA_PAGE, recipePage);
+                        startActivity(intent);
+                        Fragment recipeDetailFragment = getFragmentManager().findFragmentById(R.id.fragment_container_detail);
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(recipeDetailFragment).commit();
+                    } else {
+                        Toast.makeText(getContext(), R.string.recipe_delete_successful_message, Toast.LENGTH_LONG).show();
+
+                        getActivity().finish();
+                    }
+                } else {
+
+                    // TODO: Finish coding all the error messages
+                    for(int i = 0; i < result.length; ++i){
+                        switch (result[i]){
+                            case INVALID_USERNAME:
+                                //TODO: Use textedit.setError("") for marking a textedit as incorrect!
+                                break;
+                            //TODO: Add all possible error codes here except for longitude and latitude
+                        }
+                    }
+                    Toast.makeText(getContext(), R.string.recipe_delete_error_message, Toast.LENGTH_LONG).show();
+                }
+            }
+        }.execute();
+    }
+
     private void checkFavorite() {
         new AsyncTask<Void, Void, RESTErrorCodes[]>() {
 
@@ -321,7 +422,7 @@ public class RecipeDetailFragment extends Fragment {
                             //TODO: Add all possible error codes here except for longitude and latitude
                         }
                     }
-                    Toast.makeText(getContext(), "Error checking favorite recipes!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.recipe_check_favorite_error_message, Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
@@ -386,7 +487,7 @@ public class RecipeDetailFragment extends Fragment {
                             //TODO: Add all possible error codes here except for longitude and latitude
                         }
                     }
-                    Toast.makeText(getContext(), "Error checking favorite recipes!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.recipe_update_favorite_error_message, Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();

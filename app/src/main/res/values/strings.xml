@@ -21,9 +21,12 @@
     <string name="text_menu_new_comment">New comment</string>
     <string name="text_menu_logout">Log out</string>
 
-    <string name="text_menu_edit">Edit</string>
+    <string name="text_menu_edit">Edit Recipe</string>
+    <string name="text_menu_delete">Delete Recipe</string>
     <string name="text_menu_star_off">Mark as Favorite</string>
     <string name="text_menu_star_on">Unmark as Favorite</string>
+
+    <string name="text_menu_delete_confirmation">Do you want to delete this recipe?</string>
 
     <!-- Log In -->
     <string name="btn_login_login">Log In</string>
@@ -83,6 +86,9 @@
     <!-- Recipe info -->
     <string name="recipe_delete_successful_message">Recipe deleted!</string>
     <string name="recipe_delete_error_message">Problem deleting recipe!</string>
+
+    <string name="recipe_check_favorite_error_message">Problem checking favorite recipes!</string>
+    <string name="recipe_update_favorite_error_message">Problem updating favorite recipes!</string>
 
     <string name="recipe_edit_message">Edit recipe!</string>
     <string name="recipe_edit_successful_message">Recipe updated!</string>
