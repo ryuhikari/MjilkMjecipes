@@ -1,5 +1,7 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -293,7 +295,18 @@ public class CommentsFragment extends Fragment {
                 break;
             case R.id.imageButton_comment_delete:
                 if ( userName.equals(commentAuthor) ) {
-                    new DeleteCommentTask(commentItem).execute(commentId);
+
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.comment_delete_title)
+                            .setMessage(R.string.comment_delete_confirmation)
+                            .setIconAttribute(android.R.attr.alertDialogIcon)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    new DeleteCommentTask(commentItem).execute(commentId);
+                                }})
+                            .setNegativeButton(android.R.string.no, null).show();
+
                 } else {
                     Toast.makeText(getContext(), R.string.comment_delete_error_message, Toast.LENGTH_SHORT).show();
                 }
