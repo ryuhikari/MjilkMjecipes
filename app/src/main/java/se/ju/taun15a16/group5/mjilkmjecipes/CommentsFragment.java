@@ -1,5 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -37,8 +41,15 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.DirectionAdapter;
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.RecipeDetailActivity;
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.RecipeDetailFragment;
+
+import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class CommentsFragment extends Fragment {
+
+    private Button addCommentButton;
+    private Boolean showCommentButton = true;
 
     private ViewGroup commentsLayout;
     private LayoutInflater inflater;
@@ -65,16 +76,28 @@ public class CommentsFragment extends Fragment {
         View commentsView = inflater.inflate(R.layout.fragment_comments, container, false);
         commentsLayout = (ViewGroup) commentsView.findViewById(R.id.commentsLinearLayout);
         loadCommentData();
+
+        addCommentButton = (Button) commentsView.findViewById(R.id.button_add_comment);
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NewCommentActivity.class);
+
+                Bundle args = getArguments();
+                long recipeId = args.getLong("recipeID");
+                intent.putExtra(NewCommentActivity.EXTRA_RECIPE_ID, Long.toString(recipeId));
+                startActivity(intent);
+            }
+        });
         return commentsView;
     }
-
 
     protected void loadCommentData(){
         new AsyncTask<Void, Void, JSONArray>(){
 
             @Override
             protected JSONArray doInBackground(Void... voids) {
-                Bundle args = getArguments();;
+                Bundle args = getArguments();
                 long recipeId = args.getLong("recipeID");
                 JSONArray rawCommentData = null;
                 try {
@@ -176,8 +199,12 @@ public class CommentsFragment extends Fragment {
         // Show/Hide edit and delete buttons
         String userName = AccountManager.getInstance().getUserName(getContext());
         if ( userName.equals(commentUserName) ) {
+            addCommentButton.setVisibility(View.GONE);
+
             editButton.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            addCommentButton.setVisibility(View.VISIBLE);
         }
 
         return commentView;
@@ -218,19 +245,45 @@ public class CommentsFragment extends Fragment {
         int buttonClicked = v.getId();
 
         View commentItem = (View) findParentRecursively(v, R.id.commentItem);
-        TextView commentAuthorTextView = (TextView) commentItem.findViewById(R.id.commentUsernameLbl);
-        String commentAuthor = commentAuthorTextView.getText().toString();
 
         TextView commentIdTextView = (TextView) commentItem.findViewById(R.id.textView_comment_id);
         String commentId = commentIdTextView.getText().toString();
 
+        TextView commentAuthorTextView = (TextView) commentItem.findViewById(R.id.commentUsernameLbl);
+        String commentAuthor = commentAuthorTextView.getText().toString();
+
+        RatingBar commentRatingRatingBar = (RatingBar) commentItem.findViewById(R.id.commentRatingBar);
+        int commentRating = Math.round(commentRatingRatingBar.getRating());
+
+        TextView commentContentTextView = (TextView) commentItem.findViewById(R.id.commentLbl);
+        String commentContent = commentContentTextView.getText().toString();
+
+        ImageView commentImageImageView = (ImageView) commentItem.findViewById(R.id.commentImage);
+        commentImageImageView.buildDrawingCache();
+        int imageViewId = commentImageImageView.getId();
+
+        String userName = AccountManager.getInstance().getUserName(getContext());
         switch (buttonClicked) {
             case R.id.imageButton_comment_edit:
-                Toast.makeText(getContext(), R.string.comment_edit_message, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), commentId, Toast.LENGTH_SHORT).show();
+                if ( userName.equals(commentAuthor) ) {
+                    Intent intent = new Intent(getContext(), NewCommentActivity.class);
+                    intent.putExtra(NewCommentActivity.EXTRA_ID, commentId);
+                    intent.putExtra(NewCommentActivity.EXTRA_RATING, commentRating);
+                    intent.putExtra(NewCommentActivity.EXTRA_COMMENT, commentContent);
+                    //intent.putExtra(NewCommentActivity.EXTRA_IMAGE, imageViewId);
+                    intent.putExtra(NewCommentActivity.EXTRA_EDIT, true);
+
+                    Bundle args = getArguments();
+                    long recipeId = args.getLong("recipeID");
+
+                    intent.putExtra(NewCommentActivity.EXTRA_RECIPE_ID, Long.toString(recipeId));
+                    startActivity(intent);
+                    Toast.makeText(getContext(), R.string.comment_edit_message, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), R.string.comment_edit_error_message, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.imageButton_comment_delete:
-                String userName = AccountManager.getInstance().getUserName(getContext());
                 if ( userName.equals(commentAuthor) ) {
                     new DeleteCommentTask(commentItem).execute(commentId);
                 } else {

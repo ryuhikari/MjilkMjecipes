@@ -1254,9 +1254,78 @@ public class RESTManager
 		return data;
 	}
 	
-	public boolean updateComment(String commentID, Object[] commentData) {
-		// TODO implement me
-		return false;
+	public boolean updateComment(Context context, String commentID, String commentText, int grade) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL(BASE_PATH + PATH_COMMENTS + commentID);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("PATCH");
+            con.setRequestProperty("Content-Type","application/json");
+            con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Accept","application/json");
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            JSONObject data = new JSONObject();
+            data.put("text", commentText);
+            data.put("grade", grade);
+
+            OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+            osw.write(data.toString());
+            osw.flush();
+            osw.close();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 200:
+                case 201:
+                case 204:
+                    break;
+                case 400:
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = new String();
+                    while((line = br.readLine()) != null){
+                        sb.append(line).append("\n");
+                    }
+                    br.close();
+                    String jsonData = new String();
+                    jsonData = sb.toString();
+
+                    JSONObject obj = new JSONObject(jsonData);
+                    JSONArray jsonArray = obj.getJSONArray("errors");
+
+                    RESTErrorCodes[] errorCodes = new RESTErrorCodes[jsonArray.length()];
+                    for(int i = 0; i < errorCodes.length; ++i){
+                        errorCodes[i] = RESTErrorCodes.fromString(jsonArray.getString(i));
+                    }
+                    throw new HTTP400Exception("ERROR: 400", errorCodes);
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } catch (JSONException e) {
+            Log.e("REST-JSON", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 	
 	public boolean deleteComment(Context context, String commentID) throws HTTP404Exception, HTTP401Exception {

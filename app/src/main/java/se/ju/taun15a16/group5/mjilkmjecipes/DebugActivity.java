@@ -239,6 +239,15 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "updateComment":
+                            try {
+                                Boolean updateComment = RESTManager.getInstance().updateComment(getApplicationContext(), "349", "Comment edited! Wiiii", 2);
+                            } catch (HTTP400Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "updateRecipe":
                             Recipe recipe2 = new Recipe();

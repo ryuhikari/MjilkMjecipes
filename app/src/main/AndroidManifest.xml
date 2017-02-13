@@ -92,6 +92,10 @@
             android:name=".NewRecipeActivity"
             android:label="@string/activity_name_new_recipe">
         </activity>
+        <activity
+            android:name=".NewCommentActivity"
+            android:label="@string/activity_name_new_comment">
+        </activity>
     </application>
 
 </manifest>

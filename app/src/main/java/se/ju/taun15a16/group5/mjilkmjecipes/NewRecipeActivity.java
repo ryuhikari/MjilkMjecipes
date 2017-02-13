@@ -451,11 +451,11 @@ public class NewRecipeActivity extends AppCompatActivity {
                 protected void onPostExecute(RESTErrorCodes[] result) {
 
                     if (result.length == 0) {
-                        Toast.makeText(getApplicationContext(), "Recipe updated!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.recipe_edit_successful_message, Toast.LENGTH_SHORT).show();
                         //finish();
                         Intent intent = new Intent(getApplicationContext(), ShowRecipeListActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, "My Recipes");
+                        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_MY);
                         intent.putExtra(ShowRecipeListActivity.EXTRA_SHOW, newRecipe.getId());
                         startActivity(intent);
                         finish();
@@ -470,7 +470,7 @@ public class NewRecipeActivity extends AppCompatActivity {
                                 //TODO: Add all possible error codes here except for longitude and latitude
                             }
                         }
-                        Toast.makeText(getApplicationContext(), "Error updating recipe!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.recipe_edit_error_message, Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -504,7 +504,7 @@ public class NewRecipeActivity extends AppCompatActivity {
                 protected void onPostExecute(RESTErrorCodes[] result) {
 
                     if (result.length == 0) {
-                        Toast.makeText(getApplicationContext(), "Recipe created!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.recipe_create_successful_message, Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
 
@@ -517,7 +517,7 @@ public class NewRecipeActivity extends AppCompatActivity {
                                 //TODO: Add all possible error codes here except for longitude and latitude
                             }
                         }
-                        Toast.makeText(getApplicationContext(), "Error creating recipe!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.recipe_create_error_message, Toast.LENGTH_LONG).show();
                     }
 
                 }

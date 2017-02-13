@@ -9,6 +9,7 @@
     <string name="activity_name_signup">Sign up</string>
     <string name="activity_name_profile">Profile</string>
     <string name="activity_name_new_recipe">New Recipe</string>
+    <string name="activity_name_new_comment">New Comment</string>
 
     <!-- Search -->
     <string name="search_hint">Search food and ingredients</string>
@@ -79,12 +80,36 @@
     <string name="text_login_email">Email</string>
     <string name="text_logging_in">Logging In</string>
 
+    <!-- Recipe info -->
+    <string name="recipe_delete_successful_message">Recipe deleted!</string>
+    <string name="recipe_delete_error_message">Problem deleting recipe!</string>
+
+    <string name="recipe_edit_message">Edit recipe!</string>
+    <string name="recipe_edit_successful_message">Recipe updated!</string>
+    <string name="recipe_edit_error_message">Problem editing recipe!</string>
+
+    <string name="recipe_create_message">Create recipe!</string>
+    <string name="recipe_create_successful_message">Recipe created!</string>
+    <string name="recipe_create_error_message">Problem creating recipe!</string>
+
     <!-- Comments -->
     <string name="comment_delete_successful_message">Comment deleted!</string>
     <string name="comment_delete_error_message">Problem deleting comment!</string>
+
     <string name="comment_edit_message">Edit comment!</string>
     <string name="comment_edit_successful_message">Comment updated!</string>
     <string name="comment_edit_error_message">Problem editing comment!</string>
+
+    <string name="comment_create_message">Create comment!</string>
+    <string name="comment_create_successful_message">Comment created!</string>
+    <string name="comment_create_error_message">Problem creating comment!</string>
+
+    <!-- New Comment -->
+    <string name="text_add_comment">Add Comment</string>
+    <string name="activity_name_edit_comment">Edit Comment</string>
+    <string name="text_new_comment_comment">Comment</string>
+    <string name="text_new_comment_create_comment">Create comment</string>
+    <string name="text_new_comment_update_comment">Update comment</string>
 
     <!-- New Recipe -->
     <string name="text_new_recipe_update_recipe">Update recipe</string>
