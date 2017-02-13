@@ -66,8 +66,7 @@
         </activity>
         <activity
             android:name=".recipelist.ShowRecipeListActivity"
-            android:parentActivityName=".MainActivity"
-            android:launchMode="singleTop">
+            android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -81,7 +80,7 @@
         </activity>
         <activity
             android:name=".recipelist.RecipeDetailActivity"
-            android:label="@string/btn_main_my_recipes"
+            android:label="@string/activity_name_recipe_detail"
             android:parentActivityName=".recipelist.ShowRecipeListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

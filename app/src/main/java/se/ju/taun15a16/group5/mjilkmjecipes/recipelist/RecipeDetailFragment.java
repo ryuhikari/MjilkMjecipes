@@ -168,11 +168,28 @@ public class RecipeDetailFragment extends Fragment {
                     directionDescriptions.add(d.getDescription());
                 }
 
-                intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
-                intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
-                intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeDescription);
-                intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directionDescriptions);
-                startActivity(intent);
+                View fragmentContainer = getActivity().findViewById(R.id.fragment_container_detail);
+
+                if (fragmentContainer != null) {
+                    String recipeType = ((ShowRecipeListActivity)getActivity()).getRecipeType();
+                    int recipePage = ((ShowRecipeListActivity)getActivity()).getRecipePage();
+
+                    intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
+                    intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
+                    intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeDescription);
+                    intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directionDescriptions);
+                    intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
+                    intent.putExtra(ShowRecipeListActivity.EXTRA_PAGE, recipePage);
+                    startActivity(intent);
+                } else {
+                    intent.putExtra(NewRecipeActivity.EXTRA_ID, recipeId);
+                    intent.putExtra(NewRecipeActivity.EXTRA_NAME, recipeName);
+                    intent.putExtra(NewRecipeActivity.EXTRA_DESCRIPTION, recipeDescription);
+                    intent.putStringArrayListExtra(EXTRA_DIRECTIONS, directionDescriptions);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+
                 return true;
 
             case R.id.item_delete_recipe:

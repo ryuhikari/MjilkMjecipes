@@ -10,6 +10,7 @@
     <string name="activity_name_profile">Profile</string>
     <string name="activity_name_new_recipe">New Recipe</string>
     <string name="activity_name_new_comment">New Comment</string>
+    <string name="activity_name_recipe_detail">Recipe Detail</string>
 
     <!-- Search -->
     <string name="search_hint">Search food and ingredients</string>

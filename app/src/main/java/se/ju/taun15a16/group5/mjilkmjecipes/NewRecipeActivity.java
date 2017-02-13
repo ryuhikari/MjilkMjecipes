@@ -58,6 +58,8 @@ public class NewRecipeActivity extends AppCompatActivity {
     // To edit a recipe
 
     public Boolean editingRecipe = false;
+    public String recipeType = "";
+    public int recipePage = 0;
 
     public final static String EXTRA_ID = "recipeId";
     public final static String EXTRA_NAME = "recipeName";
@@ -120,6 +122,9 @@ public class NewRecipeActivity extends AppCompatActivity {
         if (intent.getExtras() != null) {
             editingRecipe =  true;
 
+            recipeType = intent.getStringExtra(ShowRecipeListActivity.EXTRA_TYPE);
+            recipePage = intent.getIntExtra(ShowRecipeListActivity.EXTRA_PAGE, 0);
+
             getSupportActionBar().setTitle(R.string.text_new_recipe_update_recipe);
             sendButton.setText(R.string.btn_new_recipe_update);
 
@@ -136,8 +141,7 @@ public class NewRecipeActivity extends AppCompatActivity {
         }
 
         // Add some examples
-        // inflateEditRow("Fernando");
-        // inflateEditRow("Paco");
+        // inflateEditRow("Direction description");
 
         if(mayRequestStoragePermission())
             mOptionButton.setEnabled(true);
@@ -451,14 +455,21 @@ public class NewRecipeActivity extends AppCompatActivity {
                 protected void onPostExecute(RESTErrorCodes[] result) {
 
                     if (result.length == 0) {
-                        Toast.makeText(getApplicationContext(), R.string.recipe_edit_successful_message, Toast.LENGTH_SHORT).show();
-                        //finish();
-                        Intent intent = new Intent(getApplicationContext(), ShowRecipeListActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                        intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_MY);
-                        intent.putExtra(ShowRecipeListActivity.EXTRA_SHOW, newRecipe.getId());
-                        startActivity(intent);
-                        finish();
+
+                        if (recipeType != null) {
+                            Toast.makeText(getApplicationContext(), R.string.recipe_edit_successful_message, Toast.LENGTH_SHORT).show();
+                            //finish();
+                            Intent intent = new Intent(getApplicationContext(), ShowRecipeListActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                            intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
+                            intent.putExtra(ShowRecipeListActivity.EXTRA_PAGE, recipePage);
+                            intent.putExtra(ShowRecipeListActivity.EXTRA_SHOW, newRecipe.getId());
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            finish();
+                        }
+
                     } else {
 
                         // TODO: Finish coding all the error messages
