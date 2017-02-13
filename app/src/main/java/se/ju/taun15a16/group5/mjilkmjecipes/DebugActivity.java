@@ -66,6 +66,7 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "addImageToComment":
+                            /*
                             try {
                                 Boolean commentImageUploaded = RESTManager.getInstance().addImageToComment(getApplicationContext(), getResources(), "349", "");
                             } catch (HTTP401Exception e) {
@@ -73,7 +74,10 @@ public class DebugActivity extends AppCompatActivity {
                             } catch (HTTP404Exception e) {
                                 e.printStackTrace();
                             }
+                            */
+                            break;
                         case "addImageToRecipe":
+                            /*
                             try {
                                 Boolean imageUploaded = RESTManager.getInstance().addImageToRecipe(getApplicationContext(), getResources(), "444", "");
                             } catch (HTTP401Exception e) {
@@ -81,6 +85,8 @@ public class DebugActivity extends AppCompatActivity {
                             } catch (HTTP404Exception e) {
                                 e.printStackTrace();
                             }
+                            */
+                            break;
                         case "createAccount":
                             try {
                                 JSONObject info = debugRestManager.createAccount("AdminMjilkRecipes2","Admin!1",0.0,0.0);

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -1010,7 +1012,7 @@ public class RESTManager
         return true;
 	}
 	
-	public boolean addImageToRecipe(Context context,Resources resources , String recipeID, String imagePath) throws HTTP401Exception, HTTP404Exception {
+	public boolean addImageToRecipe(Context context , String recipeID, Drawable imageDrawable) throws HTTP401Exception, HTTP404Exception {
 
         HttpURLConnection con = null;
         String boundary = Long.toHexString(System.currentTimeMillis());
@@ -1030,17 +1032,16 @@ public class RESTManager
 
             String charset = "UTF-8";
             String CRLF = "\r\n";
-            File binaryFile = new File("/path/to/file.bin");
             OutputStream output = con.getOutputStream();
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
 
             // Send binary file.
             writer.append("--" + boundary).append(CRLF);
-            writer.append("Content-Disposition: form-data;name=\"image\";filename=\"tacos.jpeg\"").append(CRLF);
+            writer.append("Content-Disposition: form-data;name=\"image\";filename=\"image.jpeg\"").append(CRLF);
             writer.append("Content-Type: image/jpeg").append(CRLF);
             writer.append(CRLF).flush();
-            Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.tacos);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, output);
+            Bitmap bitmap = ((BitmapDrawable)imageDrawable).getBitmap();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
             output.flush(); // Important before continuing with writer!
             writer.append(CRLF).flush(); // CRLF is important! It indicates end of boundary.
 
@@ -1362,7 +1363,7 @@ public class RESTManager
 		return true;
 	}
 	
-	public boolean addImageToComment(Context context, Resources resources, String commentID, String imagePath) throws HTTP401Exception, HTTP404Exception {
+	public boolean addImageToComment(Context context, String commentID, Drawable imageDrawable) throws HTTP401Exception, HTTP404Exception {
         HttpURLConnection con = null;
         String boundary = Long.toHexString(System.currentTimeMillis());
 
@@ -1381,17 +1382,16 @@ public class RESTManager
 
             String charset = "UTF-8";
             String CRLF = "\r\n";
-            File binaryFile = new File("/path/to/file.bin");
             OutputStream output = con.getOutputStream();
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
 
             // Send binary file.
             writer.append("--" + boundary).append(CRLF);
-            writer.append("Content-Disposition: form-data;name=\"image\";filename=\"tacos.jpeg\"").append(CRLF);
+            writer.append("Content-Disposition: form-data;name=\"image\";filename=\"image.jpeg\"").append(CRLF);
             writer.append("Content-Type: image/jpeg").append(CRLF);
             writer.append(CRLF).flush();
-            Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.tacos);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, output);
+			Bitmap bitmap = ((BitmapDrawable)imageDrawable).getBitmap();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
             output.flush(); // Important before continuing with writer!
             writer.append(CRLF).flush(); // CRLF is important! It indicates end of boundary.
 

@@ -24,9 +24,6 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
-
-import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 /**
  * Created by Fernando on 2017-02-13.
@@ -64,7 +61,7 @@ public class NewCommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_comment);
 
-        commentImageImageView = (ImageView) findViewById(R.id.set_picture);
+        commentImageImageView = (ImageView) findViewById(R.id.upload_image_imageView);
         commentRatingRatingBar = (RatingBar) findViewById(R.id.new_comment_ratingBar_comment_rating);
         commentContentTextView = (TextView) findViewById(R.id.new_comment_editText_comment);
         sendButton = (Button) findViewById(R.id.button_new_comment_send);

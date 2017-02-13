@@ -2,16 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="se.ju.taun15a16.group5.mjilkmjecipes">
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +21,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".recipelist.ShowRecipeListActivity" />
@@ -69,8 +67,10 @@
             android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -80,16 +80,15 @@
         </activity>
         <activity
             android:name=".recipelist.RecipeDetailActivity"
-            android:label="@string/activity_name_recipe_detail"/>
+            android:label="@string/activity_name_recipe_detail" />
         <activity android:name=".DebugActivity" />
         <activity
             android:name=".NewRecipeActivity"
-            android:label="@string/activity_name_new_recipe">
-        </activity>
+            android:label="@string/activity_name_new_recipe"></activity>
         <activity
             android:name=".NewCommentActivity"
-            android:label="@string/activity_name_new_comment">
-        </activity>
+            android:label="@string/activity_name_new_comment"></activity>
+        <activity android:name=".UploadImageActivity"></activity>
     </application>
 
 </manifest>

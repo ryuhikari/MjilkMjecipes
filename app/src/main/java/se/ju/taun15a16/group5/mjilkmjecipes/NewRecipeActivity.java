@@ -1,6 +1,5 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -21,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ShowableListMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,7 +31,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -105,8 +102,8 @@ public class NewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
 
-        mSetImage = (ImageView) findViewById(R.id.set_picture);
-        mOptionButton = (Button) findViewById(R.id.show_options_button);
+        mSetImage = (ImageView) findViewById(R.id.upload_image_imageView);
+        mOptionButton = (Button) findViewById(R.id.upload_image_options_button);
         mRlView = (RelativeLayout) findViewById(R.id.rl_view);
 
         recipeName = (EditText) findViewById(R.id.new_recipe_editText_name);

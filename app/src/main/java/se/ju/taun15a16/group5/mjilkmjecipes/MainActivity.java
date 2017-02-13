@@ -28,6 +28,19 @@ public class MainActivity extends MainMenu {
         Button btnProfile =(Button) findViewById(R.id.button_main_profile);
         btnProfile.setOnClickListener(view -> launchProfileActivity(null));
 
+        Button btnCamera = new Button(this);
+        btnCamera.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        btnCamera.setText("Camera");
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UploadImageActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout layout1 = (LinearLayout) findViewById(R.id.activity_main);
+        layout1.addView(btnCamera);
+
         Button btnDebug = new Button(this);
         btnDebug.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         btnDebug.setText("Debug Menu");
