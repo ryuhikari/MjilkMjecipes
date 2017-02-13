@@ -5,16 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,13 +18,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -44,6 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.NewCommentActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
@@ -54,6 +48,7 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
+import static android.app.Activity.RESULT_OK;
 import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class RecipeDetailFragment extends Fragment {
@@ -113,12 +108,19 @@ public class RecipeDetailFragment extends Fragment {
         recipeDescriptionTextView.setText(recipeDescription);
 
         if(savedInstanceState == null){
-            loadRecipeData();
-            checkFavorite();
+            //loadRecipeData();
+            //checkFavorite();
         }
 
         setHasOptionsMenu(true);
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRecipeData();
+        checkFavorite();
     }
 
     @Override
@@ -347,11 +349,11 @@ public class RecipeDetailFragment extends Fragment {
                         intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, recipeType);
                         intent.putExtra(ShowRecipeListActivity.EXTRA_PAGE, recipePage);
                         startActivity(intent);
+                        getActivity().finish();
                         Fragment recipeDetailFragment = getFragmentManager().findFragmentById(R.id.fragment_container_detail);
                         getActivity().getSupportFragmentManager().beginTransaction().remove(recipeDetailFragment).commit();
                     } else {
                         Toast.makeText(getContext(), R.string.recipe_delete_successful_message, Toast.LENGTH_LONG).show();
-
                         getActivity().finish();
                     }
                 } else {

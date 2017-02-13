@@ -146,8 +146,8 @@ public class ShowRecipeListActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        setListData();
         super.onRestart();
+        setListData();
     }
 
     @Override

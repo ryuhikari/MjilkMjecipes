@@ -43,6 +43,7 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.DirectionAdapter;
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.RecipeDetailActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.RecipeDetailFragment;
+import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
 
 import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
@@ -75,7 +76,7 @@ public class CommentsFragment extends Fragment {
 
         View commentsView = inflater.inflate(R.layout.fragment_comments, container, false);
         commentsLayout = (ViewGroup) commentsView.findViewById(R.id.commentsLinearLayout);
-        loadCommentData();
+        // loadCommentData();
 
         addCommentButton = (Button) commentsView.findViewById(R.id.button_add_comment);
         addCommentButton.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +91,13 @@ public class CommentsFragment extends Fragment {
             }
         });
         return commentsView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        commentsLayout.removeAllViews();
+        loadCommentData();
     }
 
     protected void loadCommentData(){
@@ -329,7 +337,9 @@ public class CommentsFragment extends Fragment {
 
         protected void onPostExecute(Boolean result){
             if (result) {
-                commentView.setVisibility(View.GONE);
+                commentsLayout.removeAllViews();
+                addCommentButton.setVisibility(View.VISIBLE);
+                loadCommentData();
                 Toast.makeText(getContext(), R.string.comment_delete_successful_message, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), R.string.comment_delete_error_message, Toast.LENGTH_SHORT).show();

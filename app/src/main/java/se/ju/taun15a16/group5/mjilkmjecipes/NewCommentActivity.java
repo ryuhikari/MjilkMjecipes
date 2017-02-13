@@ -26,11 +26,16 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
 
+import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
+
 /**
  * Created by Fernando on 2017-02-13.
  */
 
 public class NewCommentActivity extends AppCompatActivity {
+
+    public final static int RESULT_EDIT_COMMENT = 100;
+    public final static int RESULT_NEW_COMMENT = 101;
 
     public final static String EXTRA_ID = "commentId";
     public final static String EXTRA_RATING = "commentRating";
@@ -157,6 +162,7 @@ public class NewCommentActivity extends AppCompatActivity {
                 protected void onPostExecute(RESTErrorCodes[] result) {
 
                     if (result.length == 0) {
+                        Toast.makeText(getApplicationContext(), R.string.comment_edit_successful_message, Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
 

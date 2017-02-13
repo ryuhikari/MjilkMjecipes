@@ -80,12 +80,7 @@
         </activity>
         <activity
             android:name=".recipelist.RecipeDetailActivity"
-            android:label="@string/activity_name_recipe_detail"
-            android:parentActivityName=".recipelist.ShowRecipeListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".recipelist.ShowRecipeListActivity" />
-        </activity>
+            android:label="@string/activity_name_recipe_detail"/>
         <activity android:name=".DebugActivity" />
         <activity
             android:name=".NewRecipeActivity"
