@@ -11,6 +11,7 @@
     <string name="activity_name_new_recipe">New Recipe</string>
     <string name="activity_name_new_comment">New Comment</string>
     <string name="activity_name_recipe_detail">Recipe Detail</string>
+    <string name="activity_name_upload_image">Recipe Detail</string>
 
     <!-- Search -->
     <string name="search_hint">Search food and ingredients</string>
@@ -121,18 +122,11 @@
     <string name="text_new_comment_create_comment">Create comment</string>
     <string name="text_new_comment_update_comment">Update comment</string>
 
+    <string name="text_new_comment_info_image_message">Create comment to upload image</string>
+
     <!-- New Recipe -->
     <string name="text_new_recipe_update_recipe">Update recipe</string>
 
-    <string name="text_new_recipe_image_description">Recipe image</string>
-    <string name="text_new_recipe_permissions_message">Permissions are necessary to use the app</string>
-    <string name="text_new_recipe_option_take_picture">Take picture</string>
-    <string name="text_new_recipe_option_choose_from_galery">Choose from gallery</string>
-    <string name="text_new_recipe_option_cancel">Cancel</string>
-    <string name="text_new_recipe_option_choose">Choose an option</string>
-    <string name="text_new_recipe_choose_image_app">Choose image app</string>
-    <string name="text_new_recipe_permissions_granted">Permissions granted</string>
-    <string name="text_new_recipe_permissions_denied">Permissions denied</string>
     <string name="text_new_recipe_agree">Agree</string>
     <string name="text_profile_new_password">New Password</string>
     <string name="btn_profile_save_changes">Save Changes</string>
@@ -140,6 +134,15 @@
     <string name="btn_new_recipe_directions">Directions:</string>
     <string name="btn_new_recipe_create">Create Recipe</string>
     <string name="btn_new_recipe_update">Update Recipe</string>
+
+    <string name="text_new_recipe_info_image_message">Create recipe to upload image</string>
+
+    <!-- Upload Image -->
+    <string name="text_upload_image">Upload Image</string>
+
+    <string name="upload_image_create_message">Upload Image!</string>
+    <string name="upload_image_create_successful_message">Image uploaded!</string>
+    <string name="upload_image_create_error_message">Problem uploading image!</string>
 
 
 </resources>

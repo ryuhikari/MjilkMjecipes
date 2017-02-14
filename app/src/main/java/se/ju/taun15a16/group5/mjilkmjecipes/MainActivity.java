@@ -28,6 +28,7 @@ public class MainActivity extends MainMenu {
         Button btnProfile =(Button) findViewById(R.id.button_main_profile);
         btnProfile.setOnClickListener(view -> launchProfileActivity(null));
 
+        /*
         Button btnCamera = new Button(this);
         btnCamera.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         btnCamera.setText("Camera");
@@ -40,13 +41,24 @@ public class MainActivity extends MainMenu {
         });
         LinearLayout layout1 = (LinearLayout) findViewById(R.id.activity_main);
         layout1.addView(btnCamera);
+        */
 
+        /*
         Button btnDebug = new Button(this);
         btnDebug.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         btnDebug.setText("Debug Menu");
-        btnDebug.setOnClickListener(view -> launchDebugActivity(null));
+        btnDebug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(true){
+                    Intent intent = new Intent(this, DebugActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
         LinearLayout layout = (LinearLayout) findViewById(R.id.activity_main);
         layout.addView(btnDebug);
+        */
     }
 
     public void launchRecentActivity(View view){
@@ -72,13 +84,4 @@ public class MainActivity extends MainMenu {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
-
-    private void launchDebugActivity(View view){
-        if(true){
-            Intent intent = new Intent(this, DebugActivity.class);
-            startActivity(intent);
-        }
-    }
-
-
 }

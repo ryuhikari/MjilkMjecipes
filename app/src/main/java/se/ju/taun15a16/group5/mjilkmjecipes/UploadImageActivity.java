@@ -21,17 +21,26 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class UploadImageActivity extends AppCompatActivity {
 
+    public final static String EXTRA_TYPE = "destinyType";
+    public final static String EXTRA_ID = "destinyId";
+
+    public final static String TYPE_RECIPE = "recipe";
+    public final static String TYPE_COMMENT = "comment";
+
     private Button optionsButton;
     private Button sendButton;
     private ImageView imageContainer;
     private Drawable imageDrawable;
+
+    private String destinyType = "";
+    private String destinyId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_image);
 
-        optionsButton = (Button) findViewById(R.id.upload_image_options_button);
+        optionsButton = (Button) findViewById(R.id.new_recipe_upload_image_button);
         sendButton = (Button) findViewById(R.id.upload_image_send_button);
         imageContainer = (ImageView) findViewById(R.id.upload_image_imageView);
 
@@ -49,6 +58,14 @@ public class UploadImageActivity extends AppCompatActivity {
                 sendImage();
             }
         });
+
+        Intent intent = getIntent();
+
+        if ( intent != null) {
+            destinyType = intent.getStringExtra(EXTRA_TYPE);
+            destinyId = intent.getStringExtra(EXTRA_ID);
+        }
+
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -67,6 +84,7 @@ public class UploadImageActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageContainer.setImageBitmap(imageBitmap);
+            sendButton.setEnabled(true);
         }
     }
 
@@ -83,8 +101,16 @@ public class UploadImageActivity extends AppCompatActivity {
 
                 RESTErrorCodes[] result = {};
                 try {
-                    //RESTManager.getInstance().addImageToRecipe(getApplicationContext(),"231", imageDrawable);
-                    RESTManager.getInstance().addImageToComment(getApplicationContext(), "372", imageDrawable);
+                    switch (destinyType) {
+                        case TYPE_RECIPE:
+                            RESTManager.getInstance().addImageToRecipe(getApplicationContext() ,destinyId, imageDrawable);
+                            break;
+                        case TYPE_COMMENT:
+                            RESTManager.getInstance().addImageToComment(getApplicationContext(), destinyId, imageDrawable);
+                            break;
+                        default:
+                            return null;
+                    }
                 } catch (HTTP404Exception e) {
                     Log.e("REST", Log.getStackTraceString(e));
                     Context context = getApplicationContext();
@@ -110,7 +136,7 @@ public class UploadImageActivity extends AppCompatActivity {
             protected void onPostExecute(RESTErrorCodes[] result) {
 
                 if (result.length == 0) {
-                    Toast.makeText(getApplicationContext(), "Image uploaded!!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.upload_image_create_successful_message, Toast.LENGTH_LONG).show();
                     finish();
                 } else {
 
@@ -123,7 +149,7 @@ public class UploadImageActivity extends AppCompatActivity {
                             //TODO: Add all possible error codes here except for longitude and latitude
                         }
                     }
-                    Toast.makeText(getApplicationContext(), "Error uploading image!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.upload_image_create_error_message, Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();

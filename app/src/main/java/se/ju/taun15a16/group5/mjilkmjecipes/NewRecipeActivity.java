@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -52,6 +53,11 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class NewRecipeActivity extends AppCompatActivity {
 
+    // Upload images
+
+    private Button uploadImageButton;
+    private TextView warningMessageTextView;
+
     // To edit a recipe
 
     public Boolean editingRecipe = false;
@@ -62,22 +68,6 @@ public class NewRecipeActivity extends AppCompatActivity {
     public final static String EXTRA_NAME = "recipeName";
     public final static String EXTRA_DESCRIPTION = "recipeDescription";
     public final static String EXTRA_DIRECTIONS = "recipeDirections";
-
-    // Elements related to the image
-
-    private static String APP_DIRECTORY = "Mjilk/";
-    private static String MEDIA_DIRECTORY = APP_DIRECTORY + "RecipePictures";
-
-    private final int MY_PERMISSIONS = 100;
-    private final int PHOTO_CODE = 200;
-    private final int SELECT_PICTURE = 300;
-
-    private ImageView mSetImage;
-    private Button mOptionButton;
-    private RelativeLayout mRlView;
-
-    private String mPath;
-
 
     // Elements related to the recipe
 
@@ -101,10 +91,6 @@ public class NewRecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
-
-        mSetImage = (ImageView) findViewById(R.id.upload_image_imageView);
-        mOptionButton = (Button) findViewById(R.id.upload_image_options_button);
-        mRlView = (RelativeLayout) findViewById(R.id.rl_view);
 
         recipeName = (EditText) findViewById(R.id.new_recipe_editText_name);
         recipeDescription = (EditText) findViewById(R.id.new_recipe_editText_description);
@@ -137,181 +123,26 @@ public class NewRecipeActivity extends AppCompatActivity {
             }
         }
 
-        // Add some examples
-        // inflateEditRow("Direction description");
-
-        if(mayRequestStoragePermission())
-            mOptionButton.setEnabled(true);
-        else
-            mOptionButton.setEnabled(false);
-
-        mOptionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showOptions();
-            }
-        });
-
-    }
-
-    private void fillTheGaps(long recipeId) {
-
-    }
-
-    private boolean mayRequestStoragePermission() {
-
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-            return true;
-
-        if((ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) &&
-                (ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA) == PackageManager.PERMISSION_GRANTED)) {
-            return true;
-        }
-
-        if((shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) || (shouldShowRequestPermissionRationale(CAMERA))){
-            Snackbar.make(mRlView, getString(R.string.text_new_recipe_permissions_message),
-                    Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok, new View.OnClickListener() {
-                @TargetApi(Build.VERSION_CODES.M)
+        uploadImageButton = (Button)findViewById(R.id.new_recipe_upload_image_button);
+        warningMessageTextView = (TextView)findViewById(R.id.new_recipe_warning_message_textView);
+        if (editingRecipe) {
+            warningMessageTextView.setVisibility(View.GONE);
+            uploadImageButton.setEnabled(true);
+            uploadImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS);
+                    Toast.makeText(getApplicationContext(), R.string.upload_image_create_message, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), UploadImageActivity.class);
+                    intent.putExtra(UploadImageActivity.EXTRA_TYPE, UploadImageActivity.TYPE_RECIPE);
+                    intent.putExtra(UploadImageActivity.EXTRA_ID, Long.toString(recipeId));
+                    startActivity(intent);
                 }
-            }).show();
-        }else{
-            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS);
+            });
         }
 
-        return false;
+        // Add some examples
+        // inflateEditRow("Direction description");
     }
-
-    private void showOptions() {
-        final CharSequence[] option = {getString(R.string.text_new_recipe_option_take_picture), getString(R.string.text_new_recipe_option_choose_from_galery), getString(R.string.text_new_recipe_option_cancel)};
-        final AlertDialog.Builder builder = new AlertDialog.Builder(NewRecipeActivity.this);
-        builder.setTitle(getString(R.string.text_new_recipe_option_choose));
-        builder.setItems(option, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(option[which] == getString(R.string.text_new_recipe_option_take_picture)){
-                    openCamera();
-                }else if(option[which] == getString(R.string.text_new_recipe_option_choose_from_galery)){
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(intent.createChooser(intent, getString(R.string.text_new_recipe_choose_image_app)), SELECT_PICTURE);
-                }else {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        builder.show();
-    }
-
-    private void openCamera() {
-        File file = new File(Environment.getExternalStorageDirectory(), MEDIA_DIRECTORY);
-        boolean isDirectoryCreated = file.exists();
-
-        if(!isDirectoryCreated)
-            isDirectoryCreated = file.mkdirs();
-
-        if(isDirectoryCreated){
-            Long timestamp = System.currentTimeMillis() / 1000;
-            String imageName = timestamp.toString() + ".jpg";
-
-            mPath = Environment.getExternalStorageDirectory() + File.separator + MEDIA_DIRECTORY
-                    + File.separator + imageName;
-
-            File newFile = new File(mPath);
-
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(newFile));
-            startActivityForResult(intent, PHOTO_CODE);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("file_path", mPath);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        mPath = savedInstanceState.getString("file_path");
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
-                case PHOTO_CODE:
-                    MediaScannerConnection.scanFile(this,
-                            new String[]{mPath}, null,
-                            new MediaScannerConnection.OnScanCompletedListener() {
-                                @Override
-                                public void onScanCompleted(String path, Uri uri) {
-                                    Log.i("ExternalStorage", "Scanned " + path + ":");
-                                    Log.i("ExternalStorage", "-> Uri = " + uri);
-                                }
-                            });
-
-
-                    Bitmap bitmap = BitmapFactory.decodeFile(mPath);
-                    mSetImage.setImageBitmap(bitmap);
-                    break;
-                case SELECT_PICTURE:
-                    Uri path = data.getData();
-                    mSetImage.setImageURI(path);
-                    break;
-
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if(requestCode == MY_PERMISSIONS){
-            if(grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(getApplicationContext(), getString(R.string.text_new_recipe_permissions_granted), Toast.LENGTH_SHORT).show();
-                mOptionButton.setEnabled(true);
-            } else {
-                showExplanation();
-            }
-        }else{
-            showExplanation();
-        }
-    }
-
-    private void showExplanation() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewRecipeActivity.this);
-        builder.setTitle(getString(R.string.text_new_recipe_permissions_denied));
-        builder.setMessage(getString(R.string.text_new_recipe_permissions_message));
-        builder.setPositiveButton(getString(R.string.text_new_recipe_agree), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton(getString(R.string.text_new_recipe_option_cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-
-        builder.show();
-    }
-
 
     // Methods related to Directions
     // ------------------------------------------------------------------------

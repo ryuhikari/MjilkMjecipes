@@ -37,7 +37,6 @@ public class NewCommentActivity extends AppCompatActivity {
     public final static String EXTRA_ID = "commentId";
     public final static String EXTRA_RATING = "commentRating";
     public final static String EXTRA_COMMENT = "commentContent";
-    public final static String EXTRA_IMAGE = "commentImage";
     public final static String EXTRA_EDIT = "editComment";
     public final static String EXTRA_RECIPE_ID = "recipeId";
 
@@ -50,10 +49,11 @@ public class NewCommentActivity extends AppCompatActivity {
     private String commentImageURL = "";
     private String commentImagePath = null;
 
-    private ImageView commentImageImageView;
     private RatingBar commentRatingRatingBar;
     private TextView commentContentTextView;
     private Button sendButton;
+    private Button uploadImageButton;
+    private TextView imageMessageTextView;
 
 
     @Override
@@ -61,17 +61,16 @@ public class NewCommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_comment);
 
-        commentImageImageView = (ImageView) findViewById(R.id.upload_image_imageView);
         commentRatingRatingBar = (RatingBar) findViewById(R.id.new_comment_ratingBar_comment_rating);
         commentContentTextView = (TextView) findViewById(R.id.new_comment_editText_comment);
         sendButton = (Button) findViewById(R.id.button_new_comment_send);
+        uploadImageButton = (Button) findViewById(R.id.new_recipe_upload_image_button);
+        imageMessageTextView = (TextView) findViewById(R.id.new_comment_warning_message_textView);
 
         if (savedInstanceState != null) {
             commentId = savedInstanceState.getString("commentId");
             commentRating = savedInstanceState.getInt("commentRating");
             commentContent = savedInstanceState.getString("commentContent");
-            commentImageURL = savedInstanceState.getString("commentImageURL");
-            commentImagePath = savedInstanceState.getString("commentImagePath");
             recipeId = savedInstanceState.getString("recipeId");
         }
 
@@ -86,12 +85,24 @@ public class NewCommentActivity extends AppCompatActivity {
             commentId = intent.getStringExtra(EXTRA_ID);
             commentRating = intent.getIntExtra(EXTRA_RATING, 0);
             commentContent = intent.getStringExtra(EXTRA_COMMENT);
-            //commentImageURL = intent.getStringExtra(EXTRA_IMAGE);
             recipeId = intent.getStringExtra(EXTRA_RECIPE_ID);
 
-            //new DownLoadImageTask(commentImageImageView).execute(commentImageURL);
             commentRatingRatingBar.setRating(commentRating);
             commentContentTextView.setText(commentContent);
+
+            uploadImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), R.string.upload_image_create_message, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), UploadImageActivity.class);
+                    intent.putExtra(UploadImageActivity.EXTRA_TYPE, UploadImageActivity.TYPE_COMMENT);
+                    intent.putExtra(UploadImageActivity.EXTRA_ID, commentId);
+                    startActivity(intent);
+                }
+            });
+
+            uploadImageButton.setEnabled(true);
+            imageMessageTextView.setVisibility(View.GONE);
         } else {
             recipeId = intent.getStringExtra(EXTRA_RECIPE_ID);
         }
@@ -103,8 +114,6 @@ public class NewCommentActivity extends AppCompatActivity {
         outState.putString("commentId", commentId);
         outState.putInt("commentRating", commentRating);
         outState.putString("commentContent", commentContent);
-        outState.putString("commentImageURL", commentImageURL);
-        outState.putString("commentImagePath", commentImagePath);
         outState.putString("recipeId", recipeId);
     }
 
@@ -115,8 +124,6 @@ public class NewCommentActivity extends AppCompatActivity {
         commentId = savedInstanceState.getString("commentId");
         commentRating = savedInstanceState.getInt("commentRating");
         commentContent = savedInstanceState.getString("commentContent");
-        commentImageURL = savedInstanceState.getString("commentImageURL");
-        commentImagePath = savedInstanceState.getString("commentImagePath");
         recipeId = savedInstanceState.getString("recipeId");
     }
 
@@ -226,37 +233,6 @@ public class NewCommentActivity extends AppCompatActivity {
 
                 }
             }.execute();
-        }
-    }
-
-    private class DownLoadImageTask extends AsyncTask<String,Void,Bitmap>{
-        ImageView imageView;
-
-        public DownLoadImageTask(ImageView imageView){
-            this.imageView = imageView;
-        }
-
-        protected Bitmap doInBackground(String...urls){
-            String urlOfImage = urls[0];
-            Log.v("Comment Image URL", urlOfImage);
-            if (urlOfImage == null) {
-                return null;
-            }
-            Bitmap logo = null;
-            try{
-                InputStream is = new URL(urlOfImage).openStream();
-                logo = BitmapFactory.decodeStream(is);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            return logo;
-        }
-
-        protected void onPostExecute(Bitmap result){
-            if (result == null) {
-                return;
-            }
-            imageView.setImageBitmap(result);
         }
     }
 }

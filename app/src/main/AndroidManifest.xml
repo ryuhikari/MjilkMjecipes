@@ -84,11 +84,13 @@
         <activity android:name=".DebugActivity" />
         <activity
             android:name=".NewRecipeActivity"
-            android:label="@string/activity_name_new_recipe"></activity>
+            android:label="@string/activity_name_new_recipe"/>
         <activity
             android:name=".NewCommentActivity"
-            android:label="@string/activity_name_new_comment"></activity>
-        <activity android:name=".UploadImageActivity"></activity>
+            android:label="@string/activity_name_new_comment"/>
+        <activity
+            android:name=".UploadImageActivity"
+            android:label="@string/activity_name_upload_image"/>
     </application>
 
 </manifest>
