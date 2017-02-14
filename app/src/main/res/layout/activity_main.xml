@@ -41,12 +41,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/button_main_favorites" />
 
-        <Button
-            android:text="@string/btn_main_profile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_main_profile" />
-
 
     </LinearLayout>
 </ScrollView>

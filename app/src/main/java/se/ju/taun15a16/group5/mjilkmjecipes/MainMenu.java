@@ -47,8 +47,13 @@ public class MainMenu extends AppCompatActivity {
                 onSearchRequested();
                 return true;
 
+            case R.id.item_profile:
+                launchProfileActivity(null);
+                return true;
+
             case R.id.item_settings:
                 return true;
+
             case R.id.item_log_out:
                 AccountManager.getInstance().logout(getApplicationContext());
                 Toast.makeText(getApplicationContext(), R.string.facebook_logout_successful_notify, Toast.LENGTH_SHORT).show();
@@ -67,6 +72,11 @@ public class MainMenu extends AppCompatActivity {
 
     public void launchLogInActivity(View view){
         Intent intent = new Intent(this, LogInActivity.class);
+        startActivity(intent);
+    }
+
+    public void launchProfileActivity(View view){
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 }

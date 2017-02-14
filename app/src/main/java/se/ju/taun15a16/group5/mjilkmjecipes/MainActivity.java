@@ -25,9 +25,6 @@ public class MainActivity extends MainMenu {
         Button btnFavorites = (Button) findViewById(R.id.button_main_favorites);
         btnFavorites.setOnClickListener(view -> launchFavoritesActivity(null));
 
-        Button btnProfile =(Button) findViewById(R.id.button_main_profile);
-        btnProfile.setOnClickListener(view -> launchProfileActivity(null));
-
         /*
         Button btnCamera = new Button(this);
         btnCamera.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -77,11 +74,6 @@ public class MainActivity extends MainMenu {
     public void launchFavoritesActivity(View view){
         Intent intent = new Intent(this, ShowRecipeListActivity.class);
         intent.putExtra(ShowRecipeListActivity.EXTRA_TYPE, ShowRecipeListActivity.EXTRA_FAVORITES);
-        startActivity(intent);
-    }
-
-    public void launchProfileActivity(View view){
-        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 }
