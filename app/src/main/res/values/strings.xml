@@ -11,7 +11,7 @@
     <string name="activity_name_new_recipe">New Recipe</string>
     <string name="activity_name_new_comment">New Comment</string>
     <string name="activity_name_recipe_detail">Recipe Detail</string>
-    <string name="activity_name_upload_image">Recipe Detail</string>
+    <string name="activity_name_upload_image">Upload Image</string>
 
     <!-- Search -->
     <string name="search_hint">Search food and ingredients</string>
@@ -70,7 +70,7 @@
     <string name="recipe_step_title">Step</string>
 
     <string name="comment_username">Username</string>
-    <string name="comment_content" translatable="false">I am a testcomment</string>
+    <string name="comment_content" translatable="false">Lorem Ipsum</string>
     <string name="text_logging_in">Logging In</string>
 
     <!-- Recipe info -->
