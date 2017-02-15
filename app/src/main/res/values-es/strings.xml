@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App Plugins -->
+    <string name="facebook_app_id" translatable="false">1757915267779954</string>
+
+    <!-- App -->
+    <string name="app_name">Mjilk Recipes</string>
+    <string name="activity_name_login">Iniciar sesión</string>
+    <string name="activity_name_signup">Registrarse</string>
+    <string name="activity_name_profile">Perfil de usuario</string>
+    <string name="activity_name_new_recipe">Nueva receta</string>
+    <string name="activity_name_new_comment">Nuevo comentario</string>
+    <string name="activity_name_recipe_detail">Detalle de la receta</string>
+    <string name="activity_name_upload_image">Recipe Detail</string>
+
+    <!-- Search -->
+    <string name="search_hint">Buscar comidas e ingredientes</string>
+
+    <!-- Menu -->
+    <string name="text_menu_new_recipe">Nueva receta</string>
+    <string name="text_menu_search">Buscar</string>
+    <string name="text_menu_settings">Configuración</string>
+    <string name="text_menu_new_comment">Nuevo comentario</string>
+    <string name="text_menu_logout">Cerrar sesión</string>
+    <string name="text_menu_profile">Perfil de usuario</string>
+
+    <string name="text_menu_edit">Editar receta</string>
+    <string name="text_menu_delete">Eliminar receta</string>
+    <string name="text_menu_star_off">Marcar como favorita</string>
+    <string name="text_menu_star_on">Desmarcar favorita</string>
+
+    <string name="text_menu_delete_confirmation">¿Desea eliminar esta receta?</string>
+
+    <!-- Log In -->
+    <string name="btn_login_login">Iniciar sesión</string>
+    <string name="btn_login_signup">Registrarse</string>
+    <string name="text_login_username">Nombre de usuario</string>
+    <string name="text_login_password">Contraseña</string>
+
+    <!-- Facebook -->
+    <string name="facebook_logout_successful_notify">Sesión cerrada correctamente desde Facebook</string>
+    <string name="facebook_login_successful_notify">Sesión iniciada correctamente a través de Facebook</string>
+
+    <!-- Main -->
+    <string name="btn_main_search_recipes">Buscar recetas</string>
+    <string name="btn_main_recent_recipes">Últimas recetas</string>
+    <string name="btn_main_my_recipes">Mis recetas</string>
+    <string name="btn_main_favorites">Favoritas</string>
+    <string name="btn_main_profile">Perfil de usuario</string>
+
+    <!-- Sign Up -->
+    <string name="text_signup_name">Nombre</string>
+    <string name="text_signup_last_name">Apellido</string>
+    <string name="text_signup_username">Nombre de usuario</string>
+    <string name="text_signup_email">Email</string>
+    <string name="text_signup_password">Contraseña</string>
+    <string name="text_signup_confirm_password">Confirme la contraseña</string>
+    <string name="btn_signup_signup">Registrarse</string>
+    <string name="text_signing_up">Registrando</string>
+
+    <!-- Profile -->
+    <string name="text_profile_username">Nombre de usuario</string>
+    <string name="text_profile_longitude">Longitud</string>
+    <string name="text_profile_latitude">Latitud</string>
+    <string name="btn_profile_update_profile">Actualizar perfil</string>
+
+    <!-- Show List -->
+    <string name="text_show_list_recipe_name">Nombre de la receta</string>
+    <string name="title_activity_recipe" translatable="false">RecipeActivity</string>
+    <string name="action_settings">Configuración</string>
+    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
+    <string name="text_show_list_next_page">Siguiente &gt;&gt;</string>
+    <string name="text_show_list_previous_page">&lt;&lt; Anterior</string>
+
+    <!-- Recipe -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="comments_load_more">Cargar más comentarios</string>
+    <string name="recipe_by">De:</string>
+    <string name="recipe_description_title">Descripción:</string>
+    <string name="recipe_description_text" translatable="false">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</string>
+    <string name="recipe_steps_title">Pasos:</string>
+    <string name="recipe_step_title">Paso</string>
+
+    <string name="comment_username">Nombre de usuario</string>
+    <string name="comment_content" translatable="false">I am a testcomment</string>
+    <string name="text_login_email">Email</string>
+    <string name="text_logging_in">Iniciando sesión</string>
+
+    <!-- Recipe info -->
+    <string name="recipe_delete_successful_message">¡Receta eliminada!</string>
+    <string name="recipe_delete_error_message">¡Error al eliminar la receta!</string>
+
+    <string name="recipe_check_favorite_error_message">¡Error comprobando las recetas favoritas!</string>
+    <string name="recipe_update_favorite_error_message">¡Error actualizando las recetas favoritas!</string>
+
+    <string name="recipe_edit_message">¡Editar receta!</string>
+    <string name="recipe_edit_successful_message">¡Receta actualizada!</string>
+    <string name="recipe_edit_error_message">¡Error al actualizar la receta!</string>
+
+    <string name="recipe_create_message">¡Crear receta!</string>
+    <string name="recipe_create_successful_message">¡Receta creada!</string>
+    <string name="recipe_create_error_message">¡Error al crear la receta!</string>
+
+    <!-- Comments -->
+    <string name="comment_delete_successful_message">¡Comentario eliminado!</string>
+    <string name="comment_delete_error_message">¡Error al editar la receta!</string>
+
+    <string name="comment_edit_message">¡Actualizar comentario!</string>
+    <string name="comment_edit_successful_message">¡Comentario actualizado!</string>
+    <string name="comment_edit_error_message">¡Error al actualizar el comentario!</string>
+
+    <string name="comment_create_message">¡Crear comentario!</string>
+    <string name="comment_create_successful_message">¡Comentario creado!</string>
+    <string name="comment_create_error_message">¡Error al crear el comentario!</string>
+
+    <string name="comment_delete_title">Eliminar comentario</string>
+    <string name="comment_delete_confirmation">¿Desea eliminar este comentario?</string>
+
+    <!-- New Comment -->
+    <string name="text_add_comment">Añadir comentario</string>
+    <string name="activity_name_edit_comment">Editar comentario</string>
+    <string name="text_new_comment_comment">Comentario</string>
+    <string name="text_new_comment_create_comment">Crear comentario</string>
+    <string name="text_new_comment_update_comment">Actualizar comentario</string>
+
+    <string name="text_new_comment_info_image_message">Crear un comentario para agregar imagen</string>
+
+    <!-- New Recipe -->
+    <string name="text_new_recipe_update_recipe">Actualizar receta</string>
+
+    <string name="text_new_recipe_agree">Confirmar</string>
+    <string name="text_profile_new_password">Nueva contraseña</string>
+    <string name="btn_profile_save_changes">Guardar cambios</string>
+    <string name="btn_new_recipe_add_direction">Añadir paso</string>
+    <string name="btn_new_recipe_directions">Indicaciones:</string>
+    <string name="btn_new_recipe_create">Crear receta</string>
+    <string name="btn_new_recipe_update">Actualizar receta</string>
+
+    <string name="text_new_recipe_info_image_message">Crear receta para añadir imagen</string>
+
+    <!-- Upload Image -->
+    <string name="text_upload_image">Añadir imagen</string>
+
+    <string name="upload_image_create_message">¡Añadir imagen!</string>
+    <string name="upload_image_create_successful_message">¡Imagen añadida!</string>
+    <string name="upload_image_create_error_message">¡Error al añadir la imagen!</string>
+
+</resources>
