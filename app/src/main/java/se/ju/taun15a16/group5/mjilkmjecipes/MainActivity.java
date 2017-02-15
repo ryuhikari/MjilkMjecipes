@@ -3,9 +3,7 @@ package se.ju.taun15a16.group5.mjilkmjecipes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
 

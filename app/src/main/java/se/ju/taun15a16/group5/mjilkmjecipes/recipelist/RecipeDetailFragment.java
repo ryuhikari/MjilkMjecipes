@@ -3,7 +3,6 @@ package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,7 +36,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.ju.taun15a16.group5.mjilkmjecipes.NewCommentActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity;
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
@@ -48,7 +46,6 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
-import static android.app.Activity.RESULT_OK;
 import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class RecipeDetailFragment extends Fragment {
@@ -106,12 +103,6 @@ public class RecipeDetailFragment extends Fragment {
         recipeAuthorTextView.setText(recipeAuthor);
         recipeRatingTextView.setRating(recipeRating);
         recipeDescriptionTextView.setText(recipeDescription);
-
-        if(savedInstanceState == null){
-            //loadRecipeData();
-            //checkFavorite();
-        }
-
         setHasOptionsMenu(true);
         return v;
     }
@@ -164,7 +155,7 @@ public class RecipeDetailFragment extends Fragment {
             case R.id.item_edit_recipe:
                 Intent intent = new Intent(getContext(), NewRecipeActivity.class);
 
-                ArrayList<String> directionDescriptions = new ArrayList<String>();
+                ArrayList<String> directionDescriptions = new ArrayList<>();
 
                 for (Direction d : directions) {
                     directionDescriptions.add(d.getDescription());
@@ -199,11 +190,7 @@ public class RecipeDetailFragment extends Fragment {
                     .setTitle(R.string.text_menu_delete)
                     .setMessage(R.string.text_menu_delete_confirmation)
                     .setIconAttribute(android.R.attr.alertDialogIcon)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            deleteRecipe();
-                        }})
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> deleteRecipe())
                     .setNegativeButton(android.R.string.no, null).show();
                 break;
 
@@ -224,9 +211,6 @@ public class RecipeDetailFragment extends Fragment {
 
             @Override
             protected void onPreExecute() {
-                View view = getView();
-                if (view != null) {
-                }
             }
 
             @Override
@@ -428,10 +412,7 @@ public class RecipeDetailFragment extends Fragment {
             @Override
             protected void onPostExecute(RESTErrorCodes[] result) {
 
-                if (result.length == 0) {
-
-                } else {
-
+                if (result.length != 0) {
                     // TODO: Finish coding all the error messages
                     for(int i = 0; i < result.length; ++i){
                         switch (result[i]){

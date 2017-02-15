@@ -8,7 +8,6 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/commentsNestedScrollView"
         android:layout_weight="1">
 
             <LinearLayout

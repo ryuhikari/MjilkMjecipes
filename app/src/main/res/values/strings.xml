@@ -20,7 +20,6 @@
     <string name="text_menu_new_recipe">New recipe</string>
     <string name="text_menu_search">Search</string>
     <string name="text_menu_settings">Settings</string>
-    <string name="text_menu_new_comment">New comment</string>
     <string name="text_menu_logout">Log out</string>
     <string name="text_menu_profile">Profile</string>
 
@@ -42,17 +41,12 @@
     <string name="facebook_login_successful_notify">Successfully Logged in via Facebook</string>
 
     <!-- Main -->
-    <string name="btn_main_search_recipes">Search Recipes</string>
     <string name="btn_main_recent_recipes">Recent Recipes</string>
     <string name="btn_main_my_recipes">My Recipes</string>
     <string name="btn_main_favorites">Favorites</string>
-    <string name="btn_main_profile">Profile</string>
 
     <!-- Sign Up -->
-    <string name="text_signup_name">Name</string>
-    <string name="text_signup_last_name">Last name</string>
     <string name="text_signup_username">Username</string>
-    <string name="text_signup_email">Email</string>
     <string name="text_signup_password">Password</string>
     <string name="text_signup_confirm_password">Confirm New Password</string>
     <string name="btn_signup_signup">Sign up</string>
@@ -66,24 +60,17 @@
 
     <!-- Show List -->
     <string name="text_show_list_recipe_name">Recipe name</string>
-    <string name="title_activity_recipe" translatable="false">RecipeActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
     <string name="text_show_list_next_page">Next &gt;&gt;</string>
     <string name="text_show_list_previous_page">&lt;&lt; Previous</string>
 
     <!-- Recipe -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="comments_load_more">Load more Comments</string>
     <string name="recipe_by">By:</string>
     <string name="recipe_description_title">Description:</string>
-    <string name="recipe_description_text" translatable="false">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</string>
     <string name="recipe_steps_title">Steps:</string>
     <string name="recipe_step_title">Step</string>
 
     <string name="comment_username">Username</string>
     <string name="comment_content" translatable="false">I am a testcomment</string>
-    <string name="text_login_email">Email</string>
     <string name="text_logging_in">Logging In</string>
 
     <!-- Recipe info -->
@@ -93,11 +80,9 @@
     <string name="recipe_check_favorite_error_message">Problem checking favorite recipes!</string>
     <string name="recipe_update_favorite_error_message">Problem updating favorite recipes!</string>
 
-    <string name="recipe_edit_message">Edit recipe!</string>
     <string name="recipe_edit_successful_message">Recipe updated!</string>
     <string name="recipe_edit_error_message">Problem editing recipe!</string>
 
-    <string name="recipe_create_message">Create recipe!</string>
     <string name="recipe_create_successful_message">Recipe created!</string>
     <string name="recipe_create_error_message">Problem creating recipe!</string>
 
@@ -109,7 +94,6 @@
     <string name="comment_edit_successful_message">Comment edited!</string>
     <string name="comment_edit_error_message">Problem editing comment!</string>
 
-    <string name="comment_create_message">Create comment!</string>
     <string name="comment_create_successful_message">Comment created!</string>
     <string name="comment_create_error_message">Problem creating comment!</string>
 
@@ -128,9 +112,6 @@
     <!-- New Recipe -->
     <string name="text_new_recipe_update_recipe">Update recipe</string>
 
-    <string name="text_new_recipe_agree">Agree</string>
-    <string name="text_profile_new_password">New Password</string>
-    <string name="btn_profile_save_changes">Save Changes</string>
     <string name="btn_new_recipe_add_direction">Add Step</string>
     <string name="btn_new_recipe_directions">Directions:</string>
     <string name="btn_new_recipe_create">Create Recipe</string>

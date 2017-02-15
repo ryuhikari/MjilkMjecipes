@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -31,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/signupProgressBar"
             android:layout_centerHorizontal="true"
-            android:id="@+id/textViewSigningUp"
             android:textSize="24sp" />
     </RelativeLayout>
 
@@ -43,7 +41,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView_signup_username"
             android:text="@string/text_signup_username"
             android:layout_marginTop="20dp" />
 
@@ -59,7 +56,6 @@
             android:text="@string/text_signup_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView_signup_password"
             android:layout_marginTop="20dp" />
 
         <EditText
@@ -73,8 +69,7 @@
         <TextView
             android:text="@string/text_signup_confirm_password"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView_signup_confirm_password" />
+            android:layout_height="wrap_content" />
 
         <EditText
             android:layout_width="match_parent"
@@ -87,8 +82,7 @@
         <TextView
             android:text="Allow GPS Location"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView_signup_location"/>
+            android:layout_height="wrap_content" />
 
         <CheckBox
             android:text="Allow GPS Location"

@@ -1,25 +1,10 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,13 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
@@ -46,9 +28,6 @@ import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTErrorCodes;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
-
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
 public class NewRecipeActivity extends AppCompatActivity {
@@ -115,7 +94,7 @@ public class NewRecipeActivity extends AppCompatActivity {
             recipeName.setText(intent.getStringExtra(EXTRA_NAME));
             recipeDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
 
-            ArrayList<String> directions = new ArrayList<String>();
+            ArrayList<String> directions = new ArrayList<>();
             directions = intent.getStringArrayListExtra(EXTRA_DIRECTIONS);
 
             for (int i=0; i < directions.size(); i++) {
@@ -128,15 +107,12 @@ public class NewRecipeActivity extends AppCompatActivity {
         if (editingRecipe) {
             warningMessageTextView.setVisibility(View.GONE);
             uploadImageButton.setEnabled(true);
-            uploadImageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), R.string.upload_image_create_message, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), UploadImageActivity.class);
-                    intent.putExtra(UploadImageActivity.EXTRA_TYPE, UploadImageActivity.TYPE_RECIPE);
-                    intent.putExtra(UploadImageActivity.EXTRA_ID, Long.toString(recipeId));
-                    startActivity(intent);
-                }
+            uploadImageButton.setOnClickListener(v -> {
+                Toast.makeText(getApplicationContext(), R.string.upload_image_create_message, Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(getApplicationContext(), UploadImageActivity.class);
+                intent1.putExtra(UploadImageActivity.EXTRA_TYPE, UploadImageActivity.TYPE_RECIPE);
+                intent1.putExtra(UploadImageActivity.EXTRA_ID, Long.toString(recipeId));
+                startActivity(intent1);
             });
         }
 
@@ -229,7 +205,7 @@ public class NewRecipeActivity extends AppCompatActivity {
         newRecipe.setCreatorId(AccountManager.getInstance().getUserID(getApplicationContext()));
         newRecipe.setDescription(recipeDescription.getText().toString());
 
-        ArrayList<Direction> directions = new ArrayList<Direction>();
+        ArrayList<Direction> directions = new ArrayList<>();
 
         int directionOrder = 1;
 
@@ -258,7 +234,7 @@ public class NewRecipeActivity extends AppCompatActivity {
                     RESTErrorCodes[] result = {};
                     try {
                         newRecipe.setId(recipeId);
-                        String creatorId = new String();
+                        String creatorId;
 
                         creatorId = AccountManager.getInstance().getUserID(getApplicationContext());
 

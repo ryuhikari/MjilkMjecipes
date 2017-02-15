@@ -1,27 +1,20 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,21 +26,13 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
-import se.ju.taun15a16.group5.mjilkmjecipes.backend.Direction;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP401Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.DirectionAdapter;
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.RecipeDetailActivity;
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.RecipeDetailFragment;
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
-
-import static se.ju.taun15a16.group5.mjilkmjecipes.NewRecipeActivity.EXTRA_DIRECTIONS;
 
 public class CommentsFragment extends Fragment {
 
@@ -81,16 +66,13 @@ public class CommentsFragment extends Fragment {
         // loadCommentData();
 
         addCommentButton = (Button) commentsView.findViewById(R.id.button_add_comment);
-        addCommentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), NewCommentActivity.class);
+        addCommentButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), NewCommentActivity.class);
 
-                Bundle args = getArguments();
-                long recipeId = args.getLong("recipeID");
-                intent.putExtra(NewCommentActivity.EXTRA_RECIPE_ID, Long.toString(recipeId));
-                startActivity(intent);
-            }
+            Bundle args = getArguments();
+            long recipeId = args.getLong("recipeID");
+            intent.putExtra(NewCommentActivity.EXTRA_RECIPE_ID, Long.toString(recipeId));
+            startActivity(intent);
         });
         return commentsView;
     }
@@ -192,19 +174,9 @@ public class CommentsFragment extends Fragment {
         ImageButton editButton = (ImageButton) commentView.findViewById(R.id.imageButton_comment_edit);
         ImageButton deleteButton = (ImageButton) commentView.findViewById(R.id.imageButton_comment_delete);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commentAction(v);
-            }
-        });
+        editButton.setOnClickListener(v -> commentAction(v));
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commentAction(v);
-            }
-        });
+        deleteButton.setOnClickListener(v -> commentAction(v));
 
         // Show/Hide edit and delete buttons
         String userName = AccountManager.getInstance().getUserName(getContext());
@@ -300,11 +272,7 @@ public class CommentsFragment extends Fragment {
                             .setTitle(R.string.comment_delete_title)
                             .setMessage(R.string.comment_delete_confirmation)
                             .setIconAttribute(android.R.attr.alertDialogIcon)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    new DeleteCommentTask(commentItem).execute(commentId);
-                                }})
+                            .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> new DeleteCommentTask(commentItem).execute(commentId))
                             .setNegativeButton(android.R.string.no, null).show();
 
                 } else {

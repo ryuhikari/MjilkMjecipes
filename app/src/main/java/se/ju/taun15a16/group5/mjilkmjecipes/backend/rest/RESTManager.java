@@ -2,47 +2,34 @@ package se.ju.taun15a16.group5.mjilkmjecipes.backend.rest;
 
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
-
-//import com.google.gson.Gson;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+
+//import com.google.gson.Gson;
 
 public class RESTManager
 {
@@ -976,12 +963,12 @@ public class RESTManager
                 case 400:
                     BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                     StringBuilder sb = new StringBuilder();
-                    String line = new String();
+                    String line = "";
                     while((line = br.readLine()) != null){
                         sb.append(line).append("\n");
                     }
                     br.close();
-                    String jsonData = new String();
+                    String jsonData = "";
                     jsonData = sb.toString();
 
                     JSONObject obj = new JSONObject(jsonData);
@@ -1293,12 +1280,12 @@ public class RESTManager
                 case 400:
                     BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                     StringBuilder sb = new StringBuilder();
-                    String line = new String();
+                    String line = "";
                     while((line = br.readLine()) != null){
                         sb.append(line).append("\n");
                     }
                     br.close();
-                    String jsonData = new String();
+                    String jsonData = "";
                     jsonData = sb.toString();
 
                     JSONObject obj = new JSONObject(jsonData);

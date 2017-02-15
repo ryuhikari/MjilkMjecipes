@@ -13,10 +13,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -27,8 +23,6 @@ import java.util.Locale;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
-import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
-import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
 public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
@@ -110,7 +104,7 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         else
         {
             /***** Get each Model object from Arraylist ********/
-            tempValues = (Recipe) data.get( position );
+            tempValues = data.get( position );
 
             /************  Set Model values in Holder elements ***********/
 

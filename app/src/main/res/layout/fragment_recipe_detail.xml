@@ -2,7 +2,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -61,7 +60,6 @@
                 android:textAlignment="textEnd"
                 android:gravity="end"
                 android:layout_weight="1"
-                android:id="@+id/byLbl"
                 android:paddingRight="1dp"
                 android:paddingEnd="1dp"/>
 
@@ -82,7 +80,6 @@
             android:text="@string/recipe_description_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recipeDescriptionTitleLbl"
             android:paddingTop="10dp"
             android:textSize="20sp" />
 
@@ -98,7 +95,6 @@
             android:text="@string/recipe_steps_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recipeStepsTitleLbl"
             android:paddingTop="10dp"
             android:textSize="20sp" />
 

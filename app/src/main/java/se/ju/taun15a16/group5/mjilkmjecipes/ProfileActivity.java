@@ -1,9 +1,8 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 

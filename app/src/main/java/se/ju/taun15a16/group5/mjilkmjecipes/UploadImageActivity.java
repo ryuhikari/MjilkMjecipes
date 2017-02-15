@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -44,19 +43,11 @@ public class UploadImageActivity extends AppCompatActivity {
         sendButton = (Button) findViewById(R.id.upload_image_send_button);
         imageContainer = (ImageView) findViewById(R.id.upload_image_imageView);
 
-        optionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
+        optionsButton.setOnClickListener(v -> dispatchTakePictureIntent());
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageDrawable = imageContainer.getDrawable();
-                sendImage();
-            }
+        sendButton.setOnClickListener(v -> {
+            imageDrawable = imageContainer.getDrawable();
+            sendImage();
         });
 
         Intent intent = getIntent();

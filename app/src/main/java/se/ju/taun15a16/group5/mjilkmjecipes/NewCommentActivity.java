@@ -2,21 +2,15 @@ package se.ju.taun15a16.group5.mjilkmjecipes;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.InputStream;
-import java.net.URL;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP400Exception;
@@ -90,15 +84,12 @@ public class NewCommentActivity extends AppCompatActivity {
             commentRatingRatingBar.setRating(commentRating);
             commentContentTextView.setText(commentContent);
 
-            uploadImageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), R.string.upload_image_create_message, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), UploadImageActivity.class);
-                    intent.putExtra(UploadImageActivity.EXTRA_TYPE, UploadImageActivity.TYPE_COMMENT);
-                    intent.putExtra(UploadImageActivity.EXTRA_ID, commentId);
-                    startActivity(intent);
-                }
+            uploadImageButton.setOnClickListener(v -> {
+                Toast.makeText(getApplicationContext(), R.string.upload_image_create_message, Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(getApplicationContext(), UploadImageActivity.class);
+                intent1.putExtra(UploadImageActivity.EXTRA_TYPE, UploadImageActivity.TYPE_COMMENT);
+                intent1.putExtra(UploadImageActivity.EXTRA_ID, commentId);
+                startActivity(intent1);
             });
 
             uploadImageButton.setEnabled(true);

@@ -2,7 +2,7 @@ package se.ju.taun15a16.group5.mjilkmjecipes;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

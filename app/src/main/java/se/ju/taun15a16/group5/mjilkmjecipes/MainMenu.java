@@ -1,7 +1,6 @@
 package se.ju.taun15a16.group5.mjilkmjecipes;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
-import se.ju.taun15a16.group5.mjilkmjecipes.recipelist.ShowRecipeListActivity;
 
 public class MainMenu extends AppCompatActivity {
 
