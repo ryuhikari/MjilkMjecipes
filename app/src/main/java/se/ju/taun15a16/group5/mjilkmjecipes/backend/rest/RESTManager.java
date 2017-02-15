@@ -2,8 +2,15 @@ package se.ju.taun15a16.group5.mjilkmjecipes.backend.rest;
 
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 //import com.google.gson.Gson;
 
@@ -15,18 +22,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import se.ju.taun15a16.group5.mjilkmjecipes.R;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
@@ -447,13 +460,118 @@ public class RESTManager
 
 	}
 	
-	public boolean updateAllFavoriteRecipesByAccount(String userID, String[] recipeIDs) {
-		// TODO implement me
-		return false;
+	public boolean updateAllFavoriteRecipesByAccount(Context context, String userID, List<String> recipeIDs) throws HTTP401Exception, HTTP404Exception {
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + userID + "/" + PATH_FAVORITES);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("PUT");
+            con.setRequestProperty("Content-Type","application/json");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Accept","application/json");
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            // Send Favorite recipes to the server
+            JSONArray jsonArray = new JSONArray();
+            for (String recipeID : recipeIDs ) {
+                JSONObject recipe = new JSONObject();
+                try {
+                    recipe.put("id", Integer.parseInt(recipeID));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                jsonArray.put(recipe);
+            }
+
+            OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+            osw.write(jsonArray.toString());
+            osw.flush();
+            osw.close();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 200:
+                case 201:
+                case 204:
+                    break;
+                case 400:
+                    break;
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 	
-	public void getAllFavoriteRecipesByAccount(String userID) {
-		// TODO implement me
+	public JSONArray getAllFavoriteRecipesByAccount(Context context, String userID) throws HTTP404Exception, HTTP401Exception {
+		// TODO check
+
+		JSONArray data = null;
+		HttpURLConnection con = null;
+		try {
+			URL url = new URL(BASE_PATH + BASE_PATH_ACCOUNTS + userID + "/" + PATH_FAVORITES);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Accept","application/json");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setUseCaches(false);
+			con.setDoInput(true);
+			con.setAllowUserInteraction(false); //TODO: Check
+			con.setConnectTimeout(TIMEOUT);
+			con.setReadTimeout(TIMEOUT);
+
+			con.connect();
+			int status = con.getResponseCode();
+			Log.d("REST", status + " " + con.getResponseMessage());
+
+			switch(status){
+				case 200:
+				case 201:
+					BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					StringBuilder sb = new StringBuilder();
+					String line;
+					while((line = br.readLine()) != null){
+						sb.append(line).append("\n");
+					}
+					br.close();
+					String jsonData = sb.toString();
+					data = new JSONArray(jsonData);
+
+					break;
+				case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+				case 404:
+					Log.e("REST-getAllRecipes", "Error 404 Not Found");
+					throw new HTTP404Exception("ERROR: HTTP 404 Error");
+			}
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+		} catch (JSONException e) {
+			Log.e("REST-JSON", Log.getStackTraceString(e));
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
+
+		return data;
 	}
 	
 	public JSONObject createLoginToken(String username, String password) throws HTTP400Exception {
@@ -818,7 +936,7 @@ public class RESTManager
 		return true;
 	}
 	
-	public boolean updateRecipe(Context context, int recipeID, Recipe recipeData) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
+	public boolean updateRecipe(Context context, long recipeID, Recipe recipeData) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
 
         HttpURLConnection con = null;
         try {
@@ -856,7 +974,24 @@ public class RESTManager
                 case 204:
                     break;
                 case 400:
-                    break;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = new String();
+                    while((line = br.readLine()) != null){
+                        sb.append(line).append("\n");
+                    }
+                    br.close();
+                    String jsonData = new String();
+                    jsonData = sb.toString();
+
+                    JSONObject obj = new JSONObject(jsonData);
+                    JSONArray jsonArray = obj.getJSONArray("errors");
+
+                    RESTErrorCodes[] errorCodes = new RESTErrorCodes[jsonArray.length()];
+                    for(int i = 0; i < errorCodes.length; ++i){
+                        errorCodes[i] = RESTErrorCodes.fromString(jsonArray.getString(i));
+                    }
+                    throw new HTTP400Exception("ERROR: 400", errorCodes);
                 case 401:
                     throw new HTTP401Exception("ERROR: HTTP 401 Error");
                 case 404:
@@ -877,9 +1012,63 @@ public class RESTManager
         return true;
 	}
 	
-	public boolean addImageToRecipe(String recipeID, Image image) {
-		// TODO implement me
-		return false;
+	public boolean addImageToRecipe(Context context , String recipeID, Drawable imageDrawable) throws HTTP401Exception, HTTP404Exception {
+
+        HttpURLConnection con = null;
+        String boundary = Long.toHexString(System.currentTimeMillis());
+
+        try {
+            URL url = new URL(BASE_PATH + PATH_RECIPES + recipeID + "/" + PATH_IMAGE);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("PUT");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Content-Type","multipart/form-data;boundary="+boundary);
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            String charset = "UTF-8";
+            String CRLF = "\r\n";
+            OutputStream output = con.getOutputStream();
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
+
+            // Send binary file.
+            writer.append("--" + boundary).append(CRLF);
+            writer.append("Content-Disposition: form-data;name=\"image\";filename=\"image.jpeg\"").append(CRLF);
+            writer.append("Content-Type: image/jpeg").append(CRLF);
+            writer.append(CRLF).flush();
+            Bitmap bitmap = ((BitmapDrawable)imageDrawable).getBitmap();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+            output.flush(); // Important before continuing with writer!
+            writer.append(CRLF).flush(); // CRLF is important! It indicates end of boundary.
+
+            // End of multipart/form-data.
+            writer.append("--" + boundary + "--").append(CRLF).flush();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 204:
+                    break;
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 	
 	public boolean addCommentToRecipe(Context context, String recipeID, String commentText, int grade, String commenterID) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
@@ -967,7 +1156,7 @@ public class RESTManager
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Accept","application/json");
 			con.setUseCaches(false);
-			con.setDoInput(false);
+			con.setDoOutput(false);
 			con.setAllowUserInteraction(false); //TODO: Check
 			con.setConnectTimeout(TIMEOUT);
 			con.setReadTimeout(TIMEOUT);
@@ -1066,19 +1255,170 @@ public class RESTManager
 		return data;
 	}
 	
-	public boolean updateComment(String commentID, Object[] commentData) {
-		// TODO implement me
-		return false;
+	public boolean updateComment(Context context, String commentID, String commentText, int grade) throws HTTP400Exception, HTTP401Exception, HTTP404Exception {
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL(BASE_PATH + PATH_COMMENTS + commentID);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("PATCH");
+            con.setRequestProperty("Content-Type","application/json");
+            con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Accept","application/json");
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            JSONObject data = new JSONObject();
+            data.put("text", commentText);
+            data.put("grade", grade);
+
+            OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream());
+            osw.write(data.toString());
+            osw.flush();
+            osw.close();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 200:
+                case 201:
+                case 204:
+                    break;
+                case 400:
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = new String();
+                    while((line = br.readLine()) != null){
+                        sb.append(line).append("\n");
+                    }
+                    br.close();
+                    String jsonData = new String();
+                    jsonData = sb.toString();
+
+                    JSONObject obj = new JSONObject(jsonData);
+                    JSONArray jsonArray = obj.getJSONArray("errors");
+
+                    RESTErrorCodes[] errorCodes = new RESTErrorCodes[jsonArray.length()];
+                    for(int i = 0; i < errorCodes.length; ++i){
+                        errorCodes[i] = RESTErrorCodes.fromString(jsonArray.getString(i));
+                    }
+                    throw new HTTP400Exception("ERROR: 400", errorCodes);
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } catch (JSONException e) {
+            Log.e("REST-JSON", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 	
-	public boolean deleteComment(String commentID) {
-		// TODO implement me
-		return false;
+	public boolean deleteComment(Context context, String commentID) throws HTTP404Exception, HTTP401Exception {
+		HttpURLConnection con = null;
+		try {
+			URL url = new URL(BASE_PATH + PATH_COMMENTS + commentID);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("DELETE");
+			con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+			con.setUseCaches(false);
+			con.setDoOutput(false);
+			con.setAllowUserInteraction(false); //TODO: Check
+			con.setConnectTimeout(TIMEOUT);
+			con.setReadTimeout(TIMEOUT);
+
+			con.connect();
+			int status = con.getResponseCode();
+			Log.d("REST",status + " " + con.getResponseMessage());
+
+			switch(status){
+				case 204:
+				case 401:
+					throw  new HTTP401Exception("ERROR: HTTP 401 Error");
+				case 404:
+					throw new HTTP404Exception("ERROR: HTTP 404 Error");
+			}
+		} catch (IOException e) {
+			Log.e("REST", Log.getStackTraceString(e));
+		} finally {
+			if(con != null){
+				con.disconnect();
+			}
+		}
+		return true;
 	}
 	
-	public boolean addImageToComment(String commentID, Image image) {
-		// TODO implement me
-		return false;
+	public boolean addImageToComment(Context context, String commentID, Drawable imageDrawable) throws HTTP401Exception, HTTP404Exception {
+        HttpURLConnection con = null;
+        String boundary = Long.toHexString(System.currentTimeMillis());
+
+        try {
+            URL url = new URL(BASE_PATH + PATH_COMMENTS + commentID + "/" + PATH_IMAGE);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("PUT");
+            con.addRequestProperty("Authorization", "Bearer " + AccountManager.getInstance().getLoginToken(context));
+            con.setRequestProperty("Content-Type","multipart/form-data;boundary="+boundary);
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setAllowUserInteraction(false); //TODO: Check
+            con.setConnectTimeout(TIMEOUT);
+            con.setReadTimeout(TIMEOUT);
+
+            String charset = "UTF-8";
+            String CRLF = "\r\n";
+            OutputStream output = con.getOutputStream();
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
+
+            // Send binary file.
+            writer.append("--" + boundary).append(CRLF);
+            writer.append("Content-Disposition: form-data;name=\"image\";filename=\"image.jpeg\"").append(CRLF);
+            writer.append("Content-Type: image/jpeg").append(CRLF);
+            writer.append(CRLF).flush();
+			Bitmap bitmap = ((BitmapDrawable)imageDrawable).getBitmap();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+            output.flush(); // Important before continuing with writer!
+            writer.append(CRLF).flush(); // CRLF is important! It indicates end of boundary.
+
+            // End of multipart/form-data.
+            writer.append("--" + boundary + "--").append(CRLF).flush();
+
+            con.connect();
+            int status = con.getResponseCode();
+            Log.d("REST",status + " " + con.getResponseMessage());
+
+            switch(status){
+                case 204:
+                    break;
+                case 401:
+                    throw new HTTP401Exception("ERROR: HTTP 401 Error");
+                case 404:
+                    throw new HTTP404Exception("ERROR: HTTP 404 Error");
+            }
+        } catch (IOException e) {
+            Log.e("REST-recipe", Log.getStackTraceString(e));
+            return false;
+        } finally {
+            if(con != null){
+                con.disconnect();
+            }
+        }
+        return true;
 	}
 
 }

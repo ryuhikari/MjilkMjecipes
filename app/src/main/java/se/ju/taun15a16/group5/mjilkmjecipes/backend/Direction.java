@@ -5,23 +5,23 @@ package se.ju.taun15a16.group5.mjilkmjecipes.backend;
  */
 
 public class Direction {
-    private int id;
+    private long id;
     private int order;
     private String description;
 
     public Direction(){}
 
-    public Direction(int id, int order, String description) {
+    public Direction(long id, int order, String description) {
         this.id = id;
         this.order = order;
         this.description = description;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

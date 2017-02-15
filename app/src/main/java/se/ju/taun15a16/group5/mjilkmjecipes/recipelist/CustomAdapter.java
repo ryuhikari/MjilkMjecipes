@@ -3,31 +3,46 @@ package se.ju.taun15a16.group5.mjilkmjecipes.recipelist;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.R;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.Recipe;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.HTTP404Exception;
+import se.ju.taun15a16.group5.mjilkmjecipes.backend.rest.RESTManager;
 
-class CustomAdapter extends BaseAdapter implements View.OnClickListener {
+public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
     /*********** Declare Used Variables *********/
     private Activity activity;
-    private ArrayList data;
+    private ArrayList<Recipe> data = new ArrayList<>();
     private static LayoutInflater inflater = null;
     private Resources resources;
-    private ListModel tempValues = null;
-    private int i = 0;
+    private Recipe tempValues = null;
+
+
 
     /*************  CustomAdapter Constructor *****************/
-    CustomAdapter(Activity activity, ArrayList data, Resources resources) {
+    CustomAdapter(Activity activity, ArrayList<Recipe> data, Resources resources) {
 
         /********** Take passed values **********/
         this.activity = activity;
@@ -60,8 +75,7 @@ class CustomAdapter extends BaseAdapter implements View.OnClickListener {
 
         ImageView recipeImage;
         TextView recipeName;
-        TextView recipeAuthor;
-        RatingBar recipeRating;
+        TextView recipeCreated;
 
     }
 
@@ -81,8 +95,7 @@ class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             holder = new ViewHolder();
             holder.recipeImage = (ImageView) view.findViewById( R.id.imageView_tabitem_recipe_picture );
             holder.recipeName = (TextView) view.findViewById( R.id.textView_tabitem_recipe_name );
-            holder.recipeAuthor = (TextView) view.findViewById( R.id.textView_tabitem_recipe_author );
-            holder.recipeRating = (RatingBar) view.findViewById( R.id.ratingBar_tabitem_recipe_rating );
+            holder.recipeCreated = (TextView) view.findViewById( R.id.textView_tabitem_recipe_created );
 
             /************  Set holder with LayoutInflater ************/
             view.setTag( holder );
@@ -97,22 +110,57 @@ class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         else
         {
             /***** Get each Model object from Arraylist ********/
-            tempValues = (ListModel) data.get( position );
+            tempValues = (Recipe) data.get( position );
 
             /************  Set Model values in Holder elements ***********/
 
-            holder.recipeName.setText( tempValues.getRecipeName() );
-            holder.recipeAuthor.setText( tempValues.getRecipeAuthor() );
-            holder.recipeRating.setRating(tempValues.getRecipeRating()/2);
+            holder.recipeName.setText( tempValues.getName() );
 
-            int resID = resources.getIdentifier( tempValues.getRecipeImage(), "drawable", "se.ju.taun15a16.group5.mjilkmjecipes");
-            holder.recipeImage.setImageResource(resID);
+            Date tempDate = new Date(tempValues.getCreated() * 1000L);
+            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(tempDate);
+            holder.recipeCreated.setText(date);
 
-            /******** Set Item Click Listner for LayoutInflater for each row *******/
+            final String imgURL  = tempValues.getImage();
+            holder.recipeImage.setImageResource(R.drawable.no_image_available);
+            new DownLoadImageTask(holder.recipeImage).execute(imgURL);
+
+            /******** Set Item Click Listener for LayoutInflater for each row *******/
 
             view.setOnClickListener(new OnItemClickListener( position ));
         }
         return view;
+    }
+
+    private class DownLoadImageTask extends AsyncTask<String,Void,Bitmap>{
+        ImageView imageView;
+
+        public DownLoadImageTask(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        protected Bitmap doInBackground(String...urls){
+            String urlOfImage = urls[0];
+            Log.v("Image URL", urlOfImage+" "+tempValues.getName());
+            if (urlOfImage == null) {
+                return null;
+            }
+            Bitmap logo = null;
+            try{
+                InputStream is = new URL(urlOfImage).openStream();
+                logo = BitmapFactory.decodeStream(is);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        protected void onPostExecute(Bitmap result){
+            if (result == null) {
+                imageView.setImageResource(R.drawable.no_image_available);
+            } else {
+                imageView.setImageBitmap(result);
+            }
+        }
     }
 
     @Override
@@ -125,16 +173,19 @@ class CustomAdapter extends BaseAdapter implements View.OnClickListener {
         private int mPosition;
 
         OnItemClickListener(int position){
-            mPosition = position;
+            Recipe recipeInPosition = new Recipe();
+            recipeInPosition = data.get( position );
+            mPosition = (int) recipeInPosition.getId();
+            //mPosition = position;
         }
 
         @Override
         public void onClick(View arg0) {
 
 
-            ShowListActivity sct = (ShowListActivity) activity;
+            ShowRecipeListActivity sct = (ShowRecipeListActivity) activity;
 
-            /****  Call  onItemClick Method inside ShowListActivity Class ( See Below )****/
+            /****  Call  onItemClick Method inside ShowRecipeListActivity Class ( See Below )****/
 
             sct.itemClicked( mPosition );
         }

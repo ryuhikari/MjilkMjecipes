@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountInfo;
 import se.ju.taun15a16.group5.mjilkmjecipes.backend.AccountManager;
@@ -54,10 +55,37 @@ public class DebugActivity extends AppCompatActivity {
                     String selection = (String) dropdown.getSelectedItem();
                     switch(selection){
                         case "addCommentToRecipe":
+                            try {
+                                Boolean createComment = RESTManager.getInstance().addCommentToRecipe(getApplicationContext(), "444", "Cool comment", 5, AccountManager.getInstance().getUserID(getApplicationContext()));
+                            } catch (HTTP400Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "addImageToComment":
+                            /*
+                            try {
+                                Boolean commentImageUploaded = RESTManager.getInstance().addImageToComment(getApplicationContext(), getResources(), "349", "");
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
+                            */
                             break;
                         case "addImageToRecipe":
+                            /*
+                            try {
+                                Boolean imageUploaded = RESTManager.getInstance().addImageToRecipe(getApplicationContext(), getResources(), "444", "");
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
+                            */
                             break;
                         case "createAccount":
                             try {
@@ -76,9 +104,9 @@ public class DebugActivity extends AppCompatActivity {
                             break;
                         case "createRecipe":
                             Recipe recipe = new Recipe();
-                            recipe.setName("Test recipe");
+                            recipe.setName("Test recipe 2");
                             recipe.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
-                            recipe.setDescription("Recipe Description");
+                            recipe.setDescription("Recipe Description 2");
                             ArrayList<Direction> directions = new ArrayList<Direction>();
                             directions.add(new Direction(recipe.getId(),1,"Direction 1"));
                             recipe.setDirections(directions);
@@ -111,6 +139,13 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "deleteComment":
+                            try {
+                                Boolean deleteComment = RESTManager.getInstance().deleteComment(getApplicationContext(), "344");
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "deleteRecipe":
                             try {
@@ -148,6 +183,15 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "getAllFavoriteRecipesByAccount":
+                            try {
+                                JSONArray recipes3 = debugRestManager.getAllFavoriteRecipesByAccount(getApplicationContext(), AccountManager.getInstance().getUserID(getApplicationContext()));
+                                callToast(recipes3.toString());
+                            } catch (HTTP404Exception e) {
+                                Log.e("REST-recipe", Log.getStackTraceString(e));
+                                callToast(e.toString());
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "getMostRecentRecipes":
                             JSONArray recipes = debugRestManager.getMostRecentRecipes(1);
@@ -189,13 +233,32 @@ public class DebugActivity extends AppCompatActivity {
                             }
                             break;
                         case "updateAllFavoriteRecipesByAccount":
+                            try {
+                                List<String> favoriteRecipes = new ArrayList<String>();
+                                favoriteRecipes.add("444");
+                                Boolean correct = RESTManager.getInstance().updateAllFavoriteRecipesByAccount( getApplicationContext(), AccountManager.getInstance().getUserID(getApplicationContext()), favoriteRecipes );
+                                if (correct) callToast("correct");
+                            } catch (HTTP401Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                            } catch (HTTP404Exception e) {
+                                Log.e("DEBUG-REST", Log.getStackTraceString(e));
+                            }
                             break;
                         case "updateComment":
+                            try {
+                                Boolean updateComment = RESTManager.getInstance().updateComment(getApplicationContext(), "349", "Comment edited! Wiiii", 2);
+                            } catch (HTTP400Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP401Exception e) {
+                                e.printStackTrace();
+                            } catch (HTTP404Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "updateRecipe":
                             Recipe recipe2 = new Recipe();
                             recipe2.setId(231);
-                            recipe2.setName("Test recipe modified");
+                            recipe2.setName("Test recipe modified again");
                             recipe2.setCreatorId("69c23d21-f103-466f-9687-985c22f47964");
                             recipe2.setDescription("Recipe Description modified");
                             ArrayList<Direction> directions2 = new ArrayList<Direction>();

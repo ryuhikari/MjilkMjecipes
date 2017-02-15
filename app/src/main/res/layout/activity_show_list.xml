@@ -1,15 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_show_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipelist.ShowListActivity">
+    tools:context=".recipelist.ShowRecipeListActivity">
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layoutShowBar"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="100dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="100dp" />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/activity_show_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".recipelist.ShowRecipeListActivity"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/layout_page_buttons"
+            android:weightSum="3">
+
+            <Button
+                android:text="@string/text_show_list_previous_page"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_show_list_previous_page"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_show_list_page_number"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="0dp" />
+
+            <Button
+                android:text="@string/text_show_list_next_page"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_show_list_next_page"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
 </RelativeLayout>
+

@@ -3,8 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="se.ju.taun15a16.group5.mjilkmjecipes.RecipeActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/item_edit_recipe"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="@string/text_menu_edit"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/item_favorite_recipe"
+        android:orderInCategory="100"
+        android:title="@string/text_menu_star_on"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/item_not_favorite_recipe"
+        android:orderInCategory="100"
+        android:title="@string/text_menu_star_off"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/btn_star_big_off" />
+
+    <item
+        android:id="@+id/item_delete_recipe"
+        android:orderInCategory="100"
+        android:title="@string/text_menu_delete"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:visible="false" />
 </menu>
