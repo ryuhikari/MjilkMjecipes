@@ -141,7 +141,10 @@ public class CustomAdapter extends BaseAdapter implements View.OnClickListener {
             Bitmap logo = null;
             try{
                 InputStream is = new URL(urlOfImage).openStream();
-                logo = BitmapFactory.decodeStream(is);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                //TODO: make dynamic depending on display size.
+                options.inSampleSize = 4;
+                logo = BitmapFactory.decodeStream(is, null, options);
             }catch(Exception e){
                 e.printStackTrace();
             }
